@@ -6,7 +6,7 @@ export default [
         title: '首页',
         icon: 'House'
       },
-      component: () => import('@/views/HomeView.vue')
+      component: () => import('@/views/home.vue')
     },
     {
         path: '/guide',
@@ -42,6 +42,8 @@ export default [
       name: 'log',
       meta: {
         title: '更新日志',
+        hideHeader: true,
+        // hideAnchor: true,
         icon: 'Promotion'
       },
       component: () => import('@/views/log.vue')

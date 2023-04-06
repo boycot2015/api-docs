@@ -14,34 +14,34 @@ let env = process.env.NODE_ENV === 'development'
                         ? 'app.test' : 'production'
 switch (env) {
 case 'development':
-    prefix = `https://gatewaytest.haoxiny.com` // dev环境url
+    prefix = `http://gateway.test.limofang.cn` // dev环境url
     baseServeUrl = prefix + '/api/file'
-    baseUrl = prefix + '/portal/web'
-    loginUrl = prefix + '/portal/auth'
+    baseUrl = prefix + '/api'
+    loginUrl = prefix + '/api/login/authskip'
     break
 case 'dev':
-    prefix = 'https://gatewaytest.haoxiny.com'
+    prefix = 'https://gateway-show.yunzhonghe.com'
     baseServeUrl = prefix + '/api/file'
-    baseUrl = prefix + '/portal/web'
-    loginUrl = prefix + '/portal/auth'
+    baseUrl = prefix + '/api'
+    loginUrl = prefix + '/api/login/authskip'
     break
 case 'test':
-    prefix = 'https://gatewaytest.haoxiny.com'
+    prefix = 'http://gateway.test.limofang.cn'
     baseServeUrl = prefix + '/api/file'
-    baseUrl = prefix + '/portal/web'
-    loginUrl = prefix + '/portal/auth'
+    baseUrl = prefix + '/api'
+    loginUrl = prefix + '/api/login/authskip'
     break
 case 'show':
-    prefix = 'https://gatewayshow.haoxiny.com'
+    prefix = 'https://gateway-show.yunzhonghe.com'
     baseServeUrl = prefix + '/api/file'
-    baseUrl = prefix + '/portal/web'
-    loginUrl = prefix + '/portal/auth'
+    baseUrl = prefix + '/api'
+    loginUrl = prefix + '/api/login/authskip'
     break
 case 'production':
-    prefix = ' https://gateway.haoxiny.com' // aliyun生产环境url
+    prefix = 'https://gateway.yunzhonghe.com' // aliyun生产环境url
     baseServeUrl = prefix + '/api/file'
-    baseUrl = prefix + '/portal/web'
-    loginUrl = prefix + '/portal/auth'
+    baseUrl = prefix + '/api'
+    loginUrl = prefix + '/api/login/authskip'
     break
 }
 export {

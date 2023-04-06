@@ -4,9 +4,10 @@
   --vt-c-white-soft: #f8f8f8;
   --vt-c-white-mute: #f2f2f2;
 
-  --vt-c-black: #181818;
-  --vt-c-black-soft: #222222;
-  --vt-c-black-mute: #282828;
+  --vt-c-black: #333333;
+  --vt-c-black-soft: #666666;
+  --vt-c-black-light: #999999;
+  --vt-c-black-mute: #000000;
 
   --vt-c-indigo: #2c3e50;
 
@@ -61,8 +62,22 @@
   position: relative;
   font-weight: normal;
 }
-
+a,
+.green {
+  text-decoration: none;
+  color: var(--el-color-primary);
+  transition: 0.4s;
+}
 body {
+    margin: 0;
+    padding: 0;
+}
+// @media (hover: hover) {
+//   a:hover {
+//     background-color: hsla(160, 100%, 37%, 0.2);
+//   }
+// }
+html,body {
   min-height: 100vh;
   color: var(--color-text);
   background: var(--color-background);
@@ -74,6 +89,7 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
 }
 input::-webkit-input-placeholder {
     color: #cccccc !important;
@@ -104,4 +120,7 @@ input::-webkit-input-placeholder {
   }
   ::-webkit-scrollbar-track {
     background-color: transparent; /*滚动条的背景颜色*/
+  }
+  .app-page-anchor {
+    margin: 20px 0;
   }

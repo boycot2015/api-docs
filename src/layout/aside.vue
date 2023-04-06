@@ -2,7 +2,7 @@
     <el-menu
         :default-active="defaultRoute.path"
         class="el-menu-vertical"
-        :collapse="isCollapse"
+        :collapse="collapse.isCollapse"
         @open="handleOpen"
         router
         unique-opened
@@ -25,9 +25,9 @@
             </el-menu-item>
         </template>
     </el-menu>
-    <div class="logo">
-        <p v-if="!isCollapse"><a href="https://www.yunzhonghe.com" target="_blank">Yzh openApi</a></p>
-        <el-icon size="24"><Operation @click="isCollapse=!isCollapse" /></el-icon>
+    <div class="logo" v-if="$route.meta.websiteConfig && $route.meta.websiteConfig.logoPosition === 'bottom'">
+        <p v-show="!collapse.isCollapse"><a href="https://www.yunzhonghe.com" target="_blank">{{$route.meta.websiteName}}</a></p>
+        <el-icon :style="{margin: collapse.isCollapse ? '0': '0 0 0 20px'}" size="24"><Operation @click="collapse.toggleCollapse()" /></el-icon>
     </div>
 </template>
 
@@ -35,7 +35,7 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import routes from '@/router/routes'
-const emits = defineEmits(['collapse'])
+import { useCollapseStore } from '@/stores/app'
 const router = useRouter()
 // console.log(router.currentRoute.value, 'route');
 // const defaultRoute = reactive({ path : router.currentRoute.value.path || '/' })
@@ -45,14 +45,12 @@ const router = useRouter()
 const defaultRoute = computed(() => {
    return router.currentRoute.value
 })
-const isCollapse = ref(false)
+const collapse = useCollapseStore()
 const handleOpen = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
-  emits('collapse', isCollapse)
+//   console.log(key, keyPath)
 }
 const handleClose = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
-  emits('collapse', isCollapse)
+//   console.log(key, keyPath)
 }
 </script>
 
@@ -65,8 +63,9 @@ const handleClose = (key: string, keyPath: string[]) => {
     }
 }
 .logo {
-    position: absolute;
-    width: 100%;
+    position: fixed;
+    width: 200px;
+    left: 0;
     bottom: 0;
     text-align: right;
     cursor: pointer;
@@ -74,6 +73,10 @@ const handleClose = (key: string, keyPath: string[]) => {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    border-top: 1px solid var(--el-menu-border-color);
+    i {
+        margin-left: 20px;
+    }
     p a {
         font-size: 20px;
         font-weight: bold;
