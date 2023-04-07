@@ -11,6 +11,7 @@
     right: 40px;
     min-width: 150px;
     margin-left: 10px;
+    z-index: 1000;
     border-left: 2px solid var(--vt-c-black-light);
     background-color: var(--vt-c-white);
     .wrapper {

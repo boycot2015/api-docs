@@ -28,7 +28,7 @@ const getOffset = (el:any) => {
 const computedStyle = computed(() => {
     const { hideHeader, websiteConfig = {}  } = router.currentRoute.value.meta  as any
     const { showBreadcrumb } = websiteConfig
-    return { height: !hideHeader ? (showBreadcrumb ? 'calc(100vh - 126px)':''): showBreadcrumb ? 'calc(100vh - 66px)': 'calc(100vh - 36px)' }
+    return { height: !hideHeader ? (showBreadcrumb ? 'calc(100vh - 126px)':''): showBreadcrumb ? 'calc(100vh - 72px)': 'calc(100vh - 36px)' }
 })
 onMounted(() => {
     scrollRef.value.addEventListener('scroll', (e:any) => {

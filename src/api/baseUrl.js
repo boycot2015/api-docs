@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 // 根据不同的环境设定不同的baseUrl，
-
+let prefix = ''
 let baseUrl = '' // 本地代理y
 let loginUrl = '' // 本地代理y
 let baseServeUrl
@@ -14,9 +14,10 @@ let env = process.env.NODE_ENV === 'development'
                         ? 'app.test' : 'production'
 switch (env) {
 case 'development':
-    prefix = `http://gateway.test.limofang.cn` // dev环境url
+    // prefix = `http://121.41.51.167:10001` // dev环境url
+    prefix = '/openApi'
     baseServeUrl = prefix + '/api/file'
-    baseUrl = prefix + '/api'
+    baseUrl = prefix + '/v2/api-docs'
     loginUrl = prefix + '/api/login/authskip'
     break
 case 'dev':

@@ -68,6 +68,15 @@ a,
   color: var(--el-color-primary);
   transition: 0.4s;
 }
+.tc {
+    text-align: center;
+}
+.tl {
+    text-align: left;
+}
+.tr {
+    text-align: right;
+}
 body {
     margin: 0;
     padding: 0;

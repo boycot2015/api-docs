@@ -34,14 +34,11 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import routes from '@/router/routes'
-import { useCollapseStore } from '@/stores/app'
+import { useCollapseStore, useRouteStore } from '@/stores/app'
 const router = useRouter()
-// console.log(router.currentRoute.value, 'route');
+let routeStore = useRouteStore()
 // const defaultRoute = reactive({ path : router.currentRoute.value.path || '/' })
-// computed(defaultRoute, () => {
-//     return { path : router.currentRoute.value.path || '/' }
-// })
+const routes = computed(() => routeStore.routes)
 const defaultRoute = computed(() => {
    return router.currentRoute.value
 })

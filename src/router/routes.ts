@@ -1,6 +1,8 @@
+import { RouterView } from 'vue-router'
 export default [
     {
       path: '/',
+    //   redirect: '/',
       name: 'home',
       meta: {
         title: '首页',
@@ -15,7 +17,7 @@ export default [
             title: '开发指南',
             icon: 'Guide'
         },
-        // component: () => layout,
+        component: () => RouterView,
         children: [
             {
                 path: '/guide/getkey',

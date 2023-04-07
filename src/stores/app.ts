@@ -1,5 +1,6 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
+import config from '@/config'
 
 export const useCollapseStore = defineStore('collapse', () => {
   const isCollapse = ref(false)
@@ -19,4 +20,14 @@ export const useAnchorStore = defineStore('anchor', () => {
         anchorIndex.value = val
       }
     return { anchors, anchorIndex, setAnchor, setAnchorIndex }
-  })
+})
+
+export const useRouteStore = defineStore('router', () => {
+    let hasRoutes = ref(false)
+    const routes = ref([])
+    function setRoutes(list:any, exist:boolean) {
+        routes.value = list
+        hasRoutes.value = exist
+    }
+    return { routes, hasRoutes, setRoutes }
+})

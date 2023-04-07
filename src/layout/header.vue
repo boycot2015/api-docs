@@ -73,8 +73,10 @@
 <script lang="ts" setup>
 import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { useCollapseStore, useRouteStore } from '@/stores/app'
 import routes from '@/router/routes'
-import { useCollapseStore } from '@/stores/app'
+let routeStore = useRouteStore()
+// const routes = computed(() => routeStore.routes.slice(0, 4))
 const root:any = document.querySelector(':root')
 const primaryColor = getComputedStyle(root).getPropertyValue('--el-color-primary')
 const color = ref(primaryColor)
