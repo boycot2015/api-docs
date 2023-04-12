@@ -1,23 +1,23 @@
 <template>
-  <div class="anchor" v-if="anchors && anchors.length">
+  <div class="anchor" :offset="150" v-if="anchors && anchors.length">
     <div class="wrapper">
-        <a class="anchor-item" @click="setAnchorIndex(index)" :class="{'is-active': index === activeIndex}" v-for="(item, index) in anchors" :href="'#' + item.className + index" :key="item">{{item.innerText}}</a>
+        <a class="anchor-item" @click="setAnchorIndex(index)" :class="{'is-active': index === activeIndex}" v-for="(item, index) in anchors as any" :href="'#' + item.className.split(' ')[0] + index" :key="item">{{item.innerText}}</a>
     </div>
   </div>
 </template>
 <style lang="scss" scoped>
 .anchor {
-    position: fixed;
-    right: 40px;
+    position: sticky;
+    top: 0;
+    margin-left: 20px;
+    z-index: 10;
     min-width: 150px;
-    margin-left: 10px;
-    z-index: 1000;
-    border-left: 2px solid var(--vt-c-black-light);
     background-color: var(--vt-c-white);
     .wrapper {
+        border-left: 2px solid var(--vt-c-black-light);
         height: auto;
         padding: 16px 0;
-        box-shadow: 0 10px 30px #ccc;
+        box-shadow: 0 10px 50px #ccc;
         border-radius: 0 var(--border-radius) var(--border-radius) 0;
     }
     &-item {
@@ -42,7 +42,7 @@
 </style>
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
-import { RouterLink, RouterView, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useAnchorStore } from '@/stores/app'
 const router = useRouter()
 const appPageAnchors = useAnchorStore()
@@ -51,7 +51,7 @@ const anchors = computed(() => appPageAnchors.anchors)
 watch(router.currentRoute, (to, from) => {
     if (to.path !== from.path) {
         appPageAnchors.setAnchorIndex(0)
-        appPageAnchors.setAnchor([])
+        // appPageAnchors.setAnchor([])
     }
 })
 const setAnchorIndex = (index:number) => {

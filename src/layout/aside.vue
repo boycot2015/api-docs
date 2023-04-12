@@ -1,6 +1,6 @@
 <template>
     <el-menu
-        :default-active="defaultRoute.path"
+        :default-active="activeIndex"
         class="el-menu-vertical"
         :collapse="collapse.isCollapse"
         @open="handleOpen"
@@ -8,8 +8,8 @@
         unique-opened
         @close="handleClose"
     >
-        <template v-for="item in routes" :key="item.path">
-            <el-sub-menu :index="item.path" v-if="item.children && item.children.length">
+        <template v-for="item in routes as any" :key="item.path">
+            <el-sub-menu :index="item.path" v-if="item.children && item.children.length && !item.meta.hideChildren">
                 <template #title>
                     <el-icon v-if="item.meta" ><component :is="item.meta.icon" /></el-icon>
                     <span>{{item.meta.title}}</span>
@@ -25,8 +25,8 @@
             </el-menu-item>
         </template>
     </el-menu>
-    <div class="logo" v-if="$route.meta.websiteConfig && $route.meta.websiteConfig.logoPosition === 'bottom'">
-        <p v-show="!collapse.isCollapse"><a href="https://www.yunzhonghe.com" target="_blank">{{$route.meta.websiteName}}</a></p>
+    <div class="logo" :style="{width: collapse.isCollapse? '60px': '200px'}" v-if="logoPosition">
+        <p v-show="!collapse.isCollapse"><a href="/">{{$route.meta.websiteName}}</a></p>
         <el-icon :style="{margin: collapse.isCollapse ? '0': '0 0 0 20px'}" size="24"><Operation @click="collapse.toggleCollapse()" /></el-icon>
     </div>
 </template>
@@ -37,10 +37,15 @@ import { useRouter } from 'vue-router'
 import { useCollapseStore, useRouteStore } from '@/stores/app'
 const router = useRouter()
 let routeStore = useRouteStore()
-// const defaultRoute = reactive({ path : router.currentRoute.value.path || '/' })
+// const activeIndex = reactive({ path : router.currentRoute.value.path || '/' })
 const routes = computed(() => routeStore.routes)
-const defaultRoute = computed(() => {
-   return router.currentRoute.value
+const activeIndex = computed(() => {
+    let path = router.currentRoute.value.path
+   return path === '/home' ? '/' : path
+})
+const logoPosition = computed(() => {
+    let websiteConfig:any = router.currentRoute.value.meta.websiteConfig
+   return websiteConfig.logoPosition
 })
 const collapse = useCollapseStore()
 const handleOpen = (key: string, keyPath: string[]) => {
@@ -58,24 +63,27 @@ const handleClose = (key: string, keyPath: string[]) => {
     &:not(.el-menu--collapse) {
         width: 200px;
     }
+    padding-bottom: 50px;
 }
 .logo {
     position: fixed;
     width: 200px;
-    left: 0;
+    left: auto;
     bottom: 0;
+    z-index: 1000;
     text-align: right;
     cursor: pointer;
     padding: 0 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    background-color: var(--vt-c-white);
     border-top: 1px solid var(--el-menu-border-color);
     i {
         margin-left: 20px;
     }
     p a {
-        font-size: 20px;
+        font-size: 16px;
         font-weight: bold;
     }
 }

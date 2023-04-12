@@ -1,20 +1,24 @@
 <script setup lang="ts">
 import { RouterLink, RouterView, useRouter } from 'vue-router'
-import Header from '@/layout/header.vue'
-import Aside from '@/layout/aside.vue'
-import Breadcrumb from '@/layout/breadcrumb.vue'
-import Anchor from '@/layout/anchor.vue'
+import Header from './header.vue'
+import Aside from './aside.vue'
+import Breadcrumb from './breadcrumb.vue'
+import Anchor from './anchor.vue'
 import { watch, ref, onMounted, computed } from 'vue'
-import { useAnchorStore } from '@/stores/app'
+import { useAnchorStore, useCollapseStore } from '@/stores/app'
 const router = useRouter()
 const scrollRef:any = ref(null)
-let scrollPage:any = ref(null)
 const appPageAnchors = useAnchorStore()
+const collapse = useCollapseStore()
 // scrollPage = document.querySelector('.el-main')
 watch(router.currentRoute, () => {
     if (scrollRef.value && scrollRef.value) {
         scrollRef.value.scrollTop = 0
     }
+})
+const showBreadcrumb = computed(() => {
+    let websiteConfig:any = router.currentRoute.value.meta.websiteConfig
+    return websiteConfig.showBreadcrumb
 })
 const getOffset = (el:any) => {
     let scrollTop = el.offsetTop
@@ -23,7 +27,7 @@ const getOffset = (el:any) => {
         scrollTop += current.offsetTop
         current = current.offsetParent
     }
-    return scrollTop - 100
+    return scrollTop - 150
 }
 const computedStyle = computed(() => {
     const { hideHeader, websiteConfig = {}  } = router.currentRoute.value.meta  as any
@@ -48,13 +52,15 @@ onMounted(() => {
         <el-container>
             <el-header v-if="!$route.meta.hideHeader"><Header /></el-header>
             <el-container>
-                <el-aside :style="{height: !$route.meta.hideHeader ? '': '100vh'}" width="200" v-if="!$route.meta.hideAside"><Aside /></el-aside>
+                <el-aside :style="{height: !$route.meta.hideHeader ? '': '100vh'}" :width="collapse.isCollapse ? '65px': '200px'" v-if="!$route.meta.hideAside"><Aside /></el-aside>
                 <el-main>
-                    <Breadcrumb v-if="$route.meta.websiteConfig && $route.meta.websiteConfig.showBreadcrumb"></Breadcrumb>
+                    <Breadcrumb v-if="showBreadcrumb"></Breadcrumb>
                     <div class="body" ref="scrollRef" :style="computedStyle">
                         <RouterView v-slot="{ Component }">
                             <Transition name="slide-fade" mode="out-in">
-                                <component :is="Component" />
+                                <keep-alive :include="[]">
+                                    <component :is="Component"></component>
+                                </keep-alive>
                             </Transition>
                         </RouterView>
                         <Anchor v-if="!$route.meta.hideAnchor" />
@@ -63,6 +69,7 @@ onMounted(() => {
             </el-container>
             <!-- <el-footer>Footer</el-footer> -->
         </el-container>
+        <el-backtop target=".body" style="zIndex: 999" :right="100" :bottom="100" />
     </div>
 </template>
 
@@ -74,22 +81,32 @@ onMounted(() => {
     width: 100%;
     padding: 0;
     height: 58px;
-    background-color: #545c64;
+    background-color: var(--vt-c-black-mute);
 }
 .el-aside {
+    height: calc(100vh - 58px);
     border-right: solid 1px var(--el-menu-border-color);
+    transition: width .3s;
+    background-color: var(--vt-c-white);
 }
 .el-aside {
     overflow: hidden;
     overflow-y: auto;
     height: calc(100vh - 58px);
 }
-
+.el-container {
+    background-color: var(--vt-c-white-soft);
+    .el-container {
+        width: 1200px;
+        margin: 0 auto;
+    }
+}
 .el-main {
     /* overflow: auto; */
     padding: 0;
     background-color: var(--vt-c-white-soft);
     .body {
+        position: relative;
         margin: var(--section-padding);
         // border: 16px solid var(--vt-c-white-soft);
         padding: var(--section-padding);

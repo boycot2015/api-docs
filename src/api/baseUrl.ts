@@ -16,32 +16,32 @@ switch (env) {
 case 'development':
     // prefix = `http://121.41.51.167:10001` // dev环境url
     prefix = '/openApi'
-    baseServeUrl = prefix + '/api/file'
-    baseUrl = prefix + '/v2/api-docs'
+    baseServeUrl = prefix
+    baseUrl = prefix + '/'
     loginUrl = prefix + '/api/login/authskip'
     break
 case 'dev':
     prefix = 'https://gateway-show.yunzhonghe.com'
-    baseServeUrl = prefix + '/api/file'
-    baseUrl = prefix + '/api'
+    baseServeUrl = prefix
+    baseUrl = prefix + '/'
     loginUrl = prefix + '/api/login/authskip'
     break
 case 'test':
     prefix = 'http://gateway.test.limofang.cn'
-    baseServeUrl = prefix + '/api/file'
-    baseUrl = prefix + '/api'
+    baseServeUrl = prefix
+    baseUrl = prefix + '/'
     loginUrl = prefix + '/api/login/authskip'
     break
 case 'show':
     prefix = 'https://gateway-show.yunzhonghe.com'
-    baseServeUrl = prefix + '/api/file'
-    baseUrl = prefix + '/api'
+    baseServeUrl = prefix
+    baseUrl = prefix + '/'
     loginUrl = prefix + '/api/login/authskip'
     break
 case 'production':
     prefix = 'https://gateway.yunzhonghe.com' // aliyun生产环境url
-    baseServeUrl = prefix + '/api/file'
-    baseUrl = prefix + '/api'
+    baseServeUrl = prefix
+    baseUrl = prefix + '/'
     loginUrl = prefix + '/api/login/authskip'
     break
 }

@@ -10,7 +10,7 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 // https://vitejs.dev/config/
 export default defineConfig({
     server: {
-        port: 10001,
+        port: 10002,
         proxy: {
             '/openApi': {
             target: 'http://121.41.51.167:10001',

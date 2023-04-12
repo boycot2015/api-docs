@@ -1,6 +1,7 @@
 <template>
-  <el-breadcrumb :separator-icon="ArrowRight">
-    <el-breadcrumb-item :to="{ path: activeRoute.path }">{{activeRoute.meta.title}}</el-breadcrumb-item>
+  <el-breadcrumb :separator-icon="'ArrowRight'">
+    <!-- :to="{ path: route.path }" -->
+    <el-breadcrumb-item v-for="route in activeRoutes" :key="route.path">{{route.meta.title}}</el-breadcrumb-item>
   </el-breadcrumb>
 </template>
 <style lang="scss" scoped>
@@ -18,8 +19,7 @@ import {
 import { useRouter } from 'vue-router'
 // import routes from '@/router/routes'
 const router = useRouter()
-const activeRoute = computed(() => {
-   return router.currentRoute.value
+const activeRoutes = computed(() => {
+   return router.currentRoute.value.matched.filter((el:any) => !el.meta.hideChildren)
 })
-import { ArrowRight } from '@element-plus/icons-vue'
 </script>

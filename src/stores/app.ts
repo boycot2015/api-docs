@@ -1,6 +1,5 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import config from '@/config'
 
 export const useCollapseStore = defineStore('collapse', () => {
   const isCollapse = ref(false)
