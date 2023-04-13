@@ -52,6 +52,7 @@ watch(router.currentRoute, (to, from) => {
     if (to.path !== from.path) {
         appPageAnchors.setAnchorIndex(0)
         // appPageAnchors.setAnchor([])
+        // console.log(activeIndex, 'activeIndex');
     }
 })
 const setAnchorIndex = (index:number) => {

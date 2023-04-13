@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { baseUrl } from './baseUrl'
+import Loading from '@/hooks/loading'
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 
 type Result<T> = {
@@ -7,7 +8,6 @@ type Result<T> = {
   message: string;
   result: T;
 };
-
 // 导出Request类，可以用来自定义传递配置来创建实例
 export class Request {
   // axios 实例
@@ -26,10 +26,15 @@ export class Request {
         if(token) {
           config.headers!.Authorization = token;
         }
-
+        // 请求遮罩层
+        if ((config.data && config.data.loading) || (config.params && config.params.loading)) {
+            let options = config.data || config.params
+            Loading(options)
+        }
         return config;
       },
       (err: any) => {
+        Loading().close()
         // 请求错误，这里可以用全局提示框进行提示
         return Promise.reject(err);
       }
@@ -37,6 +42,7 @@ export class Request {
 
     this.instance.interceptors.response.use(
       (res: AxiosResponse) => {
+        Loading().close()
         // 直接返回res，当然你也可以只返回res.data
         // 系统如果有自定义code也可以在这里处理
         return res.data;
@@ -44,6 +50,7 @@ export class Request {
       (err: any) => {
         // 这里用来处理http常见错误，进行全局提示
         let message = "";
+        Loading().close()
         switch (err.response.status) {
           case 400:
             message = "请求错误(400)";

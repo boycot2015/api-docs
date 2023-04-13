@@ -22,7 +22,7 @@ const dynamicRoutes = (data:any, parent = '') => {
             router.addRoute(parent, {
                 path: item.path,
                 name: item.name,
-                component: () => import( /* @vite-ignore */ '@/views/apiDocs.vue'),
+                component: () => import( /* @vite-ignore */ '@/views/apiDocs/index.vue'),
                 meta: {
                     // showInHeader: true,
                     ...item.meta,

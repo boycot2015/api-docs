@@ -3,7 +3,7 @@
 let prefix = ''
 let baseUrl = '' // 本地代理y
 let loginUrl = '' // 本地代理y
-let baseServeUrl
+let baseServeUrl = '' // 本地代理y
 
 let env = process.env.NODE_ENV === 'development'
     ? 'development' : process.env.VUE_APP_TITLE === 'dev'
@@ -16,32 +16,32 @@ switch (env) {
 case 'development':
     // prefix = `http://121.41.51.167:10001` // dev环境url
     prefix = '/openApi'
-    baseServeUrl = prefix
-    baseUrl = prefix + '/'
+    baseServeUrl = `` // dev环境url
+    baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'
     break
 case 'dev':
     prefix = 'https://gateway-show.yunzhonghe.com'
-    baseServeUrl = prefix
-    baseUrl = prefix + '/'
+    baseServeUrl = `` // dev环境url
+    baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'
     break
 case 'test':
     prefix = 'http://gateway.test.limofang.cn'
-    baseServeUrl = prefix
-    baseUrl = prefix + '/'
+    baseServeUrl = `` // dev环境url
+    baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'
     break
 case 'show':
     prefix = 'https://gateway-show.yunzhonghe.com'
-    baseServeUrl = prefix
-    baseUrl = prefix + '/'
+    baseServeUrl = `` // dev环境url
+    baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'
     break
 case 'production':
     prefix = 'https://gateway.yunzhonghe.com' // aliyun生产环境url
-    baseServeUrl = prefix
-    baseUrl = prefix + '/'
+    baseServeUrl = `` // dev环境url
+    baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'
     break
 }

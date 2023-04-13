@@ -14,6 +14,7 @@ const collapse = useCollapseStore()
 watch(router.currentRoute, () => {
     if (scrollRef.value && scrollRef.value) {
         scrollRef.value.scrollTop = 0
+        appPageAnchors.setAnchorIndex(0)
     }
 })
 const showBreadcrumb = computed(() => {
@@ -36,13 +37,14 @@ const computedStyle = computed(() => {
 })
 onMounted(() => {
     scrollRef.value.addEventListener('scroll', (e:any) => {
-        let scrollTop = e.target.scrollTop.toFixed(0)
+        let scrollTop = Math.floor(e.target.scrollTop)
         let achorIndex = 0
         appPageAnchors.anchors.forEach((el: any, index: number) => {
-            if (scrollTop >= getOffset(el)) {
+            if (scrollTop > Math.abs(getOffset(el))) {
                 achorIndex = index
             }
         })
+        
         appPageAnchors.setAnchorIndex(achorIndex)
     })
 })

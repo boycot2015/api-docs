@@ -86,7 +86,6 @@ const primaryColor = getComputedStyle(root).getPropertyValue('--el-color-primary
 const color = ref(primaryColor)
 const collapse = useCollapseStore()
 const router = useRouter()
-console.log(routeStore.routes, 'routeStore.routes');
 
 const routes = computed(() => routeStore.routes.filter((el:any) => el.meta.showInHeader))
 const activeIndex = computed(() => {

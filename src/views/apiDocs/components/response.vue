@@ -1,93 +1,18 @@
-<script setup lang="ts">
-import { useAnchorStore, useCollapseStore } from '@/stores/app'
-import { computed, onMounted, reactive, watch, ref, nextTick } from 'vue'
+<script setup lang="tsx">
+import { computed, onMounted, reactive, watch, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import type { TableColumnCtx, FormInstance, FormRules } from 'element-plus'
+import type { FormInstance } from 'element-plus'
+import type { ColumnProps, FormProps, ResponseTypes } from '../tools'
+import { getParams, arr2obj } from '../tools'
 import http from '@/api/request'
-import { baseUrl } from '@/api/baseUrl'
-import { getRowSpan } from '@/utils'
+import { baseServeUrl } from '@/api/baseUrl'
 import useState from '@/hooks/useState'
 const router = useRouter()
-const appPageAnchors = useAnchorStore()
+const loading = ref(false)
 const [ showParams, toggleShowParams ] = useState(true)
 const [ responses, setResponses ] = useState({})
-// console.log(router.currentRoute.value, 'currentRoute');
 const pageData:any = computed(() => router.currentRoute.value.meta.pageData)
-interface Dto {
-  in: string
-  name: string
-  type: string
-  required: string
-  child?: string
-  children?: Dto
-  description: string
-}
-interface Cloumn {
-  prop: string
-  span?: boolean
-  label: string
-  width?: number
-  minWidth?: string
-}
-interface SpanMethodProps {
-  row: Dto
-  column: TableColumnCtx<Dto>
-  rowIndex: number
-  columnIndex: number
-}
 const ruleFormRef = ref<FormInstance>()
-const arr2obj = (arr:any, prop = 'children') => {
-    let obj:any = {}
-    let types:any = {
-        string: '',
-        number: 0,
-        boolean: false,
-        integer: 1
-    }
-    arr.map((el:any) => {
-        obj[el.name] = el.example || types[el.type]
-        if (el[prop] && el[prop].length) {
-            obj[el.name] = arr2obj(el[prop], prop)
-        }
-    })
-    return obj
-}
-const getParams = (data:any, child?:boolean, name?:string) => {
-    return data.map((el:any = {}) => {
-        let children =  el.children ?  el.children || '' : el.schema ? el.schema.$ref || '' : ''
-        if (children && children.length) {
-            children = getParams(children, true, el.type === 'array' ? 'items': el.type ? el.name : 'body')
-        }
-        return { ...el, in: el.in || (el.type === 'array' ? 'items': el.type === 'object' ? 'object': name), children, child }
-    })
-}
-const initFormData = (arr:any) => {
-    let form:any = {}
-    arr.map((el:Dto) => {
-        if (el.in === 'body') {
-            form.bodyParams = JSON.stringify(arr2obj(el.children, 'children'))
-        } else {
-            form[el.name] = el.type === 'string' ? '' : el.type === 'boolean' ? false : ''
-        }
-    })
-    form.Timestamp = new Date().toLocaleString().replace(/\//g, '-')
-    form['Random-Code'] = Math.floor(Math.random() * 100000) + ''
-    return form
-}
-const [form, setForm] = useState({...initFormData(getParams(pageData.value.data.parameters)) } as any)
-const inColumns:Cloumn[] = [
-    { prop: 'in', span: true, label: '传递位置', width: 150 },
-    { prop: 'name', label: '参数名称', width: 150 },
-    { prop: 'type', label: '类型', width: 100 },
-    { prop: 'required', label: '是否必传', width: 100 },
-    { prop: 'description', label: '说明', width: 180 },
-]
-const outColumns:Cloumn[] = [
-    { prop: 'name', label: '参数名称', width: 100 },
-    { prop: 'type', label: '类型', width: 100 },
-    { prop: 'required', label: '是否必传', width: 100 },
-    { prop: 'description', label: '说明', width: 100 },
-]
 let state = reactive({
     loading: false,
     data: pageData.value.data,
@@ -95,41 +20,28 @@ let state = reactive({
     method: pageData.value.method,
     inData: getParams(pageData.value.data.parameters),
     outData: getParams(pageData.value.data.responses[200].schema.$ref),
-    inColumns,
-    outColumns,
     name: pageData.value.name
 })
-
-
-const objectSpanMethod = ({
-  row,
-  column,
-  rowIndex,
-  columnIndex,
-}: SpanMethodProps, data:any) => {
-    // console.log(row, 'data');
-    let property = column.property
-    let spans:any = state.inColumns.filter((el:any) => el.span)
-    spans = spans.map((el:any) => el.prop).join(',')
-    if (row.child) return {
-        rowspan: 1,
-        colspan: 1
-    }
-    if (spans.includes(property)) {
-        let _row = (getRowSpan(data, { key: 'in' }).one)[rowIndex]
-        let _col = _row > 0 ? 1 : 0
-        return {
-            rowspan: !row.children ? _row : 1,
-            colspan: !row.children ? _col : 1
+const initFormData = (arr:any) => {
+    let form:FormProps = {}
+    arr.map((el:ColumnProps) => {
+        if (el.in === 'body') {
+            form.bodyParams = JSON.stringify(arr2obj(el.children, 'children'))
         }
-    }
+    })
+    form.Method = baseServeUrl + state.url
+    form.Timestamp = new Date().toLocaleString().replace(/\//g, '-')
+    form['Random-Code'] = Math.floor(Math.random() * 100000) + ''
+    return form
 }
+const [form, setForm] = useState({...initFormData(getParams(pageData.value.data.parameters)) } as FormProps)
+
 const onSubmit = (formEl: FormInstance | undefined) => {
     if (!formEl) return
     toggleShowParams(true)
     formEl.validate((valid) => {
         if (valid) {
-            console.log('submit!')
+            // console.log('submit!')
             let headerParams:any = {}
             let arr =  state.inData.filter((el:any) => el.in === 'header').map((el:any) => el.name)
             for (const key in form.value) {
@@ -137,20 +49,36 @@ const onSubmit = (formEl: FormInstance | undefined) => {
                     headerParams[key] = form.value[key]
                 }
             }
-            // console.log(form.value.bodyParams, 'headerParams');
-            http.post(state.url, {
-                ...JSON.parse(form.value.bodyParams || '{}')
-            }, {
+            let data = {
+                ...JSON.parse(form.value.bodyParams || '{}'),
+                loading: true
+            }
+            if (state.method === 'get') {
+                data = {
+                    params: data
+                }
+            }
+            http.request({
+                method: state.method,
+                url: state.url,
+                data,
                 headers: { ...headerParams }
             }).then(res => {
-                console.log(res, 'res');
                 setResponses(res)
+                setForm({
+                    ...form.value,
+                    Timestamp: new Date().toLocaleString().replace(/\//g, '-'),
+                    ['Random-Code']: Math.floor(Math.random() * 100000) + ''
+                })
             }).catch(err => {
                 setResponses(err)
-                console.log(err, 'err');
+                setForm({
+                    ...form.value,
+                    Timestamp: new Date().toLocaleString().replace(/\//g, '-'),
+                    ['Random-Code']: Math.floor(Math.random() * 100000) + ''
+                })
             })
         } else {
-            console.log('error submit!')
             return false
         }
     })
@@ -159,9 +87,9 @@ const onReset = (formEl: FormInstance | undefined) => {
     if (!formEl) return
     formEl.resetFields()
     setForm({
-        ...form,
         ...initFormData(state.inData)
     })
+    setResponses({})
 }
 watch(pageData, (val) => {
     if (!val) return
@@ -178,66 +106,14 @@ watch(pageData, (val) => {
     setResponses({})
     ruleFormRef.value?.resetFields()
     setForm({ ...form, ...initFormData(val.data ? getParams(val.data.parameters) : []) })
+    loading.value = true
     setTimeout(() => {
-        document.querySelectorAll!==null && appPageAnchors.setAnchor(document.querySelectorAll('.app-page-anchor'))
-    }, 200);
-})
-onMounted(() => {
-    appPageAnchors.setAnchor(document.querySelectorAll('.app-page-anchor'))
+        loading.value = false
+    }, 100)
 })
 </script>
 <template>
-  <div class="api-docs">
-    <h1 class="tc title">{{state.name}}</h1>
-    <div class="api-docs-section api-desc">
-        <h3 class="app-page-anchor sub-title" id="app-page-anchor0">1. 接口说明</h3>
-        <div class="api-desc-item">
-            <div class="name">1.1 接口请求地址</div>
-            <div class="value">【{{state.method}}】{{baseUrl}}{{state.url}}</div>
-        </div>
-        <div class="api-desc-item">
-            <div class="name">1.2 接口描述</div>
-            <div class="value">{{state.data.description}}</div>
-        </div>
-    </div>
-    <div class="in-params api-docs-section">
-        <h3 class="app-page-anchor sub-title" id="app-page-anchor1">2. 输入参数</h3>
-        <el-table
-        border
-        row-key="name"
-        header-cell-class-name="bg-header"
-        :span-method="(...args:[SpanMethodProps]) => objectSpanMethod(...args, state.inData)"
-        v-loading="state.loading"
-        default-expand-all
-        :data="state.inData"
-        :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-        >
-            <el-table-column
-            :prop="column.prop"
-            v-for="column in state.inColumns"
-            :key="column.prop"
-            :min-width="column.minWidth ? column.minWidth : column.width"
-            :label="column.label"></el-table-column>
-        </el-table>
-    </div>
-    <div class="out-params api-docs-section">
-        <h3 class="app-page-anchor sub-title" id="app-page-anchor2">3. 输出参数</h3>
-        <el-table
-        border
-        row-key="name"
-        v-loading="state.loading"
-        default-expand-all
-        :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-        :data="state.outData"
-        >
-            <el-table-column
-            :prop="column.prop"
-            v-for="column in state.outColumns"
-            :key="column.prop"
-            :min-width="column.minWidth ? column.minWidth : column.width"
-            :label="column.label"></el-table-column>
-        </el-table>
-    </div>
+  <div class="api-docs-response">
     <div class="api-docs-section" style="padding-bottom: 10px;">
         <div class="top clearfix sub-title">
             <h3 class="app-page-anchor fl" style="margin: 0;" id="app-page-anchor3">
@@ -271,7 +147,7 @@ onMounted(() => {
     </div>
   </div>
 </template>
-<style lang="scss" scoped>
+<style lang="scss">
 .api-docs {
     padding: 30px 0;
     .title {
