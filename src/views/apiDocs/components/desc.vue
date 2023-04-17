@@ -6,7 +6,7 @@ import useState from '@/hooks/useState'
 const router = useRouter()
 const loading = ref(false)
 const pageData:any = computed(() => router.currentRoute.value.meta.pageData)
-const [ state, setstate ] = useState({
+const [ state, setState ] = useState({
     loading: false,
     data: pageData.value.data,
     url: pageData.value.url,
@@ -19,7 +19,7 @@ watch(pageData, (val) => {
     setTimeout(() => {
         loading.value = false
     }, 100)
-    setstate({
+    setState({
         ...state.value,
         data: val.data || {},
         url: val.url,

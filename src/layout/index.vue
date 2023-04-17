@@ -19,7 +19,7 @@ watch(router.currentRoute, () => {
 })
 const showBreadcrumb = computed(() => {
     let websiteConfig:any = router.currentRoute.value.meta.websiteConfig
-    return websiteConfig.showBreadcrumb
+    return websiteConfig.showBreadcrumb && !router.currentRoute.value.meta.hideBreadcrumb
 })
 const getOffset = (el:any) => {
     let scrollTop = el.offsetTop
@@ -31,8 +31,7 @@ const getOffset = (el:any) => {
     return scrollTop - 150
 }
 const computedStyle = computed(() => {
-    const { hideHeader, websiteConfig = {}  } = router.currentRoute.value.meta  as any
-    const { showBreadcrumb } = websiteConfig
+    const { hideHeader } = router.currentRoute.value.meta  as any
     return { height: !hideHeader ? (showBreadcrumb ? 'calc(100vh - 126px)':''): showBreadcrumb ? 'calc(100vh - 72px)': 'calc(100vh - 36px)' }
 })
 onMounted(() => {
@@ -76,6 +75,10 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
+html,body {
+  height: 100vh;
+  overflow: hidden;
+}
 .layout {
     width: 100%;
 }

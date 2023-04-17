@@ -2,28 +2,39 @@ import Layout from '@/layout/index.vue'
 export default [
     {
         path: '/',
-        redirect: '/home',
+        // redirect: '/home',
         name: 'index',
         meta: {
           title: '首页',
-          hideChildren: true,
-          showInHeader: true,
           icon: 'House'
         },
-        component: Layout,
-        children: [
-            {
-              path: '/home',
-            //   redirect: '/',
-              name: 'home',
-              meta: {
-                title: '首页',
-                icon: 'House'
-              },
-              component: () => import('@/views/home.vue')
-            }
-        ]
+        // component: Layout,
+        component: () => import('@/views/home.vue')
+        // children: [
+        //     {
+        //       path: '/home',
+        //     //   redirect: '/',
+        //       name: 'home',
+        //       meta: {
+        //         title: '首页',
+        //         hideAside: true,
+        //         hideAnchor: true,
+        //         hideBreadcrumb: true,
+        //         icon: 'House'
+        //       },
+        //       component: () => import('@/views/home.vue')
+        //     }
+        // ]
       },
+      {
+        path: '/error',
+        name: 'error',
+        meta: {
+            title: '404',
+            hideInMenu: true,
+        },
+        component: () => import('@/views/error.vue')
+      }
     // {
     //     path: '/guide',
     //     name: 'guide',

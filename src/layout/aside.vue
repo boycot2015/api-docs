@@ -19,7 +19,7 @@
                     <template #title v-if="child.meta">{{child.meta.title}}</template>
                 </el-menu-item>
             </el-sub-menu>
-            <el-menu-item :index="item.path" v-else>
+            <el-menu-item :index="item.path" v-else-if="!item.meta.hideInMenu">
                 <el-icon v-if="item.meta" ><component :is="item.meta.icon" /></el-icon>
                 <template #title v-if="item.meta">{{item.meta.title}}</template>
             </el-menu-item>

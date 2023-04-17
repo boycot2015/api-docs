@@ -14,7 +14,7 @@ interface Column {
     span?: boolean
     label: string
     width?: number
-    formatter?: CallableFunction
+    formatter?: (row:ColumnProps, column?:any, cellValue?:string, index?:number) => any
     minWidth?: string
 }
 interface FormProps {
@@ -38,8 +38,8 @@ interface ResponseTypes {
     boolean: boolean
     integer: number
 }
-const getParams = (data:any, child?:boolean, name?:string) => {
-    return data.map((el:any = {}) => {
+const getParams = (data:ColumnProps[], child?:boolean, name?:string) => {
+    return data.map((el:ColumnProps|any) => {
         let children =  el.children ?  el.children || '' : el.schema ? el.schema.$ref || '' : ''
         if (children && children.length) {
             children = getParams(children, true, el.type === 'array' ? 'items': el.type ? el.name : 'body')
@@ -55,7 +55,7 @@ const arr2obj = (arr:ColumnProps[] | undefined, prop = 'children') => {
         boolean: false,
         integer: 1
     }
-    arr?.map((el:any) => {
+    arr?.map((el:ColumnProps | any) => {
         obj[el.name] = el.example || types[el.type]
         if (el[prop] && el[prop].length) {
             obj[el.name] = arr2obj(el[prop], prop)

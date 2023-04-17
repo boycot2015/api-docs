@@ -21,7 +21,7 @@ const outColumns:Column[] = [
     { prop: 'required', label: '是否必传', width: 130 },
     { prop: 'description', label: '说明', width: 180 },
 ]
-const [ state, setstate ] = useState({
+const [ state, setState ] = useState({
     loading: false,
     data: pageData.value.data,
     inData: getParams(pageData.value.data.parameters),
@@ -59,7 +59,7 @@ watch(pageData, (val) => {
     setTimeout(() => {
         loading.value = false
     }, 100)
-    setstate({
+    setState({
         ...state.value,
         data: val.data || {},
         inData: val.data ? getParams(val.data.parameters) : [],

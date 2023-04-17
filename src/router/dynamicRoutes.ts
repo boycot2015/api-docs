@@ -13,6 +13,7 @@ const dynamicRoutes = (data:any, parent = '') => {
                 name: item.name,
                 component: Layout,
                 meta: {
+                    parent,
                     ...item.meta,
                     auth: true
                 }
@@ -24,6 +25,7 @@ const dynamicRoutes = (data:any, parent = '') => {
                 name: item.name,
                 component: () => import( /* @vite-ignore */ '@/views/apiDocs/index.vue'),
                 meta: {
+                    parent,
                     // showInHeader: true,
                     ...item.meta,
                     auth: true

@@ -1,8 +1,8 @@
 <script setup lang="tsx">
-import { computed, onMounted, reactive, watch, ref } from 'vue'
+import { computed, reactive, watch, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import type { FormInstance } from 'element-plus'
-import type { ColumnProps, FormProps, ResponseTypes } from '../tools'
+import type { ColumnProps, FormProps } from '../tools'
 import { getParams, arr2obj } from '../tools'
 import http from '@/api/request'
 import { baseServeUrl } from '@/api/baseUrl'

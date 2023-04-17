@@ -1,11 +1,13 @@
 <template>
 <div class="header">
-    <div class="logo" :class="{'is-collapse': collapse.isCollapse}" >
-        <template v-if="config && config.logoPosition === 'top'">
-            <a href="/" v-if="!collapse.isCollapse">{{config.websiteName}}</a>
-                <el-icon size="24"><Operation @click="collapse.toggleCollapse()" /></el-icon>
-        </template>
-    </div>
+    <slot name="logo">
+        <div class="logo" :class="{'is-collapse': collapse.isCollapse }">
+            <template v-if="config && config.logoPosition === 'top'">
+                <a href="/" v-if="!collapse.isCollapse">{{config.websiteName}}</a>
+                    <el-icon size="24"><Operation @click="collapse.toggleCollapse()" /></el-icon>
+            </template>
+        </div>
+    </slot>
     <el-menu
         :default-active="activeIndex"
         class="el-header-menu"
@@ -67,6 +69,7 @@
         // width: 800px;
         flex: 1;
         // margin: 0 auto;
+        border-bottom: 0;
     }
     .right {
         display: flex;
