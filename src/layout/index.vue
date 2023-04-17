@@ -92,6 +92,7 @@ html,body {
     height: calc(100vh - 58px);
     border-right: solid 1px var(--el-menu-border-color);
     transition: width .3s;
+    z-index: 2;
     background-color: var(--vt-c-white);
 }
 .el-aside {

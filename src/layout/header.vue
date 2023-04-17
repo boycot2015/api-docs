@@ -32,6 +32,10 @@
         </template>
     </el-menu>
     <div class="right">
+        <el-select v-model="currentEffect" class="el-effects" style="margin-right: 10px;" placeholder="特效" @change="onEffectChange">
+            <el-option  :label="'无'" :value="-1"></el-option>
+            <el-option v-for="(item, index) in effect" :label="item.name" :value="index" :key="item.name"></el-option>
+        </el-select>
         <el-color-picker class="color-picker" v-model="color" @change="onColorPickerChange" show-alpha />
     </div>
 </div>
@@ -77,11 +81,25 @@
     }
 }
 </style>
-<script lang="ts" setup>
+<script lang="tsx" setup>
 import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCollapseStore, useRouteStore } from '@/stores/app'
 import config from '@/config'
+import effect from '@/plugins/specialEffects.js'
+const currentEffect = ref(0)
+const onEffectChange = (index?:number) => {
+    window.onclick = null
+    window.onmousedown = null
+    window.onmouseup = null
+    const canvas:HTMLCanvasElement = document.querySelector('body > canvas') as any
+    if (canvas !== null) {
+        canvas.parentNode?.removeChild(canvas);
+    }
+    !index && effect[3]?.cb()
+    effect[index]?.cb()
+}
+onEffectChange(0)
 let routeStore = useRouteStore()
 // const routes = computed(() => routeStore.routes.slice(0, 4))
 const root:any = document.querySelector(':root')

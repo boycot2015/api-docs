@@ -94,6 +94,7 @@ export class Request {
         // 比如element plus 可以使用 ElMessage
         ElMessage({
           showClose: true,
+          grouping: true,
           message: `${message}！`,
           type: "error",
         });

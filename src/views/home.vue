@@ -10,16 +10,16 @@ const getCavans = () => {
         width = canvas.width = canvas.offsetWidth,
         height = canvas.height = canvas.offsetHeight;
     //声明参数
-    let A = 30,
+    let A = 60,
         W = 1 / 200,
         Q = 0,
         H = height / 2;
-    let A2 = 30,
-        W2 = 1 / 300,
+    let A2 = 60,
+        W2 = 1 / 200,
         Q2 = 0,
         H2 = height / 2;
-    let speed = -0.01;
-    let speed2 = -0.02;
+    let speed = -0.02;
+    let speed2 = -0.01;
     
     //创建线性渐变
     let lingrad = ctx.createLinearGradient(0, 0, width, 0);
@@ -28,8 +28,8 @@ const getCavans = () => {
     lingrad.addColorStop(1, 'rgba(36,88,179,1)');
     
     let lingrad2 = ctx.createLinearGradient(0, 0, width, 0);
-    lingrad2.addColorStop(0, 'rgba(36,88,179,1)');
-    lingrad2.addColorStop(1, 'rgba(114,114,114,114.8)');
+    lingrad2.addColorStop(0, 'rgba(114,114,114,114.8)');
+    lingrad2.addColorStop(1, 'rgba(36,88,179,1)');
     
     //绘图方法
     (function draw() {
@@ -44,7 +44,7 @@ const getCavans = () => {
         ctx.strokeStyle = "#000"; //设置线条颜色
         ctx.fillStyle = lingrad;  //填充渐变色
         ctx.lineWidth = 1; //设置线条宽度
-        ctx.moveTo(0, height / 2); //起始点位置    moveTo(x,y)可把窗口的左上角移动到一个指定的坐标
+        ctx.moveTo(0, height); //起始点位置    moveTo(x,y)可把窗口的左上角移动到一个指定的坐标
         Q += speed;
         for(let x = 0; x <= width; x++) { //绘制x对应y的
             let y = A * Math.sin(W * x + Q) + H;
@@ -162,7 +162,6 @@ onMounted(() => {
 .home {
     text-align: center;
     width: 100%;
-    position: relative;
     canvas {
         position: absolute;
         width: 100%;

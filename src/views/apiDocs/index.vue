@@ -32,6 +32,7 @@ onMounted(() => {
 <style lang="scss">
 .api-docs {
     padding: 30px 0;
+    z-index: 2;
     .title {
         font-size: 32px;
         // font-weight: bold;

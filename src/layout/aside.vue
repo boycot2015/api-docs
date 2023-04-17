@@ -45,7 +45,7 @@ const activeIndex = computed(() => {
 })
 const logoPosition = computed(() => {
     let websiteConfig:any = router.currentRoute.value.meta.websiteConfig
-   return websiteConfig.logoPosition
+   return websiteConfig.logoPosition === 'bottom'
 })
 const collapse = useCollapseStore()
 const handleOpen = (key: string, keyPath: string[]) => {
