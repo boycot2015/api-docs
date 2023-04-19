@@ -4,22 +4,25 @@ import Header from './header.vue'
 import Aside from './aside.vue'
 import Breadcrumb from './breadcrumb.vue'
 import Anchor from './anchor.vue'
-import { watch, ref, onMounted, computed } from 'vue'
-import { useAnchorStore, useCollapseStore } from '@/stores/app'
+import { watch, ref, onMounted, computed  } from 'vue'
+import { useAnchorStore, useCollapseStore, useAppConfigStore } from '@/stores/app'
+const appConfigStore = useAppConfigStore()
 const router = useRouter()
+const appConfig = computed(() => appConfigStore.appConfig) as any
+const showBreadcrumb = ref(appConfig.value.showBreadcrumb)
 const scrollRef:any = ref(null)
 const appPageAnchors = useAnchorStore()
 const collapse = useCollapseStore()
-// scrollPage = document.querySelector('.el-main')
+watch(appConfig, (val) => {
+    showBreadcrumb.value = val.showBreadcrumb && !router.currentRoute.value.meta.hideBreadcrumb
+    computedStyle()
+})
+
 watch(router.currentRoute, () => {
     if (scrollRef.value && scrollRef.value) {
         scrollRef.value.scrollTop = 0
         appPageAnchors.setAnchorIndex(0)
     }
-})
-const showBreadcrumb = computed(() => {
-    let websiteConfig:any = router.currentRoute.value.meta.websiteConfig
-    return websiteConfig.showBreadcrumb && !router.currentRoute.value.meta.hideBreadcrumb
 })
 const getOffset = (el:any) => {
     let scrollTop = el.offsetTop
@@ -30,10 +33,10 @@ const getOffset = (el:any) => {
     }
     return scrollTop - 150
 }
-const computedStyle = computed(() => {
+const computedStyle = () => {
     const { hideHeader } = router.currentRoute.value.meta  as any
-    return { height: !hideHeader ? (showBreadcrumb ? 'calc(100vh - 126px)':''): showBreadcrumb ? 'calc(100vh - 72px)': 'calc(100vh - 36px)' }
-})
+    return { height: !hideHeader ? (showBreadcrumb.value ? 'calc(100vh - 152px)':'calc(100vh - 122px)') : showBreadcrumb.value ? 'calc(100vh - 102px)': 'calc(100vh - 69px)' }
+}
 onMounted(() => {
     scrollRef.value.addEventListener('scroll', (e:any) => {
         let scrollTop = Math.floor(e.target.scrollTop)
@@ -43,7 +46,7 @@ onMounted(() => {
                 achorIndex = index
             }
         })
-        
+        window.scrollTo(0, 0)
         appPageAnchors.setAnchorIndex(achorIndex)
     })
 })
@@ -56,7 +59,7 @@ onMounted(() => {
                 <el-aside :style="{height: !$route.meta.hideHeader ? '': '100vh'}" :width="collapse.isCollapse ? '65px': '200px'" v-if="!$route.meta.hideAside"><Aside /></el-aside>
                 <el-main>
                     <Breadcrumb v-if="showBreadcrumb"></Breadcrumb>
-                    <div class="body" ref="scrollRef" :style="computedStyle">
+                    <div class="body" ref="scrollRef" :style="computedStyle()">
                         <RouterView v-slot="{ Component }">
                             <Transition name="slide-fade" mode="out-in">
                                 <keep-alive :include="[]">
@@ -75,12 +78,10 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-html,body {
-  height: 100vh;
-  overflow: hidden;
-}
-.layout {
+#app .layout {
     width: 100%;
+    // height: 100vh;
+    overflow: hidden;
 }
 .el-header {
     width: 100%;
@@ -114,6 +115,7 @@ html,body {
     .body {
         position: relative;
         margin: var(--section-padding);
+        margin-right: 0;
         // border: 16px solid var(--vt-c-white-soft);
         padding: var(--section-padding);
         background-color: var(--vt-c-white);
@@ -122,7 +124,6 @@ html,body {
         display: flex;
         overflow: hidden;
         overflow-y: auto;
-        height: calc(100vh - 98px);
         border-radius: var(--border-radius);
     }
 }

@@ -32,11 +32,16 @@
         </template>
     </el-menu>
     <div class="right">
-        <el-select v-model="currentEffect" class="el-effects" style="margin-right: 10px;" placeholder="特效" @change="onEffectChange">
+        <Search style="margin-right: 10px;"></Search>
+        <div class="setting" @click="toggleVisible(true)">
+            <el-icon><Setting /></el-icon>
+        </div>
+        <WebSetting v-model="visible"></WebSetting>
+        <!-- <el-select v-model="currentEffect" class="el-effects" style="margin-right: 10px;" placeholder="特效" @change="onEffectChange">
             <el-option  :label="'无'" :value="-1"></el-option>
             <el-option v-for="(item, index) in effect" :label="item.name" :value="index" :key="item.name"></el-option>
         </el-select>
-        <el-color-picker class="color-picker" v-model="color" @change="onColorPickerChange" show-alpha />
+        <el-color-picker class="color-picker" v-model="color" @change="onColorPickerChange" show-alpha /> -->
     </div>
 </div>
 </template>
@@ -45,14 +50,12 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    padding: 0 16px;
     width: 1200px;
     margin: 0 auto;
     .logo {
         width: 200px;
         text-align: center;
         cursor: pointer;
-        padding: 0 20px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -76,35 +79,28 @@
         border-bottom: 0;
     }
     .right {
+        height: 100%;
         display: flex;
         align-items: center;
+        .setting {
+            font-size: 26px;
+            cursor: pointer;
+            line-height: 100%;
+            color: var(--vt-c-white);
+        }
     }
 }
 </style>
-<script lang="tsx" setup>
+<script lang="ts" setup>
 import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCollapseStore, useRouteStore } from '@/stores/app'
 import config from '@/config'
-import effect from '@/plugins/specialEffects.js'
-const currentEffect = ref(0)
-const onEffectChange = (index?:number) => {
-    window.onclick = null
-    window.onmousedown = null
-    window.onmouseup = null
-    const canvas:HTMLCanvasElement = document.querySelector('body > canvas') as any
-    if (canvas !== null) {
-        canvas.parentNode?.removeChild(canvas);
-    }
-    !index && effect[3]?.cb()
-    effect[index]?.cb()
-}
-onEffectChange(0)
+import WebSetting from '@/components/webSetting.vue'
+import Search from '@/components/Search.vue'
+import useState from '@/hooks/useState'
+const [ visible, toggleVisible ] = useState(false)
 let routeStore = useRouteStore()
-// const routes = computed(() => routeStore.routes.slice(0, 4))
-const root:any = document.querySelector(':root')
-const primaryColor = getComputedStyle(root).getPropertyValue('--el-color-primary')
-const color = ref(primaryColor)
 const collapse = useCollapseStore()
 const router = useRouter()
 
@@ -116,8 +112,5 @@ const activeIndex = computed(() => {
 const handleSelect = (key: string, keyPath: string[]) => {
   console.log(key, keyPath)
 
-}
-const onColorPickerChange = () => {
-    root.style.setProperty('--el-color-primary', color.value)
 }
 </script>

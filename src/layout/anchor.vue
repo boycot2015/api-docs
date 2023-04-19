@@ -9,8 +9,9 @@
 .anchor {
     position: sticky;
     top: 0;
+    right: 0;
     margin-left: 20px;
-    z-index: 10;
+    z-index: 9;
     min-width: 150px;
     background-color: var(--vt-c-white);
     .wrapper {

@@ -8,23 +8,7 @@ export default [
           title: '首页',
           icon: 'House'
         },
-        // component: Layout,
         component: () => import('@/views/home.vue')
-        // children: [
-        //     {
-        //       path: '/home',
-        //     //   redirect: '/',
-        //       name: 'home',
-        //       meta: {
-        //         title: '首页',
-        //         hideAside: true,
-        //         hideAnchor: true,
-        //         hideBreadcrumb: true,
-        //         icon: 'House'
-        //       },
-        //       component: () => import('@/views/home.vue')
-        //     }
-        // ]
       },
       {
         path: '/error',
@@ -34,7 +18,7 @@ export default [
             hideInMenu: true,
         },
         component: () => import('@/views/error.vue')
-      }
+      },
     // {
     //     path: '/guide',
     //     name: 'guide',
@@ -64,15 +48,28 @@ export default [
     //         }
     //     ]
     // },
-    // {
-    //   path: '/log',
-    //   name: 'log',
-    //   meta: {
-    //     title: '更新日志',
-    //     hideHeader: true,
-    //     // hideAnchor: true,
-    //     icon: 'Promotion'
-    //   },
-    //   component: () => import('@/views/log.vue')
-    // }
+    {
+        path: '/log',
+        name: 'log',
+        redirect: '/log/index',
+        meta: {
+            title: '更新日志',
+            hideChildren: true,
+            icon: 'Promotion'
+        },
+        component: () => Layout,
+        children: [
+            {
+                path: '/log/index',
+                name: 'logList',
+                meta: {
+                    title: '更新日志',
+                    hideHeader: true,
+                    hideAnchor: true,
+                    icon: 'Menu'
+                },
+                component: () => import('@/views/log.vue'),
+            }
+        ]
+    }
 ]

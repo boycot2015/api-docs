@@ -2,7 +2,7 @@
 import { computed, reactive, watch, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import type { Column, SpanMethodProps } from '../tools'
-import { getParams } from '../tools'
+import { getParams, getCustomParams } from '../tools'
 import useState from '@/hooks/useState'
 import { getRowSpan } from '@/utils'
 const router = useRouter()
@@ -24,7 +24,7 @@ const outColumns:Column[] = [
 const [ state, setState ] = useState({
     loading: false,
     data: pageData.value.data,
-    inData: getParams(pageData.value.data.parameters),
+    inData: [...getCustomParams(pageData.value), ...getParams(pageData.value.data?.parameters || [])],
     outData: getParams(pageData.value.data.responses[200].schema.$ref),
     inColumns,
     outColumns
@@ -62,7 +62,7 @@ watch(pageData, (val) => {
     setState({
         ...state.value,
         data: val.data || {},
-        inData: val.data ? getParams(val.data.parameters) : [],
+        inData: [...getCustomParams(pageData.value), ...getParams(val.data?.parameters || [])],
         outData: val.data && val.data.responses[200] ? getParams(val.data.responses[200].schema.$ref) : []
     })
 })

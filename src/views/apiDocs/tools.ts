@@ -38,8 +38,26 @@ interface ResponseTypes {
     boolean: boolean
     integer: number
 }
+
+const getCustomParams = (data:any) => {
+    return data?.info?.title?.includes('B2C商城前端') ? [{
+            description : "网站授权信息",
+            in: "header",
+            name: "Authorization",
+            required: false,
+            type: "string"
+    },
+    {
+            description : "网站域名",
+            in: "header",
+            name: "website-path",
+            required: true,
+            type: "string"
+    }] : []
+}
+
 const getParams = (data:ColumnProps[], child?:boolean, name?:string) => {
-    return data.map((el:ColumnProps|any) => {
+    return data && data.map((el:ColumnProps|any) => {
         let children =  el.children ?  el.children || '' : el.schema ? el.schema.$ref || '' : ''
         if (children && children.length) {
             children = getParams(children, true, el.type === 'array' ? 'items': el.type ? el.name : 'body')
@@ -56,7 +74,7 @@ const arr2obj = (arr:ColumnProps[] | undefined, prop = 'children') => {
         integer: 1
     }
     arr?.map((el:ColumnProps | any) => {
-        obj[el.name] = el.example || types[el.type]
+        obj[el.name] = el.example || types[el.type] || ''
         if (el[prop] && el[prop].length) {
             obj[el.name] = arr2obj(el[prop], prop)
         }
@@ -71,6 +89,7 @@ export type {
     SpanMethodProps
 }
 export {
+    getCustomParams,
     getParams,
     arr2obj
 }

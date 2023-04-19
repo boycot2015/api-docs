@@ -3,7 +3,7 @@ import { computed, reactive, watch, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import type { FormInstance } from 'element-plus'
 import type { ColumnProps, FormProps } from '../tools'
-import { getParams, arr2obj } from '../tools'
+import { getParams, arr2obj, getCustomParams } from '../tools'
 import http from '@/api/request'
 import { baseServeUrl } from '@/api/baseUrl'
 import useState from '@/hooks/useState'
@@ -18,15 +18,15 @@ let state = reactive({
     data: pageData.value.data,
     url: pageData.value.url,
     method: pageData.value.method,
-    inData: getParams(pageData.value.data.parameters),
+    inData: [...getCustomParams(pageData.value), ...getParams(pageData.value.data?.parameters || [])],
     outData: getParams(pageData.value.data.responses[200].schema.$ref),
     name: pageData.value.name
 })
 const initFormData = (arr:any) => {
     let form:FormProps = {}
     arr.map((el:ColumnProps) => {
-        if (el.in === 'body') {
-            form.bodyParams = JSON.stringify(arr2obj(el.children, 'children'))
+        if (el.in === 'body' || el.in === 'query') {
+            form.bodyParams = JSON.stringify(arr2obj(el.children || [el], 'children'))
         }
     })
     form.Method = baseServeUrl + state.url
@@ -34,7 +34,7 @@ const initFormData = (arr:any) => {
     form['Random-Code'] = Math.floor(Math.random() * 100000) + ''
     return form
 }
-const [form, setForm] = useState({...initFormData(getParams(pageData.value.data.parameters)) } as FormProps)
+const [form, setForm] = useState({...initFormData([...getCustomParams(pageData.value), ...getParams(pageData.value.data.parameters || [])]) } as FormProps)
 
 const onSubmit = (formEl: FormInstance | undefined) => {
     if (!formEl) return
@@ -99,13 +99,13 @@ watch(pageData, (val) => {
         url: val.url,
         method: val.method,
         name: val.name,
-        inData: val.data ? getParams(val.data.parameters) : [],
-        outData: val.data && val.data.responses[200] ? getParams(val.data.responses[200].schema.$ref) : []
+        inData: [...getCustomParams(pageData.value), ...getParams(val.data?.parameters || [])],
+        outData: val.data && val.data.responses[200] ? getParams(val.data?.responses[200]?.schema?.$ref || []) : []
     }
     toggleShowParams(true)
     setResponses({})
     ruleFormRef.value?.resetFields()
-    setForm({ ...form, ...initFormData(val.data ? getParams(val.data.parameters) : []) })
+    setForm({ ...form, ...initFormData([...getCustomParams(pageData.value), ...getParams(val.data?.parameters || [])]) })
     loading.value = true
     setTimeout(() => {
         loading.value = false
@@ -120,18 +120,18 @@ watch(pageData, (val) => {
                 4. 响应示例
             </h3>
             <div class="action fr">
-                <el-link class="mr16" @click="toggleShowParams(!showParams)">{{!showParams ? '展开' : '收起'}} <el-icon style="margin-left:5px;"><ArrowDownBold v-if="!showParams" /> <ArrowUpBold v-else /></el-icon> </el-link>
+                <el-link class="mr16" v-if="(state.inData && state.inData.length) || form.bodyParams" @click="toggleShowParams(!showParams)">{{!showParams ? '展开' : '收起'}} <el-icon style="margin-left:5px;"><ArrowDownBold v-if="!showParams" /> <ArrowUpBold v-else /></el-icon> </el-link>
                 <el-button type="primary" @click="onSubmit(ruleFormRef)">测试一下</el-button>
                 <el-button @click="onReset(ruleFormRef)">重置</el-button>
             </div>
         </div>
         <el-form :model="form" ref="ruleFormRef" label-width="120px" v-show="showParams">
-            <el-form-item label="请求头参数" :inline="false" >
+            <el-form-item label="请求头参数" :inline="false" v-if="state.inData && state.inData.length">
                 <el-form-item style="width: 100%;margin-bottom: 20px;" :prop="item.name" :rules="[{required: item.required, message: item.name + '不能为空', tigger: 'change'}]" :label="item.name" v-for="item in state.inData.filter((el:any) => el.in === 'header')" :key="item.name">
                     <el-input v-model="form[item.name]" :placeholder="item.description"></el-input>
                 </el-form-item>
             </el-form-item>
-            <el-form-item label="body参数" :rules="[{required: true, message: 'body参数不能为空', tigger: 'change'}]" prop="bodyParams" :inline="false">
+            <el-form-item :label="`${state.method === 'post'?'body':'query'}参数`" :rules="[{required: true, message: `${state.method === 'post'?'body':'query'}参数不能为空`, tigger: 'change'}]" prop="bodyParams" :inline="false">
                 <!-- <el-form-item style="width: 100%;margin-bottom: 20px;" :prop="item.name" :rules="[{required: item.required && !item.children, message: item.name + '不能为空', tigger: 'change'}]" :label="item.name" v-for="item in state.inData.filter(el => el.in === 'body').map(el => el.children)[0]" :key="item.name">
                     <el-input v-model="form[item.name]" :style="{marginBottom: item.children ?'10px': ''}" :disabled="!!item.children" :placeholder="item.description"></el-input>
                     <template v-if="item.children">
@@ -140,7 +140,7 @@ watch(pageData, (val) => {
                         </el-form-item>
                     </template>
                 </el-form-item> -->
-                    <el-input rows="8" type="textarea" v-model="form.bodyParams" :style="{marginBottom: '10px'}" placeholder="请输入"></el-input>
+                    <el-input rows="8" type="textarea" v-model="form.bodyParams" :style="{marginBottom: '10px'}" :placeholder="`请输入${state.method === 'post'?'body':'query'}参数`"></el-input>
             </el-form-item>
         </el-form>
         <pre>{{ responses }}</pre>

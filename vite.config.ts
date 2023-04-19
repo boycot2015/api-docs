@@ -16,6 +16,16 @@ export default defineConfig({
             target: 'http://121.41.51.167:10001',
             changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/openApi/, '') // 不可以省略rewrite
+            },
+            '/mallApi': {
+                target: 'http://192.168.1.225:5101',
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/mallApi/, '') // 不可以省略rewrite
+            },
+            '/mallAdminApi': {
+                target: 'http://192.168.1.225:5201',
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/mallAdminApi/, '') // 不可以省略rewrite
             }
         }
     },

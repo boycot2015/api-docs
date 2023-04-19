@@ -5,6 +5,7 @@
         :collapse="collapse.isCollapse"
         @open="handleOpen"
         router
+        :style="logoPosition?'paddingBottom: 50px':''"
         unique-opened
         @close="handleClose"
     >
@@ -63,7 +64,6 @@ const handleClose = (key: string, keyPath: string[]) => {
     &:not(.el-menu--collapse) {
         width: 200px;
     }
-    padding-bottom: 50px;
 }
 .logo {
     position: fixed;

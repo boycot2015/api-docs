@@ -4,6 +4,7 @@ import config from '@/config'
 import axios from '@/api/request'
 import router from './index';
 import Layout from '@/layout/index.vue'
+import storage from '@/utils/storage'
 const dynamicRoutes = (data:any, parent = '') => {
     for (let item of data) {
         //多级菜单
@@ -37,13 +38,10 @@ const dynamicRoutes = (data:any, parent = '') => {
 const fetchRouteData = (to:any, from:any, next: any) => {
     return new Promise((resolve, reject) => {
         let dyRoutes:any = []
-        dyRoutes = window.localStorage.getItem(config.websitePrefix + 'routes')
+        dyRoutes = storage.getItem('routes')
         if (dyRoutes && dyRoutes !== null) {
-            dynamicRoutes(JSON.parse(dyRoutes))
-            resolve(JSON.parse(dyRoutes))
-            setTimeout(() => {
-                window.localStorage.removeItem(config.websitePrefix + 'routes')
-            }, 1000 * 60 * 1);
+            dynamicRoutes(dyRoutes)
+            resolve(dyRoutes)
             return
         } else {
             dyRoutes = []
@@ -52,13 +50,13 @@ const fetchRouteData = (to:any, from:any, next: any) => {
         
         axios.get('/v2/api-docs', {}).then((res:any) => {
             // console.log(res);
-            const { tags, paths, definitions } = res as any
+            const { tags, paths, definitions, host, info } = res as any
             const getParameters = (obj:any) => {
                 if (!obj || obj === null) return {}
                 for (const k in obj) {
                     if (k === '$ref') {
                         for (const key in definitions) {
-                            if (obj[k] && typeof obj[k] === 'string' && key === obj[k].split('/')[2]) {
+                            if (obj[k] && typeof obj[k] === 'string' && obj[k].split('/')[2] && key === obj[k].split('/')[2]) {
                                 obj[k] = getParameters(definitions[key])
                                 let children:any = []
                                 for (const key in obj[k].properties) {
@@ -78,10 +76,9 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                             }
                         }
                     }
-                    if (typeof obj[k] === 'object' &&  obj[k] !== null) {
+                    if (typeof obj[k] === 'object' &&  obj[k] !== null && obj[k]) {
                         obj[k] = getParameters(obj[k])
                     }
-                    
                 }
                 return obj
             }
@@ -93,7 +90,7 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                     meta: {
                         title: el.name.replace(/接口/g, ''),
                         icon: 'Menu',
-                        showInHeader: el.name.length < 5,
+                        showInHeader: el.name.length < 13,
                         pageData: []
                     }
                 }
@@ -106,16 +103,18 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                             url: key,
                             component: 'apiDocs',
                             name: data.summary,
+                            host,
+                            info,
                             method: paths[key].post ? 'post' : 'get'
                         })
                     }
                 }
-                route.name = route.meta.pageData[0].url.split('/').join('')
-                route.path += route.name
+                route.name = route.meta.pageData[0]?.url.split('/').join('')|| 'apiDocs'
+                route.path += route.name || ''
                 if (route.meta.pageData.length >= 1) {
                     route.children = route.meta.pageData.map((val:any, idx: number) => ({
-                        path: '/apiDocs/' + route.name + '/' + val.url.split('/').join(''),
-                        name: 'apiDocs' + val.url.split('/').join(''),
+                        path: '/apiDocs/' + route.name + val.url ? '/' + val.url.split('/').join('') : 'index',
+                        name: 'apiDocs' + val.url?.split('/').join('') || '',
                         meta: {
                             title: val.name.replace(/接口/g, ''),
                             icon: 'Menu',

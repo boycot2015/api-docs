@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, RouterView } from 'vue-router'
 import config from '@/config'
+import storage from '@/utils/storage'
 import routes from './routes'
 import dynamicRoutes from './dynamicRoutes'
 import { useRouteStore } from '@/stores/app'
@@ -14,6 +15,9 @@ router.beforeEach(async (to:any, from, next) => {
     to.meta.websiteName = config.websiteName
     to.meta.websiteConfig = config
     document.title = config.websiteName + '-' + to.meta.title
+    if (!storage.getItem('websiteConfig')) {
+        storage.setItem('websiteConfig', config)
+    }
     if (routeStore.hasRoutes) {
         next()
         // if (routeStore.routes.map((el:any) => el.path).includes(to.path)) {
@@ -26,7 +30,7 @@ router.beforeEach(async (to:any, from, next) => {
         dyRoutes = await dynamicRoutes(to, from, next)
         Loading().close()
         routeStore.setRoutes([...routes, ...dyRoutes], true)
-        window.localStorage.setItem(config.websitePrefix + 'routes', JSON.stringify([...dyRoutes]))
+        storage.setItem('routes', [...dyRoutes], 5000)
         next({ ...to, replace: true })
     }
 })

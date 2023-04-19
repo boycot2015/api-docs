@@ -3,7 +3,7 @@ import { baseUrl } from './baseUrl'
 import Loading from '@/hooks/loading'
 import { ElMessage } from 'element-plus'
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
-
+import storage from '@/utils/storage'
 type Result<T> = {
   code: number;
   message: string;
@@ -19,11 +19,14 @@ export class Request {
   constructor(config: AxiosRequestConfig) {
     // 使用axios.create创建axios实例
     this.instance = axios.create(Object.assign(this.baseConfig, config));
-
+    
     this.instance.interceptors.request.use(
-      (config) => {
+        (config) => {
+        if (config.url?.includes('http') || config.url?.includes('https')) {
+            config.baseURL = '/'
+        }
         // 一般会请求拦截里面加token，用于后端的验证
-        const token = localStorage.getItem("token") as string
+        const token = storage.getItem("token") as string
         if(token) {
           config.headers!.Authorization = token;
         }

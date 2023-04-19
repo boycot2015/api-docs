@@ -18,18 +18,18 @@ const getCavans = () => {
         W2 = 1 / 200,
         Q2 = 0,
         H2 = height / 2;
-    let speed = -0.02;
-    let speed2 = -0.01;
+    let speed = -0.005;
+    let speed2 = -0.001;
     
     //创建线性渐变
     let lingrad = ctx.createLinearGradient(0, 0, width, 0);
     //规定渐变对象中的颜色和停止位置
     lingrad.addColorStop(0, 'rgba(114,114,114,0.8)');
-    lingrad.addColorStop(1, 'rgba(36,88,179,1)');
+    lingrad.addColorStop(1, 'rgba(0,0,0,1)');
     
     let lingrad2 = ctx.createLinearGradient(0, 0, width, 0);
-    lingrad2.addColorStop(0, 'rgba(114,114,114,114.8)');
-    lingrad2.addColorStop(1, 'rgba(36,88,179,1)');
+    lingrad2.addColorStop(0, 'rgba(0,0,0,1)');
+    lingrad2.addColorStop(1, 'rgba(114,114,114,0.8)');
     
     //绘图方法
     (function draw() {
@@ -121,10 +121,10 @@ onMounted(() => {
   <div class="home">
     <el-header><Header>
         <template #logo>
-            <a class="logo" href="/">
+            <RouterLink class="logo" to="/">
                 <img src="src/assets/image/logo.png" />
                 {{config.websiteName}}
-            </a>
+            </RouterLink>
         </template>
     </Header></el-header>
     <canvas id="canvas"></canvas>
