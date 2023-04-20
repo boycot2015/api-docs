@@ -14,9 +14,9 @@ let env = process.env.NODE_ENV === 'development'
                         ? 'app.test' : 'production'
 switch (env) {
 case 'development':
-    // prefix = `http://121.41.51.167:10001` // dev环境url
-    prefix = '/mallApi'
-    // prefix = '/openApi'
+    prefix = `http://121.41.51.167:10001` // dev环境url
+    prefix = '/devApi'
+    prefix = '/openApi'
     baseServeUrl = `` // dev环境url
     baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'

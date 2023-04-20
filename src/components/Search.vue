@@ -2,31 +2,21 @@
 import { useRouteStore } from '@/stores/app'
 import { computed, onMounted, reactive, watch, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { getVaildRoute } from '@/utils'
 let routeStore = useRouteStore()
 interface LinkItem {
   name: string
   value: string
   path: string
 }
-const routes:any = computed(() => routeStore.routes.filter((el:any) => el.meta.showInHeader))
+const routes:any = computed(() => routeStore.routes)
 const router = useRouter()
 const loading = ref(true)
-const pageData:any = computed(() => router.currentRoute.value.meta.pageData)
+const pageData:any = computed(() => router.currentRoute.value.meta?.pageData)
 watch(pageData, (val) => {})
 const keyword = ref('')
-const getVaildRoute = (routes:any) => {
-    let arr:any = []
-    routes?.map((el:any) => {
-        if (el.children && el.children.length) {
-            arr = [...arr, ...getVaildRoute(el.children)]
-        } else {
-            arr.push({ ...el, value: el.meta?.pageData?.url || el.path, name: el.meta?.title || el.name })
-        }
-    })
-    return arr
-}
-const suggestions = ref<LinkItem[]>(getVaildRoute(routes.value).slice(0, 3))
-const querySearch = (key:string, cb: (params:any) => void) => {
+const suggestions = ref<LinkItem[]>(getVaildRoute(routes.value.filter((el:any) => el.meta?.showInHeader)))
+const querySearch = (key:string, cb: (params:any) => void) => {    
     const results = key ? getVaildRoute(routes.value).filter(createFilter(key)) : suggestions.value
     cb(results)
 }

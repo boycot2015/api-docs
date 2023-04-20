@@ -1,6 +1,6 @@
 <script setup lang="tsx">
 import { useAnchorStore } from '@/stores/app'
-import { computed, onMounted, reactive, watch, ref } from 'vue'
+import { computed, onMounted, watch, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import ApiDesc from './components/desc.vue'
 import ApiParameters from './components/parameters.vue'
@@ -9,7 +9,7 @@ import ApiResponse from './components/response.vue'
 const router = useRouter()
 const appPageAnchors = useAnchorStore()
 const loading = ref(true)
-const pageData:any = computed(() => router.currentRoute.value.meta.pageData)
+const pageData:any = computed(() => router.currentRoute.value.meta?.pageData)
 watch(pageData, (val) => {
     if (!val) return
     setTimeout(() => {
@@ -68,22 +68,6 @@ onMounted(() => {
                 margin: 10px 0 10px 30px;
             }
         }
-        pre {
-            padding: 10px ;
-            overflow: auto;
-            max-height: 600px;
-            border-radius: var(--border-radius);
-            background-color: var(--vt-c-white-soft);
-            color: var(--vt-c-black);
-        }
-    .top {
-        position: --webkit-sticky;
-        position: sticky;
-        z-index: 9;
-        top: -16px;
-        padding-top: 10px;
-        background-color: var(--vt-c-white);
-    }
     }
 }
 </style>

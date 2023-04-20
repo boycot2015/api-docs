@@ -5,6 +5,7 @@ import routes from './routes'
 import dynamicRoutes from './dynamicRoutes'
 import { useRouteStore } from '@/stores/app'
 import Loading from '@/hooks/loading'
+import { getVaildRoute } from '@/utils'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: routes as any
@@ -20,18 +21,18 @@ router.beforeEach(async (to:any, from, next) => {
     }
     if (routeStore.hasRoutes) {
         next()
-        // if (routeStore.routes.map((el:any) => el.path).includes(to.path)) {
-        //     next()
-        // } else {
-        //     next({ name: 'error' })
-        // }
     } else {
         Loading()
         dyRoutes = await dynamicRoutes(to, from, next)
         Loading().close()
         routeStore.setRoutes([...routes, ...dyRoutes], true)
         storage.setItem('routes', [...dyRoutes], 5000)
-        next({ ...to, replace: true })
+        // console.log(getVaildRoute(dyRoutes).map((el:any) => el.path), to.path, 'getVaildRoute');
+        if (![...routes.map((el:any) => el.path), ...getVaildRoute(dyRoutes).map((el:any) => el.path)].includes(to.path)) {
+            next({ name: 'error' })
+        } else {
+            next({ ...to, replace: true })
+        }
     }
 })
 router.afterEach(() => {

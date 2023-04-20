@@ -7,19 +7,21 @@
 </template>
 <style lang="scss" scoped>
 .anchor {
-    position: sticky;
-    top: 0;
-    right: 0;
-    margin-left: 20px;
+    position: fixed;
+    top: auto;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    margin-left: 800px;
     z-index: 9;
     min-width: 150px;
+    box-shadow: 0 10px 50px #ccc;
     background-color: var(--vt-c-white);
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
     .wrapper {
+        width: 100%;
         border-left: 2px solid var(--vt-c-black-light);
-        height: auto;
         padding: 16px 0;
-        box-shadow: 0 10px 50px #ccc;
-        border-radius: 0 var(--border-radius) var(--border-radius) 0;
     }
     &-item {
         display: block;

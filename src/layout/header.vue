@@ -75,6 +75,7 @@
     .el-header-menu {
         // width: 800px;
         flex: 1;
+        width: 600px;
         // margin: 0 auto;
         border-bottom: 0;
     }
@@ -96,7 +97,7 @@ import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCollapseStore, useRouteStore } from '@/stores/app'
 import config from '@/config'
-import WebSetting from '@/components/webSetting.vue'
+import WebSetting from '@/components/WebSetting.vue'
 import Search from '@/components/Search.vue'
 import useState from '@/hooks/useState'
 const [ visible, toggleVisible ] = useState(false)
@@ -104,7 +105,7 @@ let routeStore = useRouteStore()
 const collapse = useCollapseStore()
 const router = useRouter()
 
-const routes = computed(() => routeStore.routes.filter((el:any) => el.meta.showInHeader))
+const routes = computed(() => routeStore.routes.filter((el:any) => el.meta?.showInHeader))
 const activeIndex = computed(() => {
     let path = router.currentRoute.value.path
    return path === '/home' ? '/' : path

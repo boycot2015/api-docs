@@ -1,6 +1,7 @@
 import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig } from 'vite'
+import proxy from './proxy'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import AutoImport from 'unplugin-auto-import/vite'
@@ -11,23 +12,8 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 export default defineConfig({
     server: {
         port: 10002,
-        proxy: {
-            '/openApi': {
-            target: 'http://121.41.51.167:10001',
-            changeOrigin: true,
-                rewrite: (path) => path.replace(/^\/openApi/, '') // 不可以省略rewrite
-            },
-            '/mallApi': {
-                target: 'http://192.168.1.225:5101',
-                changeOrigin: true,
-                rewrite: (path) => path.replace(/^\/mallApi/, '') // 不可以省略rewrite
-            },
-            '/mallAdminApi': {
-                target: 'http://192.168.1.225:5201',
-                changeOrigin: true,
-                rewrite: (path) => path.replace(/^\/mallAdminApi/, '') // 不可以省略rewrite
-            }
-        }
+        proxy,
+        cors: true,
     },
     plugins: [
         vue(),

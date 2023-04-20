@@ -34,12 +34,17 @@ watch(pageData, (val) => {
     <div class="api-docs-section api-desc">
         <h3 class="app-page-anchor sub-title" id="app-page-anchor0">1. 接口说明</h3>
         <div class="api-desc-item">
+            <!-- {{pageData}} -->
             <div class="name">1.1 接口请求地址</div>
-            <div class="value">【{{state.method}}】{{baseServeUrl}}{{state.url}}</div>
+            <div class="value" v-highlight>【{{state.method}}】{{baseServeUrl}}{{state.url}}</div>
         </div>
         <div class="api-desc-item">
-            <div class="name">1.2 接口描述</div>
-            <div class="value">{{state.data.description}}</div>
+            <div class="name">1.2 请求类型</div>
+            <div class="value">{{state.data?.consumes[0]}}</div>
+        </div>
+        <div class="api-desc-item">
+            <div class="name">1.3 接口描述</div>
+            <div class="value">{{state.data?.description}}</div>
         </div>
     </div>
   </div>

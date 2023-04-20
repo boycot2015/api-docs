@@ -25,7 +25,7 @@ const [ state, setState ] = useState({
     loading: false,
     data: pageData.value.data,
     inData: [...getCustomParams(pageData.value), ...getParams(pageData.value.data?.parameters || [])],
-    outData: getParams(pageData.value.data.responses[200].schema.$ref),
+    outData: getParams(pageData.value.data?.responses[200].schema.$ref),
     inColumns,
     outColumns
 })
@@ -63,7 +63,7 @@ watch(pageData, (val) => {
         ...state.value,
         data: val.data || {},
         inData: [...getCustomParams(pageData.value), ...getParams(val.data?.parameters || [])],
-        outData: val.data && val.data.responses[200] ? getParams(val.data.responses[200].schema.$ref) : []
+        outData: val.data && val.data?.responses[200] ? getParams(val.data.responses[200].schema.$ref) : []
     })
 })
 </script>
