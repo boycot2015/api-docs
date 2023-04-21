@@ -39,8 +39,8 @@ export const useAuthUserStore = defineStore('auth/user', {
     // no context as first argument, use `this` instead
     async loadUser (id: number) {
       if (this.userId !== null) throw new Error('Already logged in')
-      const res = await api.user.load(id)
-      this.updateUser(res)
+    //   const res = await api.user.load(id)
+      this.updateUser({})
     },
     // mutations can now become actions, instead of `state` as first argument use `this`
     updateUser (payload:any) {

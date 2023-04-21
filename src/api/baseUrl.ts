@@ -16,7 +16,7 @@ switch (env) {
 case 'development':
     prefix = `http://121.41.51.167:10001` // dev环境url
     prefix = '/devApi'
-    prefix = '/mallAdminApi'
+    // prefix = '/mallAdminApi'
     // prefix = '/mallApi'
     // prefix = '/openApi'
     baseServeUrl = `` // dev环境url
@@ -42,7 +42,8 @@ case 'show':
     loginUrl = prefix + '/api/login/authskip'
     break
 case 'production':
-    prefix = 'https://gateway.yunzhonghe.com' // aliyun生产环境url
+    // prefix = 'https://gateway.yunzhonghe.com' // aliyun生产环境url
+    prefix = 'http://192.168.4.42:5101'
     baseServeUrl = `` // dev环境url
     baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'

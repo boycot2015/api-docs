@@ -3,6 +3,7 @@ import { useAnchorStore } from '@/stores/app'
 import { onMounted, ref } from 'vue'
 import Header from '@/layout/header.vue'
 import config from '@/config'
+import logo from '@/assets/image/logo.png'
 const appPageAnchors = useAnchorStore()
 const getCavans = () => {
     let canvas:any = document.getElementById("canvas"),
@@ -122,7 +123,7 @@ onMounted(() => {
     <el-header><Header>
         <template #logo>
             <RouterLink class="logo" to="/">
-                <img src="src/assets/image/logo.png" />
+                <img :src="logo" />
                 {{config.websiteName}}
             </RouterLink>
         </template>
