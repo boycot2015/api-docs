@@ -1,7 +1,8 @@
 <template>
   <el-breadcrumb :separator-icon="'ArrowRight'">
     <!-- :to="{ path: route.path }" -->
-    <el-breadcrumb-item v-for="route in activeRoutes" :key="route.path">{{route.meta.title}}</el-breadcrumb-item>
+    <el-breadcrumb-item v-for="(route, index) in activeRoutes"
+    :key="route.path + index">{{route.meta.title}}</el-breadcrumb-item>
   </el-breadcrumb>
 </template>
 <style lang="scss" scoped>

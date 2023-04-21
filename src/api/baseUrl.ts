@@ -16,7 +16,9 @@ switch (env) {
 case 'development':
     prefix = `http://121.41.51.167:10001` // dev环境url
     prefix = '/devApi'
-    prefix = '/openApi'
+    prefix = '/mallAdminApi'
+    // prefix = '/mallApi'
+    // prefix = '/openApi'
     baseServeUrl = `` // dev环境url
     baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'

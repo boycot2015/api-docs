@@ -6,6 +6,7 @@ interface ColumnProps {
     required: string
     child?: string
     example?: unknown
+    format?:string
     children?: ColumnProps[]|undefined
     description: string
 }
@@ -24,6 +25,7 @@ interface FormProps {
     'Random-Code'?: string
     code?: number
     message?: string
+    bodyRequired?:boolean
     bodyParams?: string
 }
 interface SpanMethodProps {
@@ -41,14 +43,14 @@ interface ResponseTypes {
 
 const getCustomParams = (data:any) => {
     return data?.info?.title?.includes('B2C商城前端') ? [{
-            description : "网站授权信息",
+            description : "token令牌",
             in: "header",
             name: "Authorization",
             required: false,
             type: "string"
     },
     {
-            description : "网站域名",
+            description : "商城域名",
             in: "header",
             name: "website-path",
             required: true,
@@ -57,12 +59,12 @@ const getCustomParams = (data:any) => {
 }
 
 const getParams = (data:ColumnProps[], child?:boolean, name?:string) => {
-    return data && data.map((el:ColumnProps|any) => {
+    return data && data.map && data.map((el:ColumnProps|any) => {
         let children =  el.children ?  el.children || '' : el.schema ? el.schema.$ref || '' : ''
         if (children && children.length) {
-            children = getParams(children, true, el.type === 'array' ? 'items': el.type ? el.name : 'body')
+            children = getParams(children, true, el.type === 'array' ? el.name+'[]' : el.type ? el.name : 'body')
         }
-        return { ...el, in: el.in || (el.type === 'array' ? 'items': el.type === 'object' ? 'object': name), children, child }
+        return { ...el, in: el.in || (el.type === 'array' ? 'body': el.type === 'object' ? 'object': name), children, child }
     })
 }
 const arr2obj = (arr:ColumnProps[] | undefined, prop = 'children') => {
@@ -73,10 +75,13 @@ const arr2obj = (arr:ColumnProps[] | undefined, prop = 'children') => {
         boolean: false,
         integer: 1
     }
-    arr?.map((el:ColumnProps | any) => {
-        obj[el.name] = el.example || types[el.type] || ''
+    arr && arr.map && arr.map((el:ColumnProps | any) => {
+        obj[el.name] = el.example || types[el.type] !== undefined ? types[el.type] : ''
         if (el[prop] && el[prop].length) {
             obj[el.name] = arr2obj(el[prop], prop)
+            if (el.type === 'array') {
+                obj[el.name] = [arr2obj(el[prop], prop)]
+            }
         }
     })
     return obj

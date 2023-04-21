@@ -40,10 +40,14 @@ watch(pageData, (val) => {
         </div>
         <div class="api-desc-item">
             <div class="name">1.2 请求类型</div>
-            <div class="value">{{state.data?.consumes[0]}}</div>
+            <div class="value">{{state.data?.consumes.join(',')}}</div>
         </div>
         <div class="api-desc-item">
-            <div class="name">1.3 接口描述</div>
+            <div class="name">1.3 响应类型</div>
+            <div class="value">{{state.data?.produces.join(',')}}</div>
+        </div>
+        <div class="api-desc-item">
+            <div class="name">1.4 接口描述</div>
             <div class="value">{{state.data?.description}}</div>
         </div>
     </div>

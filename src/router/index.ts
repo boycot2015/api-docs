@@ -26,7 +26,7 @@ router.beforeEach(async (to:any, from, next) => {
         dyRoutes = await dynamicRoutes(to, from, next)
         Loading().close()
         routeStore.setRoutes([...routes, ...dyRoutes], true)
-        storage.setItem('routes', [...dyRoutes], 5000)
+        storage.setItem('routes', [...dyRoutes], 60000)
         // console.log(getVaildRoute(dyRoutes).map((el:any) => el.path), to.path, 'getVaildRoute');
         if (![...routes.map((el:any) => el.path), ...getVaildRoute(dyRoutes).map((el:any) => el.path)].includes(to.path)) {
             next({ name: 'error' })

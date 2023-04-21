@@ -3,6 +3,8 @@
  */
 import config from '@/config'
 import { JSONStringify, JSONParse } from '@/utils'
+// import { Huffman } from '@/utils/huffman'
+
  export default { //可以用this
     getStroage() { //获取所有值并转成json
         //获取本地存储 & 装成json格式 当它是空时，给他一个对象，方便设置没有外层包裹并且直接转成字符串
@@ -16,7 +18,11 @@ import { JSONStringify, JSONParse } from '@/utils'
             time: Date.now(),
             expired
         }
-        window.localStorage.setItem(config.websitePrefix, JSONStringify(storage));
+        try {
+            window.localStorage.setItem(config.websitePrefix, JSONStringify(storage));
+        } catch (error) {
+            console.log('存储超过最大5M限制！')
+        }
     },
     getItem(key:string) { //获取一个值
         //获取到运行函数之后值的key

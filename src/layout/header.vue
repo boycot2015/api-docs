@@ -1,11 +1,9 @@
 <template>
 <div class="header">
     <slot name="logo">
-        <div class="logo" :class="{'is-collapse': collapse.isCollapse }">
-            <template v-if="config && config.logoPosition === 'top'">
-                <a href="/" v-if="!collapse.isCollapse">{{config.websiteName}}</a>
-                    <el-icon size="24"><Operation @click="collapse.toggleCollapse()" /></el-icon>
-            </template>
+        <div class="logo" :class="{'is-collapse': collapse.isCollapse }" v-if="appConfig.logoPosition === 'top'">
+            <RouterLink class="title" to="/" v-if="!collapse.isCollapse">{{appConfig.websiteName}}</RouterLink>
+            <el-icon size="24"><Operation @click="collapse.toggleCollapse()" /></el-icon>
         </div>
     </slot>
     <el-menu
@@ -15,6 +13,7 @@
         background-color="#000000"
         text-color="#fff"
         router
+        :style="appConfig.logoPosition === 'bottom' && activeIndex!=='/' ? 'width: 800px': ''"
         @select="handleSelect"
     >
         <template v-for="item in routes as any" :key="item.path">
@@ -37,11 +36,6 @@
             <el-icon><Setting /></el-icon>
         </div>
         <WebSetting v-model="visible"></WebSetting>
-        <!-- <el-select v-model="currentEffect" class="el-effects" style="margin-right: 10px;" placeholder="特效" @change="onEffectChange">
-            <el-option  :label="'无'" :value="-1"></el-option>
-            <el-option v-for="(item, index) in effect" :label="item.name" :value="index" :key="item.name"></el-option>
-        </el-select>
-        <el-color-picker class="color-picker" v-model="color" @change="onColorPickerChange" show-alpha /> -->
     </div>
 </div>
 </template>
@@ -49,17 +43,20 @@
 .header {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
     width: 1200px;
     margin: 0 auto;
     .logo {
-        width: 200px;
+        flex-basis: 200px;
         text-align: center;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        flex-wrap: nowrap;
+        // flex-wrap: nowrap;
+        .title {
+            flex-basis: 140px;
+        }
         i {
             color: var(--el-menu-border-color);
         }
@@ -68,15 +65,14 @@
             font-weight: bold;
         }
         &.is-collapse {
-            width: 60px;
-            padding: 0;
+            flex-basis: 70px;
+            text-align: center;
+            display: inline-block;
         }
     }
     .el-header-menu {
-        // width: 800px;
-        flex: 1;
-        width: 600px;
-        // margin: 0 auto;
+        width: 640px;
+        // max-width: 700px;
         border-bottom: 0;
     }
     .right {
@@ -95,8 +91,7 @@
 <script lang="ts" setup>
 import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { useCollapseStore, useRouteStore } from '@/stores/app'
-import config from '@/config'
+import { useCollapseStore, useRouteStore, useAppConfigStore } from '@/stores/app'
 import WebSetting from '@/components/WebSetting.vue'
 import Search from '@/components/Search.vue'
 import useState from '@/hooks/useState'
@@ -104,14 +99,15 @@ const [ visible, toggleVisible ] = useState(false)
 let routeStore = useRouteStore()
 const collapse = useCollapseStore()
 const router = useRouter()
-
+const appConfigStore = useAppConfigStore()
+const appConfig = computed(() => appConfigStore.appConfig) as any
 const routes = computed(() => routeStore.routes.filter((el:any) => el.meta?.showInHeader))
 const activeIndex = computed(() => {
     let path = router.currentRoute.value.path
    return path === '/home' ? '/' : path
 })
 const handleSelect = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
+//   console.log(key, keyPath)
 
 }
 </script>

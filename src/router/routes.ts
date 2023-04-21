@@ -6,6 +6,7 @@ export default [
         name: 'index',
         meta: {
           title: '首页',
+          hideInSearch: true,
           icon: 'House'
         },
         component: () => import('@/views/home.vue')
@@ -15,6 +16,7 @@ export default [
         name: 'error',
         meta: {
             title: '404',
+            hideInSearch: true,
             hideInMenu: true,
         },
         component: () => import('@/views/error.vue')

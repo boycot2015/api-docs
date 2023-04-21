@@ -5,7 +5,7 @@
         :collapse="collapse.isCollapse"
         @open="handleOpen"
         router
-        :style="logoPosition?'paddingBottom: 50px':''"
+        :style="appConfig.logoPosition === 'bottom'?'padding-bottom:55px':''"
         unique-opened
         @close="handleClose"
     >
@@ -26,8 +26,8 @@
             </el-menu-item>
         </template>
     </el-menu>
-    <div class="logo" :style="{width: collapse.isCollapse? '60px': '200px'}" v-if="logoPosition">
-        <p v-show="!collapse.isCollapse"><a href="/">{{$route.meta.websiteName}}</a></p>
+    <div class="logo" :style="{width: collapse.isCollapse? '20px': '160px'}" v-if="appConfig.logoPosition === 'bottom'">
+        <p v-show="!collapse.isCollapse"><RouterLink to="/">{{$route.meta.websiteName}}</RouterLink></p>
         <el-icon :style="{margin: collapse.isCollapse ? '0': '0 0 0 20px'}" size="24"><Operation @click="collapse.toggleCollapse()" /></el-icon>
     </div>
 </template>
@@ -35,18 +35,16 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useCollapseStore, useRouteStore } from '@/stores/app'
+import { useCollapseStore, useRouteStore, useAppConfigStore } from '@/stores/app'
 const router = useRouter()
 let routeStore = useRouteStore()
+const appConfigStore = useAppConfigStore()
+const appConfig = computed(() => appConfigStore.appConfig) as any
 // const activeIndex = reactive({ path : router.currentRoute.value.path || '/' })
 const routes = computed(() => routeStore.routes)
 const activeIndex = computed(() => {
     let path = router.currentRoute.value.path
    return path === '/home' ? '/' : path
-})
-const logoPosition = computed(() => {
-    let websiteConfig:any = router.currentRoute.value.meta.websiteConfig
-   return websiteConfig.logoPosition === 'bottom'
 })
 const collapse = useCollapseStore()
 const handleOpen = (key: string, keyPath: string[]) => {

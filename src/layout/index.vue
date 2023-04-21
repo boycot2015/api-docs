@@ -73,7 +73,7 @@ onMounted(() => {
             </el-container>
             <!-- <el-footer>Footer</el-footer> -->
         </el-container>
-        <el-backtop target=".body" style="zIndex: 999" :right="100" :bottom="100" />
+        <el-backtop target=".body" style="zIndex: 999;box-shadow: 0 0 30px #999;" :right="70" :bottom="80" />
     </div>
 </template>
 

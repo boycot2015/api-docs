@@ -1,25 +1,27 @@
 <script setup lang="tsx">
 import { computed, reactive, watch, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import type { Column, SpanMethodProps } from '../tools'
+import type { TableColumnCtx } from 'element-plus'
+import type { Column, ColumnProps, SpanMethodProps } from '../tools'
 import { getParams, getCustomParams } from '../tools'
 import useState from '@/hooks/useState'
 import { getRowSpan } from '@/utils'
 const router = useRouter()
 const loading = ref(false)
 const pageData:any = computed(() => router.currentRoute.value.meta.pageData)
-const inColumns:Column[] = [
-    { prop: 'in', span: true, label: '传递位置', width: 150 },
+const baseColumns:Column[] = [
     { prop: 'name', label: '参数名称', width: 200 },
-    { prop: 'type', label: '类型', width: 100 },
-    { prop: 'required', label: '是否必传', width: 100 },
-    { prop: 'description', label: '说明', width: 180 },
+    { prop: 'type', label: '类型', width: 80 },
+    { prop: 'required', label: '是否必传', width: 80 },
+    { prop: 'description', label: '说明', width: 220 },
+    { prop: 'format', label: '其他', formatter: (row:ColumnProps, column:TableColumnCtx<Column>) => row.format ? 'format:'+ row.format : '', width: 120 },
+]
+const inColumns:Column[] = [
+    { prop: 'in', span: true, label: '传递位置', width: 180 },
+    ...baseColumns
 ]
 const outColumns:Column[] = [
-    { prop: 'name', label: '参数名称', width: 300 },
-    { prop: 'type', label: '类型', width: 130 },
-    { prop: 'required', label: '是否必传', width: 130 },
-    { prop: 'description', label: '说明', width: 180 },
+    ...baseColumns
 ]
 const [ state, setState ] = useState({
     loading: false,
@@ -86,6 +88,7 @@ watch(pageData, (val) => {
             :key="column.prop"
             :label="column.label"
             :prop="column.prop"
+            :formatter="column.formatter"
             :min-width="column.minWidth ? column.minWidth : column.width"
             ></el-table-column>
         </el-table>
@@ -106,6 +109,7 @@ watch(pageData, (val) => {
             :key="column.prop"
             :label="column.label"
             :prop="column.prop"
+            :formatter="column.formatter"
             :min-width="column.minWidth ? column.minWidth : column.width"
             ></el-table-column>
         </el-table>

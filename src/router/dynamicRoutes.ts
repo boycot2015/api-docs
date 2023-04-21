@@ -4,7 +4,8 @@ import axios from '@/api/request'
 import router from './index';
 import Layout from '@/layout/index.vue'
 import storage from '@/utils/storage'
-const dynamicRoutes = (data:any, parent = 'apiDocs') => {
+const baseApiStr = 'apiDocs'
+const dynamicRoutes = (data:any, parent = baseApiStr) => {
     for (let item of data) {
         //多级菜单
         if (item.children && item.children.length > 0) {
@@ -23,15 +24,17 @@ const dynamicRoutes = (data:any, parent = 'apiDocs') => {
             let route:any = {
                 path: item.path,
                 name: item.name,
-                component: () => import( /* @vite-ignore */ '@/views/apiDocs/index.vue'),
+                component: () => import( /* @vite-ignore */ `@/views/${baseApiStr}/index.vue`),
                 meta: {
                     parent,
-                    // showInHeader: true,
                     ...item.meta,
                     auth: true
                 }
             }
-            if (item.path === '/apiDocs/') route.redirect = '/error'
+            if (item.path === `/${baseApiStr}/`) {
+                route.redirect = '/error'
+                route.meta.hideInMenu = true
+            }
             router.addRoute(parent, route);
         }
     }
@@ -47,6 +50,7 @@ const fetchRouteData = (to:any, from:any, next: any) => {
         } else {
             dyRoutes = []
         }
+        let loopRefs = ['DepartmentPurchaseCategoryOutputVO', 'WebsiteDepartmentCategoryOutputVO', 'WebsiteDepartmentCategoryOutputVO', 'DepartmentTreeOutputVO']
         // http://121.41.51.167:10001/v2/api-docs
         axios.get('/v2/api-docs', {}).then((res:any) => {
             // console.log(res);
@@ -58,10 +62,15 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                         if (k === '$ref') {
                             for (const key in definitions) {
                                 if (obj[k] && typeof obj[k] === 'string' && obj[k].split('/')[2] && key === obj[k].split('/')[2]) {
-                                    obj[k] = getParameters(definitions[key])
+                                    loopStr = obj[k]
+                                    if (loopRefs.includes(key)) { // 剔除树结构，防止递归死循环
+                                        obj[k] = ''
+                                    } else {
+                                        obj[k] = getParameters(definitions[key])
+                                    }
                                     let children:any = []
                                     for (const key in obj[k].properties) {
-                                        let child:any = obj[k].properties[key].items ? obj[k].properties[key].items.$ref : obj[k].properties[key].$ref ? obj[k].properties[key].$ref : ''
+                                        let child:any = obj[k].properties[key].items ? obj[k].properties[key].items.$ref : obj[k].properties[key].$ref ? obj[k].properties[key].$ref : obj[k].properties[key] || obj[k].properties || ''
                                         let o:any = {
                                             // in: 'body',
                                             name: key,
@@ -69,6 +78,7 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                                             children: child,
                                             type: (obj[k].properties[key] && obj[k].properties[key]['type']) || child?.type || 'object',
                                             required: (obj[k].properties[key] && obj[k].properties[key]['required']) || child?.required || false,
+                                            format:obj[k].properties[key]['format'],
                                             description: obj[k].properties[key]['description'],
                                         }
                                         children.push(o)
@@ -83,11 +93,12 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                     }
                     return obj
                 }
+                let loopStr = ''
                 tags.map((el:any, index: number) => {
                     let route:any = {
-                        path: '/apiDocs/',
+                        path: `/${baseApiStr}/`,
                         name: '',
-                        component: 'apiDocs',
+                        component: baseApiStr,
                         meta: {
                             title: el.name.replace(/接口/g, ''),
                             icon: 'Menu',
@@ -101,8 +112,8 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                             route.meta.pageData.push({
                                 data: { ...getParameters(data) },
                                 url: key,
-                                component: 'apiDocs',
-                                name: data.summary.replace(/\//g, ''),
+                                component: baseApiStr,
+                                name: data.summary.replace(/[`~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘'，。、]/g, ''),
                                 host,
                                 info,
                                 method: paths[key].post ? 'post' : 'get'
@@ -112,17 +123,22 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                     route.name = route.meta.pageData[0]?.url.split('/').join('') || ''
                     route.path += route.name || ''
                     route.meta.showInHeader = false
+                    route.meta.hideInMenu = route.path === `/${baseApiStr}/`
                     if (route.meta.pageData.length >= 1) {
-                        route.meta.showInHeader = route.meta.pageData.length > 3 && route.meta.pageData.length < 10
-                        route.children = route.meta.pageData.map((val:any, idx: number) => ({
-                            path: '/apiDocs' + (route.name + val.url ? '/' + val.url.split('/').join('') : ''),
-                            name: 'apiDocs' + val.url?.split('/').join('') || '',
-                            meta: {
-                                title: val.name.replace(/接口/g, ''),
-                                icon: 'Menu',
-                                pageData: val
+                        route.meta.showInHeader = route.meta.pageData.length > 2
+                        route.children = route.meta.pageData.map((val:any, idx: number) => {
+                            let path:string = `/${baseApiStr}/` + (route.name + (val.url ? '/' + val.url.split('/').join('') : ''))
+                            return {
+                                path,
+                                name: baseApiStr + val.url?.split('/').join('') || '',
+                                meta: {
+                                    title: val.name.replace(/接口/g, ''),
+                                    icon: 'Menu',
+                                    hideInMenu: path === `/${baseApiStr}/`,
+                                    pageData: val
+                                }
                             }
-                        }))
+                        })
                     }
                     dyRoutes.push(route)
                 })

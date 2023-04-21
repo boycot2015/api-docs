@@ -13,7 +13,7 @@ const form = ref({
     color: appConfig.primaryColor || getComputedStyle(root).getPropertyValue('--el-color-primary'),
     showBreadcrumb: appConfig.showBreadcrumb,
     logoPosition: appConfig.logoPosition,
-    currentEffect: appConfig.currentEffect || -1
+    currentEffect: appConfig.currentEffect || 3
 })
 
 const onEffectChange = (index?:number, select?:boolean) => {
@@ -38,6 +38,10 @@ const onColorPickerChange = (select?:boolean) => {
 const onBreadcrumbChange = () => {
     setAppConfig({ showBreadcrumb: form.value.showBreadcrumb })
 }
+const onPositionChange = () => {
+    setAppConfig({ logoPosition: form.value.logoPosition })
+}
+
 const emits = defineEmits(['update:modelValue'])
 const onClose = () => {
   emits('update:modelValue', false)
@@ -46,7 +50,7 @@ const onSubmit = () => {
   emits('update:modelValue', false)
 }
 const onReset = () => {
-    const config = { showBreadcrumb: true, currentEffect: -1, primaryColor: '#2458b3', logoPosition: 'top'  }
+    const config = { showBreadcrumb: true, currentEffect: 3, primaryColor: '#2458b3', logoPosition: 'top'  }
     setAppConfig(config)
     form.value.color = config.primaryColor
     form.value.showBreadcrumb = config.showBreadcrumb
@@ -97,6 +101,12 @@ watch(appConfig, (val) => {
             </el-form-item>
             <el-form-item label="显示导航">
                 <el-switch @change="onBreadcrumbChange" v-model="form.showBreadcrumb"></el-switch>
+            </el-form-item>
+            <el-form-item label="logo位置">
+                <el-radio-group v-model="form.logoPosition" @change="onPositionChange">
+                    <el-radio :value="'top'" :label="'top'">头部</el-radio>
+                    <el-radio :value="'bottom'" :label="'bottom'">侧边栏</el-radio>
+                </el-radio-group>
             </el-form-item>
         </el-form>
         <div class="el-drawer__footer">

@@ -204,3 +204,8 @@ input::-webkit-input-placeholder {
     margin-bottom: 0;
     border-bottom: 1px solid var(--color-border);
 }
+.el-menu--horizontal.el-menu--popup-container {
+    max-height: 600px;
+    // display: block;
+    overflow-y: auto;
+}

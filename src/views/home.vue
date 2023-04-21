@@ -174,13 +174,13 @@ onMounted(() => {
         padding-top: 220px;
     }
     .logo {
-        margin-right: 20px;
         display: flex;
+        flex-basis: 200px;
         align-items: center;
         justify-content: space-between;
         height: 60px;
         img {
-            height: 32px;
+            height: 24px;
             margin-right: 16px;
         }
     }

@@ -16,8 +16,8 @@ const pageData:any = computed(() => router.currentRoute.value.meta?.pageData)
 watch(pageData, (val) => {})
 const keyword = ref('')
 const suggestions = ref<LinkItem[]>(getVaildRoute(routes.value.filter((el:any) => el.meta?.showInHeader)))
-const querySearch = (key:string, cb: (params:any) => void) => {    
-    const results = key ? getVaildRoute(routes.value).filter(createFilter(key)) : suggestions.value
+const querySearch = (key:string, cb: (params:any) => void) => {
+    const results = key ? getVaildRoute(routes.value.filter((el:any) => !el.meta?.hideInSearch)).filter(createFilter(key)) : suggestions.value
     cb(results)
 }
 const createFilter = (queryString:string) => {

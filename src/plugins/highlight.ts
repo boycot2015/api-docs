@@ -11,7 +11,7 @@ export default {
         app.directive('highlight', function (el) {
             const blocks = el.querySelectorAll('pre code');
             blocks.forEach((block: any) => {
-                hljs.highlightBlock(block)
+                hljs.highlightElement(block)
             })
         })
     }
