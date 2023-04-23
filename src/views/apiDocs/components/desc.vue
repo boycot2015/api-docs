@@ -1,8 +1,9 @@
 <script setup lang="tsx">
-import { computed, reactive, watch, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { baseServeUrl } from '@/api/baseUrl'
 import useState from '@/hooks/useState'
+import { useAppConfigStore } from '@/stores/app'
+const appConfigStore = useAppConfigStore()
 const router = useRouter()
 const loading = ref(false)
 const pageData:any = computed(() => router.currentRoute.value.meta.pageData)
@@ -36,7 +37,7 @@ watch(pageData, (val) => {
         <div class="api-desc-item">
             <!-- {{pageData}} -->
             <div class="name">1.1 接口请求地址</div>
-            <div class="value" v-highlight>【{{state.method}}】{{baseServeUrl}}{{state.url}}</div>
+            <div class="value" v-highlight>【{{state.method}}】{{baseServeUrl}}{{ appConfigStore.appConfig?.baseUrl || '' }}{{state.url}}</div>
         </div>
         <div class="api-desc-item">
             <div class="name">1.2 请求类型</div>

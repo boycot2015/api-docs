@@ -1,6 +1,5 @@
 <script setup lang="tsx">
 import { useAppsStore } from '@/stores/app'
-import { computed, onMounted, reactive, watch, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const appsStore = useAppsStore()

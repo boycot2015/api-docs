@@ -89,11 +89,10 @@
 }
 </style>
 <script lang="ts" setup>
-import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCollapseStore, useRouteStore, useAppConfigStore } from '@/stores/app'
-import WebSetting from '@/components/WebSetting.vue'
-import Search from '@/components/Search.vue'
+// import WebSetting from '@/components/WebSetting.vue'
+// import Search from '@/components/Search.vue'
 import useState from '@/hooks/useState'
 const [ visible, toggleVisible ] = useState(false)
 let routeStore = useRouteStore()

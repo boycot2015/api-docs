@@ -4,7 +4,6 @@ import Header from './header.vue'
 import Aside from './aside.vue'
 import Breadcrumb from './breadcrumb.vue'
 import Anchor from './anchor.vue'
-import { watch, ref, onMounted, computed  } from 'vue'
 import { useAnchorStore, useCollapseStore, useAppConfigStore } from '@/stores/app'
 const appConfigStore = useAppConfigStore()
 const router = useRouter()

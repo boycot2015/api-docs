@@ -1,6 +1,5 @@
 <script setup lang="tsx">
 import { useRouteStore } from '@/stores/app'
-import { computed, onMounted, reactive, watch, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { getVaildRoute } from '@/utils'
 let routeStore = useRouteStore()

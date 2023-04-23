@@ -22,7 +22,8 @@ export class Request {
     
     this.instance.interceptors.request.use(
         (config) => {
-        if (config.url?.includes('http') || config.url?.includes('https')) {
+        let apiUrl = storage.getItem('websiteConfig').apiUrl || baseUrl
+        if (config.url?.includes('http') || config.url?.includes('https') || apiUrl !== baseUrl) {
             config.baseURL = '/'
         }
         // 一般会请求拦截里面加token，用于后端的验证

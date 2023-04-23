@@ -199,6 +199,9 @@ input::-webkit-input-placeholder {
         }
     }
 }
+.el-popup-parent--hidden {
+    overflow: hidden;
+}
 .el-drawer__header {
     padding: 16px;
     margin-bottom: 0;

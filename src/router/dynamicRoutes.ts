@@ -52,7 +52,11 @@ const fetchRouteData = (to:any, from:any, next: any) => {
         }
         let loopRefs = ['DepartmentPurchaseCategoryOutputVO', 'WebsiteDepartmentCategoryOutputVO', 'WebsiteDepartmentCategoryOutputVO', 'DepartmentTreeOutputVO']
         // http://121.41.51.167:10001/v2/api-docs
-        axios.get('/v2/api-docs', {}).then((res:any) => {
+        let baseUrl = ''
+        if (storage.getItem('websiteConfig')) {
+            baseUrl = storage.getItem('websiteConfig').apiUrl || ''
+        }
+        axios.get(baseUrl + '/v2/api-docs', {}).then((res:any) => {
             // console.log(res);
             if (res) {
                 const { tags, paths, definitions, host, info } = res as any
@@ -101,7 +105,7 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                         component: baseApiStr,
                         meta: {
                             title: el.name.replace(/接口/g, ''),
-                            icon: 'Menu',
+                            // icon: 'Menu',
                             pageData: []
                         }
                     }
@@ -133,7 +137,7 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                                 name: baseApiStr + val.url?.split('/').join('') || '',
                                 meta: {
                                     title: val.name.replace(/接口/g, ''),
-                                    icon: 'Menu',
+                                    // icon: 'Menu',
                                     hideInMenu: path === `/${baseApiStr}/`,
                                     pageData: val
                                 }

@@ -1,5 +1,4 @@
 <script setup lang="tsx">
-import { computed, reactive, watch, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import type { FormInstance } from 'element-plus'
 import { ElMessage } from 'element-plus'
@@ -7,8 +6,11 @@ import{ copyToClipboard } from '@/utils'
 import type { ColumnProps, FormProps } from '../tools'
 import { getParams, arr2obj, getCustomParams } from '../tools'
 import http from '@/api/request'
-import { baseServeUrl } from '@/api/baseUrl'
+import { useAppConfigStore } from '@/stores/app'
+import { baseServeUrl, baseUrl } from '@/api/baseUrl'
 import useState from '@/hooks/useState'
+const appConfigStore = useAppConfigStore()
+
 const router = useRouter()
 const loading = ref(false)
 const [ showParams, toggleShowParams ] = useState(true)
@@ -19,7 +21,7 @@ const ruleFormRef = ref<FormInstance>()
 let state = reactive({
     loading: false,
     data: pageData.value.data,
-    url: pageData.value.url,
+    url: (appConfigStore.appConfig?.apiUrl || baseUrl) + (appConfigStore.appConfig?.baseUrl || '') + pageData.value.url,
     method: pageData.value.method,
     pramsObj: {
         name: '',
@@ -64,7 +66,7 @@ const onSubmit = (formEl: FormInstance | undefined) => {
             }
             let params:any = {
                 method: state.method,
-                url: state.url,
+                url: (appConfigStore.appConfig?.apiUrl || '') + pageData.value.url,
                 headers: { ...headerParams }
             }
             try {
@@ -112,8 +114,9 @@ const onReset = (formEl: FormInstance | undefined) => {
     })
     setResponses(arr2obj(pageData.value.data?.responses[200]?.schema?.$ref))
 }
-const delParams = (index:number) => {
-    state.inData.splice(index, 1)
+const delParams = (item:any, index:number) => {
+    state.inData = state.inData.filter((el: any) => item.name !== el.name)
+    
 }
 const addParams = () => {
     if (!state.pramsObj.name) return
@@ -177,7 +180,7 @@ watch(pageData, (val) => {
                 <el-form-item style="width: 100%;margin-bottom: 20px;" v-for="(item, index) in state.inData.filter((el:any) => el.in === 'header')" :prop="item.name" :rules="[{required: item.required, message: item.name + '不能为空', tigger: 'change'}]" :label="item.name" :key="item.name">
                     <div class="action">
                         <el-input clearable :style="item.closeable? { width: '85.5%', marginRight: '16px' }: {}" v-model="form[item.name]" :placeholder="item.description || '请输入'"></el-input>
-                        <el-button type="danger" v-if="item.closeable" @click="() => delParams(index)">移除</el-button>
+                        <el-button type="danger" v-if="item.closeable" @click="() => delParams(item, index)">移除</el-button>
                     </div>
                 </el-form-item>
                 <el-form-item style="width: 100%;margin-bottom: 20px;">

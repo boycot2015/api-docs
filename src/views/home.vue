@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useAnchorStore } from '@/stores/app'
-import { onMounted, ref } from 'vue'
 import Header from '@/layout/header.vue'
 import config from '@/config'
 import logo from '@/assets/image/logo.png'

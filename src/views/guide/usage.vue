@@ -64,7 +64,6 @@
 </template>
 <script setup lang="ts">
 import { useAnchorStore } from '@/stores/app'
-import { onMounted } from 'vue'
 const appPageAnchors = useAnchorStore()
 onMounted(() => {
     appPageAnchors.setAnchor(document.querySelectorAll('.app-page-anchor'))

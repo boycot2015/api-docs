@@ -1,5 +1,4 @@
 <script setup lang="tsx">
-import { computed, reactive, watch, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import type { TableColumnCtx } from 'element-plus'
 import type { Column, ColumnProps, SpanMethodProps } from '../tools'

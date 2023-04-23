@@ -1,6 +1,5 @@
 <script setup lang="tsx">
 import { useAnchorStore } from '@/stores/app'
-import { computed, onMounted, watch, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import ApiDesc from './components/desc.vue'
 import ApiParameters from './components/parameters.vue'

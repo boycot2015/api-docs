@@ -18,7 +18,7 @@ case 'development':
     prefix = '/devApi'
     // prefix = '/mallAdminApi'
     // prefix = '/mallApi'
-    // prefix = '/openApi'
+    prefix = '/openApi'
     baseServeUrl = `` // dev环境url
     baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'

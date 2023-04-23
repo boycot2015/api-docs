@@ -4,7 +4,6 @@ import router from './router'
 import ElementPlus from 'element-plus'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
-import 'element-plus/theme-chalk/src/message.scss'
 
 import { createPinia } from 'pinia' // store
 
