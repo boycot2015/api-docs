@@ -6,6 +6,7 @@ import config from '@/config'
 import router from '@/router'
 import Loading from '@/hooks/loading'
 import type { FormInstance, FormRules } from 'element-plus'
+import { ElMessage } from 'element-plus'
 defineProps({
     modelValue: {
         type: Boolean,
@@ -61,9 +62,6 @@ const onClose = () => {
   emits('update:modelValue', false)
 }
 const onReload = () => {
-    setTimeout(() => {
-        Loading().close()
-    }, 1000);
     if (form.value.apiUrl !== appConfig.apiUrl) {
         Loading({ text: '正在同步数据，请稍后...' })
         storage.removeItem('routes')
@@ -72,8 +70,13 @@ const onReload = () => {
         } else {
             window.location.href = '/'
         }
+        Loading().close()
     } else {
         Loading({ text: '正在保存设置，请稍后...' })
+        setTimeout(() => {
+        Loading().close()
+            ElMessage.success('保存成功')
+        }, 500);
     }
 }
 const onSubmit = () => {
@@ -100,7 +103,14 @@ const onReset = () => {
     root.style.setProperty('--el-color-primary', config.primaryColor)
     onReload()
 }
-
+const onLinksSort = (lindex:number, type:string) => {
+    let temp = form.value.footer.links.splice(lindex, 1)[0]
+    if (type === 'down') {
+        form.value.footer.links.splice(lindex + 1, 0, temp)
+    } else {
+        form.value.footer.links.splice(lindex - 1, 0, temp)
+    }
+}
 onEffectChange(form.value.currentEffect)
 onColorPickerChange()
 watch(appConfig, (val) => {
@@ -172,9 +182,11 @@ watch(appConfig, (val) => {
                         :prop="'footer.links.'+ lindex +'.name'"
                         :rules="[{required: true, message: '友情链接不能为空', trigger: 'change'}]"
                         :key="lindex">
-                            <el-input style="margin-bottom: 5px;width:80%" placeholder="链接名称" v-model="form.footer.links[lindex].name"></el-input>
+                            <el-input style="margin-bottom: 5px;width:72%" placeholder="链接名称" v-model="form.footer.links[lindex].name"></el-input>
                             <el-icon v-if="form.footer.links.length > 1" style="margin-left: 8px;cursor: pointer;" @click="form.footer.links.splice(lindex, 1)"><Delete /></el-icon>
-                            <el-icon v-if="lindex === form.footer.links.length - 1 && !isLimit" style="margin-left: 8px;cursor: pointer;" @click="form.footer.links.push({name: '', href: '',  target: '_blank'})"><Plus /></el-icon>
+                            <el-icon v-if="lindex !== form.footer.links.length - 1" style="cursor: pointer;" @click="onLinksSort(lindex, 'down')"><SortDown /></el-icon>
+                            <el-icon v-if="lindex" style="cursor: pointer;" @click="onLinksSort(lindex, 'up')"><SortUp /></el-icon>
+                            <el-icon v-if="lindex === form.footer.links.length - 1 && !isLimit" style="margin-left: 0px;cursor: pointer;" @click="form.footer.links.push({name: '', href: '',  target: '_blank'})"><Plus /></el-icon>
                             <el-input style="margin-bottom: 5px" placeholder="链接地址" v-model="form.footer.links[lindex].href"></el-input>
                         </el-form-item>
                     </el-form-item>

@@ -29,7 +29,7 @@ router.beforeEach(async (to:any, from, next) => {
         storage.setItem('routes', [...dyRoutes])
         // console.log(getVaildRoute(dyRoutes).map((el:any) => el.path), to.path, 'getVaildRoute');
         if (![...getVaildRoute(routes).map((el:any) => el.path), ...getVaildRoute(dyRoutes).map((el:any) => el.path)].includes(to.path)) {
-            next({ name: 'error' })
+            next({ path: '/', replace: true })
         } else {
             next({ ...to, replace: true })
         }

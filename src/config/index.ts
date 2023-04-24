@@ -49,6 +49,18 @@ export default <AppConfigProps>({
             target: '_blank'
         },
         links: [{
+            name: '云台系统',
+            href: 'https://www.user.yunzhonghe.com/',
+            target: '_blank'
+        },{
+            name: '积分中台',
+            href: 'https://www.admin-points.haoxiny.com/',
+            target: '_blank'
+        },{
+            name: 'GitLab',
+            href: 'http://192.168.1.218:8888/YZH-WEB',
+            target: '_blank'
+        },{
             name: '云中鹤官网',
             href: 'https://www.yunzhonghe.com/',
             target: '_blank'
