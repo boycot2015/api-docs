@@ -10,11 +10,12 @@ interface LinkItem {
 }
 const routes:any = computed(() => routeStore.routes)
 const router = useRouter()
-const loading = ref(true)
+const timer:any = ref(null)
 const pageData:any = computed(() => router.currentRoute.value.meta?.pageData)
 watch(pageData, (val) => {})
 const keyword = ref('')
 const suggestions = ref<LinkItem[]>(getVaildRoute(routes.value.filter((el:any) => el.meta?.showInHeader)))
+const placeholder = ref(suggestions.value[Math.floor(Math.random() * suggestions.value.length)].name || '请输入关键字/接口路径')
 const querySearch = (key:string, cb: (params:any) => void) => {
     const results = key ? getVaildRoute(routes.value.filter((el:any) => !el.meta?.hideInSearch)).filter(createFilter(key)) : suggestions.value
     cb(results)
@@ -32,17 +33,23 @@ const handleSelect = (item: LinkItem) => {
   router.push(item.path)
 }
 onMounted(() => {
-    loading.value = false
+    timer.value = setInterval(() => {
+        placeholder.value = suggestions.value[Math.floor(Math.random() * suggestions.value.length)].name
+    }, 3000)
+})
+onUnmounted(() => {
+    clearInterval(timer.value)
+    timer.value = null
 })
 </script>
 <template>
-  <div class="api-docs-search" key="api-docs-search" v-loading="loading">
+  <div class="api-docs-search" key="api-docs-search">
     <el-autocomplete v-model="keyword"
     :fetch-suggestions="querySearch"
     @select="handleSelect"
     style="width: 100%;"
     clearable
-    placeholder="请输入关键字/接口路径"></el-autocomplete>
+    :placeholder="placeholder"></el-autocomplete>
   </div>
 </template>
 <style lang="scss">

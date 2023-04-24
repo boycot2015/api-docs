@@ -36,19 +36,19 @@ watch(pageData, (val) => {
         <h3 class="app-page-anchor sub-title" id="app-page-anchor0">1. 接口说明</h3>
         <div class="api-desc-item">
             <!-- {{pageData}} -->
-            <div class="name">1.1 接口请求地址</div>
+            <div class="name sub-title-item">1.1 接口请求地址</div>
             <div class="value" v-highlight>【{{state.method}}】{{baseServeUrl}}{{ appConfigStore.appConfig?.baseUrl || '' }}{{state.url}}</div>
         </div>
         <div class="api-desc-item">
-            <div class="name">1.2 请求类型</div>
+            <div class="name sub-title-item">1.2 请求类型</div>
             <div class="value">{{state.data?.consumes.join(',')}}</div>
         </div>
         <div class="api-desc-item">
-            <div class="name">1.3 响应类型</div>
+            <div class="name sub-title-item">1.3 响应类型</div>
             <div class="value">{{state.data?.produces.join(',')}}</div>
         </div>
         <div class="api-desc-item">
-            <div class="name">1.4 接口描述</div>
+            <div class="name sub-title-item">1.4 接口描述</div>
             <div class="value">{{state.data?.description}}</div>
         </div>
     </div>

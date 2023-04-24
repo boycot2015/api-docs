@@ -28,7 +28,7 @@ router.beforeEach(async (to:any, from, next) => {
         routeStore.setRoutes([...routes, ...dyRoutes], true)
         storage.setItem('routes', [...dyRoutes])
         // console.log(getVaildRoute(dyRoutes).map((el:any) => el.path), to.path, 'getVaildRoute');
-        if (![...routes.map((el:any) => el.path), ...getVaildRoute(dyRoutes).map((el:any) => el.path)].includes(to.path)) {
+        if (![...getVaildRoute(routes).map((el:any) => el.path), ...getVaildRoute(dyRoutes).map((el:any) => el.path)].includes(to.path)) {
             next({ name: 'error' })
         } else {
             next({ ...to, replace: true })

@@ -19,13 +19,13 @@
         <template v-for="item in routes as any" :key="item.path">
             <el-sub-menu :index="item.path" v-if="item.children && item.children.length && !item.meta.hideChildren">
                 <template #title><span>{{item.meta.title}}</span></template>
-                <el-menu-item  v-for="child in item.children" :key="child.path" :index="child.path">
-                    <el-icon v-if="child.meta"><component  :is="child.meta.icon" /></el-icon>
+                <el-menu-item v-for="child in item.children" :key="child.path" :index="child.path">
+                    <el-icon v-if="child.meta"><component :is="child.meta.icon" /></el-icon>
                     <template #title v-if="child.meta">{{child.meta.title}}</template>
                 </el-menu-item>
             </el-sub-menu>
             <el-menu-item :index="item.path" v-else>
-                <el-icon v-if="item.meta" ><component :is="item.meta.icon" /></el-icon>
+                <el-icon v-if="item.meta"><component :is="item.meta.icon" /></el-icon>
                 <template #title v-if="item.meta">{{item.meta.title}}</template>
             </el-menu-item>
         </template>

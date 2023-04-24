@@ -8,27 +8,20 @@ import { getRowSpan } from '@/utils'
 const router = useRouter()
 const loading = ref(false)
 const pageData:any = computed(() => router.currentRoute.value.meta.pageData)
-const baseColumns:Column[] = [
+const columns:Column[] = [
     { prop: 'name', label: '参数名称', width: 200 },
     { prop: 'type', label: '类型', width: 80 },
     { prop: 'required', label: '是否必传', width: 80 },
     { prop: 'description', label: '说明', width: 220 },
-    { prop: 'format', label: '其他', formatter: (row:ColumnProps, column:TableColumnCtx<Column>) => row.format ? 'format:'+ row.format : '', width: 120 },
-]
-const inColumns:Column[] = [
-    { prop: 'in', span: true, label: '传递位置', width: 180 },
-    ...baseColumns
-]
-const outColumns:Column[] = [
-    ...baseColumns
+    { prop: 'format', label: '其他信息', formatter: (row:ColumnProps, column:TableColumnCtx<Column>) => row.format ? 'format:'+ row.format : '', width: 120 },
 ]
 const [ state, setState ] = useState({
     loading: false,
+    method: pageData.value.method,
     data: pageData.value.data,
     inData: [...getCustomParams(pageData.value), ...getParams(pageData.value.data?.parameters || [])],
     outData: getParams(pageData.value.data?.responses[200].schema.$ref),
-    inColumns,
-    outColumns
+    columns
 })
 
 const objectSpanMethod = ({
@@ -39,7 +32,7 @@ const objectSpanMethod = ({
 }: SpanMethodProps, data:any) => {
     // console.log(row, 'data');
     let property = column.property
-    let spans:any = state.value.inColumns.filter((el:any) => el.span)
+    let spans:any = state.value.columns.filter((el:any) => el.span)
     spans = spans.map((el:any) => el.prop).join(',')
     if (row.child) return {
         rowspan: 1,
@@ -71,7 +64,8 @@ watch(pageData, (val) => {
 <template>
   <div class="api-docs-parameters" v-loading="loading">
     <div class="in-params api-docs-section">
-        <h3 class="app-page-anchor sub-title" id="app-page-anchor1">2. 输入参数</h3>
+        <h3 class="app-page-anchor sub-title" id="app-page-anchor1">2. 请求参数</h3>
+        <h3 class="sub-title-item">Headers</h3>
         <el-table
         border
         row-key="name"
@@ -79,11 +73,33 @@ watch(pageData, (val) => {
         :span-method="(...args:[SpanMethodProps]) => objectSpanMethod(...args, state.inData)"
         v-loading="state.loading"
         default-expand-all
-        :data="state.inData"
+        :data="state.inData.filter((l:any) => l.in === 'header')"
         :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
         >
             <el-table-column
-            v-for="column in state.inColumns"
+            v-for="column in state.columns"
+            :key="column.prop"
+            :label="column.label"
+            :prop="column.prop"
+            :formatter="column.formatter"
+            :min-width="column.minWidth ? column.minWidth : column.width"
+            ></el-table-column>
+        </el-table>
+    </div>
+    <div class="in-params api-docs-section">
+        <h3 class="sub-title-item">{{ state.method === 'post'?'Body':'Query' }}</h3>
+        <el-table
+        border
+        row-key="name"
+        header-cell-class-name="bg-header"
+        :span-method="(...args:[SpanMethodProps]) => objectSpanMethod(...args, state.inData)"
+        v-loading="state.loading"
+        default-expand-all
+        :data="state.inData.filter((l:any) => state.method === 'post' ? l.in === 'body': l.in === 'query')"
+        :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+        >
+            <el-table-column
+            v-for="column in state.columns"
             :key="column.prop"
             :label="column.label"
             :prop="column.prop"
@@ -93,7 +109,7 @@ watch(pageData, (val) => {
         </el-table>
     </div>
     <div class="out-params api-docs-section">
-        <h3 class="app-page-anchor sub-title" id="app-page-anchor2">3. 输出参数</h3>
+        <h3 class="app-page-anchor sub-title" id="app-page-anchor2">3. 返回数据</h3>
         <el-table
         border
         row-key="name"
@@ -104,7 +120,7 @@ watch(pageData, (val) => {
         :data="state.outData"
         >
             <el-table-column
-            v-for="column in state.outColumns"
+            v-for="column in state.columns"
             :key="column.prop"
             :label="column.label"
             :prop="column.prop"

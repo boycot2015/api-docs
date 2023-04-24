@@ -1,6 +1,5 @@
 import { ElLoading } from 'element-plus'
-import type { LoadingOptionsResolved } from 'element-plus'
-export default (options?:LoadingOptionsResolved) => {
+export default (options?:any) => {
     return ElLoading.service({
         fullscreen: true,
         lock: true,

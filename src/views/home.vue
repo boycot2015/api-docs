@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useAnchorStore } from '@/stores/app'
 import Header from '@/layout/header.vue'
+import Footer from '@/layout/footer.vue'
 import config from '@/config'
 import logo from '@/assets/image/logo.png'
 const appPageAnchors = useAnchorStore()
@@ -142,19 +143,7 @@ onMounted(() => {
             </ul>
         </div>
         <!--foot_nav部分-->
-        <div class="foot_nav">
-            <footer>
-                <div class="footer">
-                    <div class="inner">
-                    <span class="text_left">
-                        <a href="http://www.yunzhonghe.com" target="_blank">云中鹤官网&nbsp;&nbsp;</a>
-                    </span>
-                    <span class="text_right">Copyright©2001-2023&nbsp;&nbsp;云中鹤版权所有&nbsp;&nbsp;<a href="http://www.miitbeian.gov.cn">粤ICP备16107141号</a>
-                        </span>
-                    </div>
-                </div>
-            </footer>
-        </div>
+        <Footer></Footer>
     </div>
   </div>
 </template>
@@ -183,11 +172,6 @@ onMounted(() => {
             height: 24px;
             margin-right: 16px;
         }
-    }
-    .foot_nav {
-        padding: 16px 0;
-        color: #ffffff;
-        background-color: var(--vt-c-black-mute);
     }
 }
 .process {

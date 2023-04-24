@@ -1,5 +1,5 @@
 <template>
-  <div class="anchor" :offset="150" :class="activeIndex===3 && 'hide'" v-show="anchors && anchors.length">
+  <div class="anchor" :offset="150" :class="activeIndex===anchors.length && 'hide'" v-show="anchors && anchors.length">
     <div class="wrapper">
         <a class="anchor-item" @click="setAnchorIndex(index)" :class="{'is-active': index === activeIndex}" v-for="(item, index) in anchors as any" :href="'#' + item.className.split(' ')[0] + index" :key="item">{{item.innerText}}</a>
     </div>
@@ -10,9 +10,8 @@
     position: fixed;
     top: auto;
     left: auto;
-    right: auto;
+    right: 60px;
     bottom: auto;
-    margin-left: 800px;
     z-index: 9;
     min-width: 150px;
     box-shadow: 0 10px 50px #ccc;

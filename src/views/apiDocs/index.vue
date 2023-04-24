@@ -43,18 +43,21 @@ onMounted(() => {
         .sub-title {
             margin: 0 0 15px;
             padding-bottom: 5px;
-            padding-left: 15px;
-            position: relative;
             border-bottom: 1px solid var(--vt-c-white-mute);
-            &::before {
-                content: '';
-                position: absolute;
-                left: 0;
-                top: 50%;
-                transform: translateY(-6px);
-                width: 8px;
-                height: 8px;
-                background-color: #ccc;
+            &-item {
+                padding-left: 15px;
+                position: relative;
+                margin-bottom: 10px;
+                &::before {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    top: 50%;
+                    transform: translateY(-4px);
+                    width: 8px;
+                    height: 8px;
+                    background-color: #ccc;
+                }
             }
         }
         .api-desc-item {
@@ -64,7 +67,7 @@ onMounted(() => {
             .value {
                 padding: 5px 10px;
                 // background-color: var(--vt-c-white-soft);
-                margin: 10px 0 10px 30px;
+                margin: 0 0 10px 30px;
             }
         }
     }

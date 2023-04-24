@@ -199,7 +199,7 @@ watch(pageData, (val) => {
             </el-form-item>
         </el-form>
         <div v-highlight class="code" v-show="showParams">
-            <span class="copy" @click="onCopy">复制代码</span>
+            <span class="copy" @click="onCopy">json 复制代码</span>
             <pre><code class="hljs language-kotlin"> {{ responses }}</code></pre>
         </div>
     </div>
@@ -220,6 +220,7 @@ watch(pageData, (val) => {
             code {
                 background-color: var(--vt-c-white-soft);
                 border-radius: var(--border-radius);
+                overflow: auto;
             }
         }
     }

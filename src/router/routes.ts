@@ -67,7 +67,7 @@ export default [
                 meta: {
                     title: '更新日志',
                     hideHeader: true,
-                    hideAnchor: true,
+                    showAnchor: true,
                     icon: 'Menu'
                 },
                 component: () => import('@/views/log.vue'),

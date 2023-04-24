@@ -66,7 +66,7 @@ onMounted(() => {
                                 </keep-alive>
                             </Transition>
                         </RouterView>
-                        <Anchor v-if="!$route.meta.hideAnchor" />
+                        <Anchor v-if="$route.meta.showAnchor" />
                     </div>
                 </el-main>
             </el-container>
@@ -114,7 +114,7 @@ onMounted(() => {
     .body {
         position: relative;
         margin: var(--section-padding);
-        margin-right: 0;
+        margin-right: 10px;
         // border: 16px solid var(--vt-c-white-soft);
         padding: var(--section-padding);
         background-color: var(--vt-c-white);

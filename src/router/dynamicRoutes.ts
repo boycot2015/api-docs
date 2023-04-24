@@ -4,6 +4,7 @@ import axios from '@/api/request'
 import router from './index';
 import Layout from '@/layout/index.vue'
 import storage from '@/utils/storage'
+import { baseUrl } from '@/api/baseUrl'
 const baseApiStr = 'apiDocs'
 const dynamicRoutes = (data:any, parent = baseApiStr) => {
     for (let item of data) {
@@ -52,12 +53,12 @@ const fetchRouteData = (to:any, from:any, next: any) => {
         }
         let loopRefs = ['DepartmentPurchaseCategoryOutputVO', 'WebsiteDepartmentCategoryOutputVO', 'WebsiteDepartmentCategoryOutputVO', 'DepartmentTreeOutputVO']
         // http://121.41.51.167:10001/v2/api-docs
-        let baseUrl = ''
+        let apiUrl = ''
         if (storage.getItem('websiteConfig')) {
-            baseUrl = storage.getItem('websiteConfig').apiUrl || ''
+            apiUrl = storage.getItem('websiteConfig').apiUrl || ''
+            apiUrl = apiUrl === baseUrl ? '' : apiUrl
         }
-        axios.get(baseUrl + '/v2/api-docs', {}).then((res:any) => {
-            // console.log(res);
+        axios.get(apiUrl + '/v2/api-docs', {}).then((res:any) => {
             if (res) {
                 const { tags, paths, definitions, host, info } = res as any
                 const getParameters = (obj:any) => {
@@ -129,7 +130,7 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                     route.meta.showInHeader = false
                     route.meta.hideInMenu = route.path === `/${baseApiStr}/`
                     if (route.meta.pageData.length >= 1) {
-                        route.meta.showInHeader = route.meta.pageData.length > 2
+                        route.meta.showInHeader = route.meta.pageData.length > 2 && route.meta.pageData.length < 15
                         route.children = route.meta.pageData.map((val:any, idx: number) => {
                             let path:string = `/${baseApiStr}/` + (route.name + (val.url ? '/' + val.url.split('/').join('') : ''))
                             return {
