@@ -1,6 +1,6 @@
 {
-  "name": "openapi",
-  "version": "0.0.1",
+  "name": "api-docs",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "vite",
