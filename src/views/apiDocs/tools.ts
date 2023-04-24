@@ -72,6 +72,7 @@ const arr2obj = (arr:ColumnProps[] | undefined, prop = 'children') => {
     let types:ResponseTypes | any = {
         string: '',
         number: 0,
+        array: [],
         boolean: false,
         integer: 1
     }

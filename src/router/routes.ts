@@ -73,5 +73,28 @@ export default [
                 component: () => import('@/views/log.vue'),
             }
         ]
+    },
+    {
+        path: '/apps',
+        name: 'apps',
+        redirect: '/apps/index',
+        meta: {
+            title: '应用',
+            hideChildren: true,
+            icon: 'Menu'
+        },
+        component: () => Layout,
+        children: [
+            {
+                path: '/apps/index',
+                name: 'appsList',
+                meta: {
+                    title: '应用列表',
+                    hideHeader: false,
+                    icon: 'Menu'
+                },
+                component: () => import('@/views/apps/index.vue'),
+            }
+        ]
     }
 ]

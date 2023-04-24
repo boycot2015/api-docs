@@ -37,9 +37,9 @@ let state = reactive({
 })
 const initFormData = (arr:any) => {
     let form:FormProps = {}
+    form.bodyParams = state.method === 'post' ? '{}': JSON.stringify(arr2obj(arr.filter((el:any) => el.in === 'query'), 'children'), null, 2)  
     arr.map((el:ColumnProps) => {
-        form.bodyParams = state.method === 'post' ? '{}': ''
-        if (el.in === 'body' || el.in === 'query') {
+        if (el.in === 'body') {
             form.bodyRequired = Boolean(el.required)
             form.bodyParams = JSON.stringify(arr2obj(el.children || [el], 'children'), null, 2)            
         }

@@ -53,9 +53,9 @@ onMounted(() => {
 })
 </script>
 <style>
-@media (min-width: 1024px) {
+/* @media (min-width: 1024px) {
   .about {
-    /* display: flex; */
+    display: flex;
   }
-}
+} */
 </style>

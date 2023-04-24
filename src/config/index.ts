@@ -1,4 +1,5 @@
 import effect from '@/plugins/specialEffects'
+import { baseUrl } from '@/api/baseUrl'
 interface effectProps {
     name: string
     cb: (params?:any) => void
@@ -40,6 +41,10 @@ export default <AppConfigProps>({
     showBreadcrumb: true, // 是否显示面包屑导航 false/true
     logoPosition: 'top', // logo位置 bottom/top
     effect,
+    apiList: [{
+        name: '开发文档',
+        url: baseUrl
+    }],
     currentEffect: -1,
     footer: {
         copyright: '2001-2023 云中鹤版权所有',

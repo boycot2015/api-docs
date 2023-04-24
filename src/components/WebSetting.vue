@@ -21,6 +21,7 @@ const rules = reactive<FormRules>({
 })
 const emits = defineEmits(['update:modelValue'])
 const accordion = ref(['1', '2'])
+const apiObj = ref({ name: '', url: '' })
 const drawerFormRef = ref<FormInstance|undefined>()
 const { appConfig, setAppConfig } = useAppConfigStore()
 const root:any = document.querySelector(':root')
@@ -30,6 +31,7 @@ const form = ref({
     logoPosition: appConfig.logoPosition,
     baseUrl: appConfig.baseUrl || '',
     apiUrl: appConfig.apiUrl || baseUrl,
+    apiList: appConfig.apiList,
     footer: {
         ...appConfig.footer
     },
@@ -159,6 +161,19 @@ watch(appConfig, (val) => {
     @close="onClose">
         <el-form class="web-setting-form" ref="drawerFormRef" :model="form" label-width="110px" :rules="rules">
             <el-collapse v-model="accordion">
+                <el-collapse-item name="2" title="接口设置">
+                    <el-form-item label="基础公共地址" prop="baseUrl">
+                        <el-input placeholder="接口地址前缀，如：/api" v-model="form.baseUrl"></el-input>
+                    </el-form-item>
+                    <el-form-item label="swagger地址" prop="apiUrl">
+                        <el-select v-model="form.apiUrl" style="width: 100%;margin-bottom: 5px;">
+                            <el-option v-for="api in form.apiList" :label="api.name" :value="api.url" :key="api.name"></el-option>
+                        </el-select>
+                        <el-input style="width:45%" placeholder="链接名称" v-model="apiObj.name"></el-input>
+                        <el-input style="margin-left: 5px;width:45%" placeholder="不存在跨域的或者项目中代理的地址" v-model="apiObj.url"></el-input>
+                        <el-icon style="margin-left: 5px;cursor: pointer;" @click="form.apiList.push({ name: apiObj.name || apiObj.url, url: apiObj.url });apiObj = {name: '', url: ''}"><Plus /></el-icon>
+                    </el-form-item>
+                </el-collapse-item>
                 <el-collapse-item name="1" title="基础设置">
                     <el-form-item label="主题色" prop="primaryColor" class="color-picker">
                         <el-color-picker style="width: 200px;" v-model="form.primaryColor" @change="() => onColorPickerChange(true)" show-alpha />
@@ -183,10 +198,10 @@ watch(appConfig, (val) => {
                         :rules="[{required: true, message: '友情链接不能为空', trigger: 'change'}]"
                         :key="lindex">
                             <el-input style="margin-bottom: 5px;width:72%" placeholder="链接名称" v-model="form.footer.links[lindex].name"></el-input>
-                            <el-icon v-if="form.footer.links.length > 1" style="margin-left: 8px;cursor: pointer;" @click="form.footer.links.splice(lindex, 1)"><Delete /></el-icon>
-                            <el-icon v-if="lindex !== form.footer.links.length - 1" style="cursor: pointer;" @click="onLinksSort(lindex, 'down')"><SortDown /></el-icon>
+                            <el-icon v-if="lindex !== form.footer.links.length - 1" style="margin-left: 5px;cursor: pointer;" @click="onLinksSort(lindex, 'down')"><SortDown /></el-icon>
                             <el-icon v-if="lindex" style="cursor: pointer;" @click="onLinksSort(lindex, 'up')"><SortUp /></el-icon>
-                            <el-icon v-if="lindex === form.footer.links.length - 1 && !isLimit" style="margin-left: 0px;cursor: pointer;" @click="form.footer.links.push({name: '', href: '',  target: '_blank'})"><Plus /></el-icon>
+                            <el-icon v-if="form.footer.links.length > 1" style="margin-left: 5px;cursor: pointer;" @click="form.footer.links.splice(lindex, 1)"><Delete /></el-icon>
+                            <el-icon v-if="lindex === form.footer.links.length - 1 && !isLimit" style="margin-left: 5px;cursor: pointer;" @click="form.footer.links.push({name: '', href: '',  target: '_blank'})"><Plus /></el-icon>
                             <el-input style="margin-bottom: 5px" placeholder="链接地址" v-model="form.footer.links[lindex].href"></el-input>
                         </el-form-item>
                     </el-form-item>
@@ -198,14 +213,6 @@ watch(appConfig, (val) => {
                     </el-form-item>
                     <el-form-item label="显示导航" prop="showBreadcrumb">
                         <el-switch v-model="form.showBreadcrumb"></el-switch>
-                    </el-form-item>
-                </el-collapse-item>
-                <el-collapse-item name="2" title="接口设置">
-                    <el-form-item label="swagger地址" prop="apiUrl">
-                        <el-input placeholder="不存在跨域的或者项目中代理的地址" v-model="form.apiUrl"></el-input>
-                    </el-form-item>
-                    <el-form-item label="基础公共地址" prop="baseUrl">
-                        <el-input placeholder="接口地址前缀，如：/portal/web" v-model="form.baseUrl"></el-input>
                     </el-form-item>
                 </el-collapse-item>
             </el-collapse>
