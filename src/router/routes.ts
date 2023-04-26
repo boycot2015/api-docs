@@ -28,7 +28,7 @@ export default [
     //         title: '开发指南',
     //         icon: 'Guide'
     //     },
-    //     component: () => RouterView,
+    //     component: Layout,
     //     children: [
     //         {
     //             path: '/guide/getkey',
@@ -59,14 +59,14 @@ export default [
             hideChildren: true,
             icon: 'Promotion'
         },
-        component: () => Layout,
+        component: Layout,
         children: [
             {
                 path: '/log/index',
                 name: 'logList',
                 meta: {
                     title: '更新日志',
-                    hideHeader: true,
+                    // hideHeader: true,
                     showAnchor: true,
                     icon: 'Menu'
                 },
@@ -79,18 +79,19 @@ export default [
         name: 'apps',
         redirect: '/apps/index',
         meta: {
-            title: '应用',
+            title: '项目',
             hideChildren: true,
+            showInHeader: true,
             icon: 'Menu'
         },
-        component: () => Layout,
+        component: Layout,
         children: [
             {
                 path: '/apps/index',
                 name: 'appsList',
                 meta: {
-                    title: '应用列表',
-                    hideHeader: false,
+                    title: '项目列表',
+                    showInHeader: true,
                     icon: 'Menu'
                 },
                 component: () => import('@/views/apps/index.vue'),

@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check build-only",
+    "test": "set NODE_ENV='test' && npm run build",
+    "show": "set NODE_ENV='show' && npm run build",
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit",

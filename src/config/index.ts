@@ -41,7 +41,9 @@ export default <AppConfigProps>({
     showBreadcrumb: true, // 是否显示面包屑导航 false/true
     logoPosition: 'top', // logo位置 bottom/top
     effect,
+    apiUrl: baseUrl,
     apiList: [{
+        id: 1,
         name: '开发文档',
         url: baseUrl
     }],

@@ -18,14 +18,18 @@
     >
         <template v-for="item in routes as any" :key="item.path">
             <el-sub-menu :index="item.path" v-if="item.children && item.children.length && !item.meta.hideChildren">
-                <template #title><span>{{item.meta.title}}</span></template>
+                <template #title>
+                    <el-icon v-if="item.meta && item.meta.icon"><component :is="item.meta.icon" /></el-icon>
+                    <el-icon v-else>{{ item.name.slice(0,2).toUpperCase() }}</el-icon>
+                    <span>{{item.meta.title}}</span>
+                </template>
                 <el-menu-item v-for="child in item.children" :key="child.path" :index="child.path">
-                    <el-icon v-if="child.meta"><component :is="child.meta.icon" /></el-icon>
+                    <el-icon v-if="child.meta && item.meta.icon"><component :is="child.meta.icon" /></el-icon>
                     <template #title v-if="child.meta">{{child.meta.title}}</template>
                 </el-menu-item>
             </el-sub-menu>
             <el-menu-item :index="item.path" v-else>
-                <el-icon v-if="item.meta"><component :is="item.meta.icon" /></el-icon>
+                <el-icon v-if="item.meta && item.meta.icon"><component :is="item.meta.icon" /></el-icon>
                 <template #title v-if="item.meta">{{item.meta.title}}</template>
             </el-menu-item>
         </template>
@@ -91,8 +95,6 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router'
 import { useCollapseStore, useRouteStore, useAppConfigStore } from '@/stores/app'
-// import WebSetting from '@/components/WebSetting.vue'
-// import Search from '@/components/Search.vue'
 import useState from '@/hooks/useState'
 const [ visible, toggleVisible ] = useState(false)
 let routeStore = useRouteStore()
@@ -102,8 +104,10 @@ const appConfigStore = useAppConfigStore()
 const appConfig = computed(() => appConfigStore.appConfig) as any
 const routes = computed(() => routeStore.routes.filter((el:any) => el.meta?.showInHeader))
 const activeIndex = computed(() => {
-    let path = router.currentRoute.value.path
-   return path === '/home' ? '/' : path
+    let path = router.currentRoute.value.path    
+    let hideChildren = router.currentRoute.value.meta.hideChildren
+    let matched = router.currentRoute.value.matched
+    return path === '/home' ? '/' : hideChildren ? matched[0].path : path
 })
 const handleSelect = (key: string, keyPath: string[]) => {
 //   console.log(key, keyPath)

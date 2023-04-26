@@ -6,7 +6,7 @@ import config from '@/config'
 import router from '@/router'
 import Loading from '@/hooks/loading'
 import type { FormInstance, FormRules } from 'element-plus'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 defineProps({
     modelValue: {
         type: Boolean,
@@ -62,6 +62,7 @@ const onColorPickerChange = (select?:boolean) => {
 
 const onClose = () => {
   emits('update:modelValue', false)
+  resetForm(config)
 }
 const onReload = () => {
     if (form.value.apiUrl !== appConfig.apiUrl) {
@@ -79,6 +80,7 @@ const onReload = () => {
         Loading().close()
             ElMessage.success('保存成功')
         }, 500);
+        emits('update:modelValue', false)
     }
 }
 const onSubmit = () => {
@@ -92,18 +94,23 @@ const onSubmit = () => {
         onReload()
     })
 }
+const resetForm = (val?:any) => {
+    form.value.primaryColor = val.primaryColor
+    form.value.showBreadcrumb = val.showBreadcrumb
+    form.value.currentEffect = val.currentEffect
+    form.value.logoPosition = val.logoPosition
+    form.value.baseUrl = val.baseUrl
+    form.value.apiUrl = val.apiUrl
+    form.value.footer = val.footer
+}
 const onReset = () => {
-    form.value.primaryColor = config.primaryColor
-    form.value.showBreadcrumb = config.showBreadcrumb
-    form.value.currentEffect = config.currentEffect
-    form.value.logoPosition = config.logoPosition
-    form.value.baseUrl = config.baseUrl
-    form.value.apiUrl = config.apiUrl
-    form.value.footer = config.footer
-    setAppConfig(config)
-    onEffectChange(config.currentEffect)
-    root.style.setProperty('--el-color-primary', config.primaryColor)
-    onReload()
+    ElMessageBox.confirm('重置操作会清空本地数据，恢复初始状态，确认重置？', '温馨提示').then(() => {
+        resetForm(config)
+        setAppConfig(config)
+        onEffectChange(config.currentEffect)
+        root.style.setProperty('--el-color-primary', config.primaryColor)
+        onReload()
+    }).catch(() => {})
 }
 const onLinksSort = (lindex:number, type:string) => {
     let temp = form.value.footer.links.splice(lindex, 1)[0]
@@ -116,13 +123,7 @@ const onLinksSort = (lindex:number, type:string) => {
 onEffectChange(form.value.currentEffect)
 onColorPickerChange()
 watch(appConfig, (val) => {
-    form.value.primaryColor = val.primaryColor
-    form.value.showBreadcrumb = val.showBreadcrumb
-    form.value.currentEffect = val.currentEffect
-    form.value.logoPosition = val.logoPosition
-    form.value.baseUrl = val.baseUrl
-    form.value.apiUrl = val.apiUrl
-    form.value.footer = val.footer
+    resetForm(val)
 })
 </script>
 <style lang="scss">
@@ -152,7 +153,7 @@ watch(appConfig, (val) => {
 </style>
 <template>
     <el-drawer
-    size="400"
+    size="480"
     title="网站设置"
     ref="drawerRef"
     :lock-scroll="true"
@@ -165,13 +166,13 @@ watch(appConfig, (val) => {
                     <el-form-item label="基础公共地址" prop="baseUrl">
                         <el-input placeholder="接口地址前缀，如：/api" v-model="form.baseUrl"></el-input>
                     </el-form-item>
-                    <el-form-item label="swagger地址" prop="apiUrl">
+                    <el-form-item label="应用名称" prop="apiUrl">
                         <el-select v-model="form.apiUrl" style="width: 100%;margin-bottom: 5px;">
                             <el-option v-for="api in form.apiList" :label="api.name" :value="api.url" :key="api.name"></el-option>
                         </el-select>
                         <el-input style="width:45%" placeholder="链接名称" v-model="apiObj.name"></el-input>
                         <el-input style="margin-left: 5px;width:45%" placeholder="不存在跨域的或者项目中代理的地址" v-model="apiObj.url"></el-input>
-                        <el-icon style="margin-left: 5px;cursor: pointer;" @click="form.apiList.push({ name: apiObj.name || apiObj.url, url: apiObj.url });apiObj = {name: '', url: ''}"><Plus /></el-icon>
+                        <el-icon style="margin-left: 5px;cursor: pointer;" @click="form.apiList.push({ name: apiObj.name || apiObj.url, url: apiObj.url, id: form.apiList.length+1 });apiObj = {name: '', url: ''}"><Plus /></el-icon>
                     </el-form-item>
                 </el-collapse-item>
                 <el-collapse-item name="1" title="基础设置">
@@ -197,7 +198,7 @@ watch(appConfig, (val) => {
                         :prop="'footer.links.'+ lindex +'.name'"
                         :rules="[{required: true, message: '友情链接不能为空', trigger: 'change'}]"
                         :key="lindex">
-                            <el-input style="margin-bottom: 5px;width:72%" placeholder="链接名称" v-model="form.footer.links[lindex].name"></el-input>
+                            <el-input style="margin-bottom: 5px;width:82%" placeholder="链接名称" v-model="form.footer.links[lindex].name"></el-input>
                             <el-icon v-if="lindex !== form.footer.links.length - 1" style="margin-left: 5px;cursor: pointer;" @click="onLinksSort(lindex, 'down')"><SortDown /></el-icon>
                             <el-icon v-if="lindex" style="cursor: pointer;" @click="onLinksSort(lindex, 'up')"><SortUp /></el-icon>
                             <el-icon v-if="form.footer.links.length > 1" style="margin-left: 5px;cursor: pointer;" @click="form.footer.links.splice(lindex, 1)"><Delete /></el-icon>

@@ -14,7 +14,7 @@ export class Request {
   // axios 实例
   instance: AxiosInstance;
   // 基础配置，url和超时时间
-  baseConfig: AxiosRequestConfig = { baseURL: baseUrl, timeout: 60000 };
+  baseConfig: AxiosRequestConfig = { baseURL: baseUrl, timeout: 120000 };
 
   constructor(config: AxiosRequestConfig) {
     // 使用axios.create创建axios实例

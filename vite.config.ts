@@ -2,6 +2,7 @@ import { fileURLToPath, URL } from 'node:url'
 import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import { defineConfig } from 'vite'
+import { proxyPlugin } from './middlewares'
 import proxy from './proxy'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
@@ -14,12 +15,12 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 export default defineConfig({
     server: {
         port: 3008,
-        proxy,
-        cors: true,
+        proxy
     },
     plugins: [
         vue(),
         vueJsx(),
+        // proxyPlugin(),
         createStyleImportPlugin({
             resolves: [ElementPlusResolve()],
             libs: [

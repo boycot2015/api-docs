@@ -13,19 +13,18 @@
             <el-sub-menu :index="item.path" v-if="item.children && item.children.length && !item.meta.hideChildren">
                 <template #title>
                     <el-icon v-if="item.meta && item.meta.icon" ><component :is="item.meta.icon" /></el-icon>
-                    <el-icon v-else>{{ item.meta.title.slice(0,2).toUpperCase() }}</el-icon>
-                    <span>{{item.meta.title}}</span>
+                    <el-icon v-else>{{ item.name.slice(0,2).toUpperCase() }}</el-icon>
+                    <span>{{item.meta.title.slice(0, 6)}}</span>
                 </template>
                 <el-menu-item  v-for="child in item.children" :key="child.path" :index="child.path">
                     <el-icon v-if="child.meta && item.meta.icon"><component  :is="child.meta.icon" /></el-icon>
-                    <!-- <el-icon v-else>{{ child.meta.title.slice(0,2).toUpperCase() }}</el-icon> -->
-                    <template #title v-if="child.meta">{{child.meta.title}}</template>
+                    <template #title v-if="child.meta">{{child.meta.title.slice(0, 10)}}</template>
                 </el-menu-item>
             </el-sub-menu>
             <el-menu-item :index="item.path" v-else-if="!item.meta.hideInMenu">
                 <el-icon v-if="item.meta && item.meta.icon"><component :is="item.meta.icon" /></el-icon>
                 <el-icon v-else>{{ item.meta.title.slice(0,2).toUpperCase() }}</el-icon>
-                <template #title v-if="item.meta">{{item.meta.title}}</template>
+                <template #title v-if="item.meta">{{item.meta.title.slice(0, 6)}}</template>
             </el-menu-item>
         </template>
     </el-menu>
@@ -46,7 +45,9 @@ const appConfig = computed(() => appConfigStore.appConfig) as any
 const routes = computed(() => routeStore.routes)
 const activeIndex = computed(() => {
     let path = router.currentRoute.value.path
-   return path === '/home' ? '/' : path
+    let hideChildren = router.currentRoute.value.meta.hideChildren
+    let matched = router.currentRoute.value.matched
+    return path === '/home' ? '/' : hideChildren ? matched[0].path : path
 })
 const collapse = useCollapseStore()
 const handleOpen = (key: string, keyPath: string[]) => {

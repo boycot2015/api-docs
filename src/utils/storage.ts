@@ -21,7 +21,7 @@ import { JSONStringify, JSONParse } from '@/utils'
         try {
             window.localStorage.setItem(config.websitePrefix, JSONStringify(storage));
         } catch (error) {
-            console.log('存储超过最大5M限制！')
+            console.log('存储超过最大5M限制！' + error)
         }
     },
     getItem(key:string) { //获取一个值

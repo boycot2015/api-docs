@@ -1,6 +1,7 @@
 /* color palette from <https://github.com/vuejs/theme> */
 :root {
   --vt-c-white: #ffffff;
+  --vt-c-ccc: #cccccc;
   --vt-c-white-soft: #f8f8f8;
   --vt-c-white-mute: #f2f2f2;
 
@@ -29,6 +30,7 @@
     --el-color-primary: #2458b3;
     --el-color-primary-light-3: #2663b9;
     --el-color-primary-dark-2: #3f77c5;
+
     --color-background: var(--vt-c-white);
     --color-background-soft: var(--vt-c-white-soft);
     --color-background-mute: var(--vt-c-white-mute);
@@ -72,25 +74,71 @@ h1,h2,h3,h4,h5 {
     margin: 0;
     padding: 0;
 }
+/*对齐，浮动*/
 .tc {
     text-align: center;
-}
-.tl {
-    text-align: left;
-}
-.tr {
+  }
+  .tr {
     text-align: right;
-}
-.fl {
+  }
+  .tl {
+    text-align: left;
+  }
+  .fl {
     float: left;
-}
-.fr {
+  }
+  .fr {
     float: right;
-}
-.clearfix {
-    overflow: hidden;
+  }
+  .clearfix:before,
+  .clearfix:after {
+    content: '';
+    display: table;
+  }
+  .clearfix:after {
     clear: both;
-}
+  }
+  // 手势样式
+  .pointer{
+    cursor:pointer
+  }
+  /*文字超出隐藏*/
+  /*文字超出隐藏*/
+  .ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .ellipsisTwo {
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    word-wrap: break-word;
+    word-break: break-all;
+    -webkit-box-orient: vertical;
+  }
+  .line-clamp1,
+  .line-clamp2,
+  .line-clamp3,
+  .line-clamp4 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+  }
+  .line-clamp1 {
+    -webkit-line-clamp: 1;
+  }
+  .line-clamp2 {
+    -webkit-line-clamp: 2;
+  }
+  .line-clamp3 {
+    -webkit-line-clamp: 3;
+  }
+  .line-clamp4 {
+    -webkit-line-clamp: 4;
+  }
 .mr16 {
     margin-right: 16px;
 }
@@ -148,8 +196,16 @@ input::-webkit-input-placeholder {
   .app-page-anchor {
     margin: 20px 0;
   }
-
-
+// .el-menu-item,
+// .el-sub-menu__title {
+//     max-width: 180px;
+//     overflow: hidden;
+//     text-overflow: ellipsis;
+//     white-space: nowrap;
+// }
+.el-menu-item [class^=el-icon],.el-sub-menu .el-icon {
+    margin-right: 10px;
+}
 .el-header {
     width: 100%;
     padding: 0;
@@ -205,5 +261,27 @@ input::-webkit-input-placeholder {
 .el-drawer__header {
     padding: 16px;
     margin-bottom: 0;
+    color: var(--vt-c-black);
     border-bottom: 1px solid var(--color-border);
+}
+.el-dialog {
+    --el-dialog-padding-primary: 16px;
+    .el-dialog__headerbtn {
+        height: 40px;
+        width: 40px;
+    }
+    .el-dialog__header {
+        margin-right: 0;
+        border-bottom: 1px solid var(--color-border);
+        .el-dialog__title {
+            font-size: 16px;
+        }
+    }
+    .el-dialog__body {
+        padding: var(--el-dialog-padding-primary);
+    }
+    .el-dialog__footer {
+        // border-top: 1px solid var(--vt-c-ccc);
+        padding: var(--el-dialog-padding-primary) 0 0 0;
+    }
 }

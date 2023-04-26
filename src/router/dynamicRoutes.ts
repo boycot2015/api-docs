@@ -44,7 +44,7 @@ const fetchRouteData = (to:any, from:any, next: any) => {
     return new Promise((resolve, reject) => {
         let dyRoutes:any = []
         dyRoutes = storage.getItem('routes')
-        if (dyRoutes && dyRoutes !== null) {
+        if (dyRoutes && dyRoutes !== null && dyRoutes.length) {
             dynamicRoutes(dyRoutes)
             resolve(dyRoutes)
             return
@@ -52,22 +52,23 @@ const fetchRouteData = (to:any, from:any, next: any) => {
             dyRoutes = []
         }
         let loopRefs = ['DepartmentPurchaseCategoryOutputVO', 'WebsiteDepartmentCategoryOutputVO', 'WebsiteDepartmentCategoryOutputVO', 'DepartmentTreeOutputVO']
+        // let url = 'http://api.boycot.top'
         // http://121.41.51.167:10001/v2/api-docs
+        // let url = 'http://localhost:8090'
         let apiUrl = ''
         if (storage.getItem('websiteConfig')) {
             apiUrl = storage.getItem('websiteConfig').apiUrl || ''
             apiUrl = apiUrl === baseUrl ? '' : apiUrl
         }
-        axios.get(apiUrl + '/v2/api-docs', {}).then((res:any) => {
+        axios.get(apiUrl + '/v2/api-docs', { params: { url: baseUrl + '/v2/api-docs' } }).then((res:any) => {
             if (res) {
-                const { tags, paths, definitions, host, info } = res as any
+                const { tags, paths, definitions, host, info } = (res.data  || res) as any
                 const getParameters = (obj:any) => {
                     if (!obj || obj === null) return {}
                     for (const k in obj) {
                         if (k === '$ref') {
                             for (const key in definitions) {
                                 if (obj[k] && typeof obj[k] === 'string' && obj[k].split('/')[2] && key === obj[k].split('/')[2]) {
-                                    loopStr = obj[k]
                                     if (loopRefs.includes(key)) { // 剔除树结构，防止递归死循环
                                         obj[k] = ''
                                     } else {
@@ -98,7 +99,6 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                     }
                     return obj
                 }
-                let loopStr = ''
                 tags.map((el:any, index: number) => {
                     let route:any = {
                         path: `/${baseApiStr}/`,
@@ -148,11 +148,13 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                     dyRoutes.push(route)
                 })
                 dynamicRoutes(dyRoutes)
-                // console.log(router.getRoutes(), 'hasRoutes');
                 resolve(dyRoutes)
             } else {
                 resolve([])
             }
+        }).catch((err) => {
+            console.log(err, 'err')
+            resolve([])
         })
     })
 }
