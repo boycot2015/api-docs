@@ -24,16 +24,26 @@
               <div class="name">新增项目</div>
           </div>
       </el-row>
+      <div class="export-btn">
+            <el-button size="small" type="primary" @click="onExport">导出数据</el-button>
+      </div>
       <AddOrEdit v-model="visible" :data="rowData"></AddOrEdit>
     </div>
 </template>
 <script setup lang="ts">
 import { useAppConfigStore } from '@/stores/app'
+import storage from '@/utils/storage'
+import { downloadFile } from '@/utils'
 import useState from '@/hooks/useState'
 import { useRouter } from 'vue-router'
 import AddOrEdit from './addOrEdit.vue'
 const {appConfig, setAppConfig } = useAppConfigStore()
-const appList = computed(() => appConfig.apiList)
+interface AppProps {
+    icon: string
+    url: string
+    name: string
+}
+const appList = computed<AppProps[]>(() => appConfig.apiList)
 const router = useRouter()
 const loading = ref(true)
 const [ visible, toggleVisible ] = useState(false)
@@ -42,6 +52,10 @@ const pageData:any = computed(() => router.currentRoute.value.meta.pageData)
 const onAdd = (row?:any) => {
     rowData.value = row || {}
     toggleVisible(true)
+}
+const onExport = () => {
+    let data = storage.getItem('websiteConfig').apiList || {}
+    downloadFile(data, 'app-list', 'json')
 }
 watch(pageData, (val) => {})
 onMounted(() => {
@@ -80,6 +94,11 @@ onMounted(() => {
                 max-width: 100px;
             }
         }
+    }
+    .export-btn {
+        position: absolute;
+        right: 10px;
+        top: 10px;
     }
 }
 </style>

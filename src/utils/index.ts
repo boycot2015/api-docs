@@ -115,14 +115,38 @@ export const copyToClipboard = (textToCopy:string) => {
     }
 }
 
-export const getVaildRoute = (routes:any) => {
+export const getValidRoute = (routes:any) => {
     let arr:any = []
     routes?.map((el:any) => {
         if (el.children && el.children.length) {
-            arr = [...arr, ...getVaildRoute(el.children)]
+            arr = [...arr, ...getValidRoute(el.children)]
         } else {
             arr.push({ ...el, value: el.meta?.pageData?.url || el.path, name: el.meta?.title || el.name })
         }
     })
     return arr
+}
+
+/**
+ * 
+ * @param data 下载的数据
+ * @param fileName 文件名
+ * @param fileType 文件类型
+ */
+export const downloadFile = (data:any, fileName = 'file', fileType = 'json') => {
+    let uri = 'data:text/csv;charset=utf-8,\ufeff'
+    try {
+        uri += encodeURIComponent(JSON.stringify(data || {}))
+    } catch (error) {
+        uri += data + ''
+    }
+    //encodeURIComponent解决中文乱码
+    //通过创建a标签实现
+    let link = document.createElement('a')
+    link.href = uri;
+    //对下载的文件命名
+    link.download = fileName + '-' + new Date().toLocaleString().replace(/\//g, '-') + '.' + fileType
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
 }

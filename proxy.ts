@@ -1,11 +1,26 @@
 export default {
     '/openApi': {
-    readonly: true,
-    name: '开发平台文档',
-    target: 'http://121.41.51.167:10001',
-    changeOrigin: true,
+        readonly: true,
+        name: '开发平台文档',
+        target: 'http://121.41.51.167:10001',
+        changeOrigin: true,
         rewrite: (path:string) => path.replace(/^\/openApi/, '')
     },
+    // '/v2/api-docs': {
+    //     readonly: true,
+    //     name: '开发平台文档',
+    //     target: 'http://127.0.0.1:3008',
+    //     changeOrigin: true,
+    //     rewrite: (path:string) => path.replace(/^\/v2\/api-docs/, ''),
+    //     router: (req:any) => {
+    //         console.log(req, '123123123');
+    //         let url = req.host
+    //         if (req.url.includes('?') && req.url.includes('http')) {
+    //             url = req.url.split('?')[1].split('=')[1]
+    //         }
+    //         return url
+    //     }
+    // },
     '/mallTest': {
         readonly: true,
         name: '商城前端测试环境开发文档',

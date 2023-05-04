@@ -20,7 +20,7 @@ export default defineConfig({
     plugins: [
         vue(),
         vueJsx(),
-        // proxyPlugin(),
+        proxyPlugin(),
         createStyleImportPlugin({
             resolves: [ElementPlusResolve()],
             libs: [

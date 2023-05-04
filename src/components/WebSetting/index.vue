@@ -4,9 +4,15 @@ import { baseUrl } from '@/api/baseUrl'
 import storage from '@/utils/storage'
 import config from '@/config'
 import router from '@/router'
+import { downloadFile } from '@/utils'
 import Loading from '@/hooks/loading'
-import type { FormInstance, FormRules } from 'element-plus'
+import type { FormInstance, FormRules, UploadProps, UploadFile } from 'element-plus'
 import { ElMessage, ElMessageBox } from 'element-plus'
+interface AppProps {
+    id: number
+    url: string
+    name: string
+}
 defineProps({
     modelValue: {
         type: Boolean,
@@ -25,13 +31,14 @@ const apiObj = ref({ name: '', url: '' })
 const drawerFormRef = ref<FormInstance|undefined>()
 const { appConfig, setAppConfig } = useAppConfigStore()
 const root:any = document.querySelector(':root')
+const fileList = ref<UploadFile[]>([])
 const form = ref({
     primaryColor: appConfig.primaryColor || getComputedStyle(root).getPropertyValue('--el-color-primary'),
     showBreadcrumb: appConfig.showBreadcrumb,
     logoPosition: appConfig.logoPosition,
     baseUrl: appConfig.baseUrl || '',
     apiUrl: appConfig.apiUrl || baseUrl,
-    apiList: appConfig.apiList,
+    apiList: appConfig.apiList as AppProps[],
     footer: {
         ...appConfig.footer
     },
@@ -120,6 +127,49 @@ const onLinksSort = (lindex:number, type:string) => {
         form.value.footer.links.splice(lindex - 1, 0, temp)
     }
 }
+const onExport = () => {
+    let data = storage.getItem('websiteConfig')
+    downloadFile(data, 'webSiteConfig', 'json')
+}
+const onImport:UploadProps['beforeUpload'] = (rawFile) => {
+    // let data = storage.getItem('websiteConfig')
+    // downloadFile(data, 'webSiteConfig', 'json')
+    let reader = new FileReader()   //先new 一个读文件的对象 FileReader
+    if (typeof FileReader === "undefined") {  //用来判断你的浏览器是否支持 FileReader
+        ElMessage({
+            type: "info",
+            message: "您的浏览器不支持文件读取。"
+        })
+        return
+    }
+    reader.readAsArrayBuffer(rawFile) //读任意文件
+    reader.onload = function (e:any) {
+        var ints = new Uint8Array(e.target.result) //要使用读取的内容，所以将读取内容转化成Uint8Array
+        ints = ints.slice(0, 5000) //截取一段读取的内容
+        let data:any = new TextDecoder('utf-8').decode(ints) //二进制缓存区内容转化成中文（即也就是读取到的内容）
+        try {
+            data = JSON.parse(data)
+        } catch (error) {
+            data = {}
+        }
+        form.value = {
+            ...form.value,
+            ...data
+        }
+        ElMessageBox.alert('导入成功，数据如下：' + '<div style="width: 360px;overflow:auto;background: #f8f8f8;padding: 10px;" v-highlight><code class="">'+JSON.stringify(data)+'</code></div>', '温馨提示', {
+            dangerouslyUseHTMLString: true,
+        })
+        // console.log(rawFile, data, 'rawFile');
+    }
+    if (rawFile.type !== 'application/json') {
+        ElMessage.error('file must be json format!')
+        return false
+    } else if (rawFile.size / 1024 / 1024 > 50) {
+        ElMessage.error('file size can not exceed 50MB!')
+        return false
+    }
+    return false
+}
 onEffectChange(form.value.currentEffect)
 onColorPickerChange()
 watch(appConfig, (val) => {
@@ -162,7 +212,7 @@ watch(appConfig, (val) => {
     @close="onClose">
         <el-form class="web-setting-form" ref="drawerFormRef" :model="form" label-width="110px" :rules="rules">
             <el-collapse v-model="accordion">
-                <el-collapse-item name="2" title="接口设置">
+                <el-collapse-item name="1" title="接口设置">
                     <el-form-item label="基础公共地址" prop="baseUrl">
                         <el-input placeholder="接口地址前缀，如：/api" v-model="form.baseUrl"></el-input>
                     </el-form-item>
@@ -175,7 +225,7 @@ watch(appConfig, (val) => {
                         <el-icon style="margin-left: 5px;cursor: pointer;" @click="form.apiList.push({ name: apiObj.name || apiObj.url, url: apiObj.url, id: form.apiList.length+1 });apiObj = {name: '', url: ''}"><Plus /></el-icon>
                     </el-form-item>
                 </el-collapse-item>
-                <el-collapse-item name="1" title="基础设置">
+                <el-collapse-item name="2" title="基础设置">
                     <el-form-item label="主题色" prop="primaryColor" class="color-picker">
                         <el-color-picker style="width: 200px;" v-model="form.primaryColor" @change="() => onColorPickerChange(true)" show-alpha />
                         <span>{{ form.primaryColor }}</span>
@@ -183,7 +233,7 @@ watch(appConfig, (val) => {
                     <el-form-item label="特效" prop="currentEffect">
                         <el-select v-model="form.currentEffect" class="effect" style="width:100%;margin-right: 10px;" placeholder="特效" @change="(val:any) => onEffectChange(val, true)">
                             <el-option  :label="'无'" :value="-1"></el-option>
-                            <el-option v-for="(item, index) in appConfig.effect" :label="item.name" :value="index" :key="item.name"></el-option>
+                            <el-option v-for="(item, index) in appConfig.effect as AppProps[]" :label="item.name" :value="index" :key="item.name"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="logo位置" prop="logoPosition">
@@ -216,10 +266,29 @@ watch(appConfig, (val) => {
                         <el-switch v-model="form.showBreadcrumb"></el-switch>
                     </el-form-item>
                 </el-collapse-item>
+                <el-collapse-item name="3" title="导入导出">
+                    <div class="btns" style="margin-top: 10px;">
+                        <el-upload
+                        class="upload fl"
+                        accept=".json"
+                        v-model:file-list="fileList"
+                        :before-upload="onImport">
+                            <el-button class="fl" @click="onExport">下载导入模板</el-button>
+                            <template #trigger>
+                                <el-button style="margin-left: 10px;" type="primary">导入数据</el-button>
+                            </template>
+                            <template #tip>
+                                <div class="el-upload__tip">
+                                    仅支持导入json格式的文件
+                                </div>
+                            </template>
+                        </el-upload>
+                    </div>
+                </el-collapse-item>
             </el-collapse>
         </el-form>
         <div class="el-drawer__footer">
-        <el-button @click="onReset">重置</el-button>
+            <el-button @click="onReset" type="danger">重置</el-button>
         <el-button type="primary" @click="onSubmit">确 定</el-button>
         </div>
     </el-drawer>

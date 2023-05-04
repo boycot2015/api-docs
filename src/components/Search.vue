@@ -1,7 +1,7 @@
 <script setup lang="tsx">
 import { useRouteStore } from '@/stores/app'
 import { useRouter } from 'vue-router'
-import { getVaildRoute } from '@/utils'
+import { getValidRoute } from '@/utils'
 let routeStore = useRouteStore()
 interface LinkItem {
   name: string
@@ -14,10 +14,10 @@ const timer:any = ref(null)
 const pageData:any = computed(() => router.currentRoute.value.meta?.pageData)
 watch(pageData, (val) => {})
 const keyword = ref('')
-const suggestions = ref<LinkItem[]>(getVaildRoute(routes.value.filter((el:any) => el.meta?.showInHeader)))
+const suggestions = ref<LinkItem[]>(getValidRoute(routes.value.filter((el:any) => el.meta?.showInHeader)))
 const placeholder = ref(suggestions.value[Math.floor(Math.random() * suggestions.value.length)].name || '请输入关键字/接口路径')
 const querySearch = (key:string, cb: (params:any) => void) => {
-    const results = key ? getVaildRoute(routes.value.filter((el:any) => !el.meta?.hideInSearch)).filter(createFilter(key)) : suggestions.value
+    const results = key ? getValidRoute(routes.value.filter((el:any) => !el.meta?.hideInSearch)).filter(createFilter(key)) : suggestions.value
     cb(results)
 }
 const createFilter = (queryString:string) => {

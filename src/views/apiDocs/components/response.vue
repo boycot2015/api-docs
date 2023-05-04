@@ -82,25 +82,50 @@ const onSubmit = (formEl: FormInstance | undefined) => {
                 params.params = params.data
                 delete params.data
             }
-            http.request(params).then((res:any) => {
-                setResponses(JSON.stringify(res, null, 2))
-                setForm({
-                    ...form.value,
-                    Timestamp: new Date().toLocaleString().replace(/\//g, '-'),
-                    ['Random-Code']: Math.floor(Math.random() * 100000) + ''
+            if (import.meta.hot) {
+                import.meta.hot.send('getDataByApiUrl', params)
+                import.meta.hot.on('getDataByApiUrl', (res) => {
+                    if (res) {
+                        setResponses(JSON.stringify(res, null, 2))
+                        setForm({
+                            ...form.value,
+                            Timestamp: new Date().toLocaleString().replace(/\//g, '-'),
+                            ['Random-Code']: Math.floor(Math.random() * 100000) + ''
+                        })
+                    } else {
+                        try {
+                            setResponses(JSON.stringify(res || {}, null, 2))
+                        } catch (error) {
+                            setResponses(error)
+                        }
+                        setForm({
+                            ...form.value,
+                            Timestamp: new Date().toLocaleString().replace(/\//g, '-'),
+                            ['Random-Code']: Math.floor(Math.random() * 100000) + ''
+                        })
+                    }
                 })
-            }).catch((err:any) => {
-                try {
-                    setResponses(JSON.stringify(err, null, 2))
-                } catch (error) {
-                    setResponses(error)
-                }
-                setForm({
-                    ...form.value,
-                    Timestamp: new Date().toLocaleString().replace(/\//g, '-'),
-                    ['Random-Code']: Math.floor(Math.random() * 100000) + ''
+            } else {
+                http.request(params).then((res:any) => {
+                    setResponses(JSON.stringify(res, null, 2))
+                    setForm({
+                        ...form.value,
+                        Timestamp: new Date().toLocaleString().replace(/\//g, '-'),
+                        ['Random-Code']: Math.floor(Math.random() * 100000) + ''
+                    })
+                }).catch((err:any) => {
+                    try {
+                        setResponses(JSON.stringify(err, null, 2))
+                    } catch (error) {
+                        setResponses(error)
+                    }
+                    setForm({
+                        ...form.value,
+                        Timestamp: new Date().toLocaleString().replace(/\//g, '-'),
+                        ['Random-Code']: Math.floor(Math.random() * 100000) + ''
+                    })
                 })
-            })
+            }
         } else {
             return false
         }

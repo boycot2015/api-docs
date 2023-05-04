@@ -5,23 +5,28 @@ import type { Column, ColumnProps, SpanMethodProps } from '../tools'
 import { getParams, getCustomParams } from '../tools'
 import useState from '@/hooks/useState'
 import { getRowSpan } from '@/utils'
+const props = defineProps({
+    columns: {
+    type: Array as unknown as PropType<[Column]>,
+    default: () => [
+        { prop: 'name', label: '参数名称', width: 200 },
+        { prop: 'type', label: '类型', width: 80 },
+        { prop: 'required', label: '是否必传', width: 100 },
+        { prop: 'description', label: '说明', width: 220 },
+        { prop: 'format', label: '其他信息', formatter: (row:ColumnProps, column:TableColumnCtx<Column>) => row.format ? 'format:'+ row.format : '', width: 120 },
+    ],
+  }
+})
 const router = useRouter()
 const loading = ref(false)
 const pageData:any = computed(() => router.currentRoute.value.meta.pageData)
-const columns:Column[] = [
-    { prop: 'name', label: '参数名称', width: 200 },
-    { prop: 'type', label: '类型', width: 80 },
-    { prop: 'required', label: '是否必传', width: 80 },
-    { prop: 'description', label: '说明', width: 220 },
-    { prop: 'format', label: '其他信息', formatter: (row:ColumnProps, column:TableColumnCtx<Column>) => row.format ? 'format:'+ row.format : '', width: 120 },
-]
 const [ state, setState ] = useState({
     loading: false,
     method: pageData.value.method,
     data: pageData.value.data,
     inData: [...getCustomParams(pageData.value), ...getParams(pageData.value.data?.parameters || [])],
-    outData: getParams(pageData.value.data?.responses[200].schema.$ref),
-    columns
+    columns: props.columns,
+    outData: getParams(pageData.value.data?.responses[200].schema.$ref)
 })
 
 const objectSpanMethod = ({
@@ -77,7 +82,7 @@ watch(pageData, (val) => {
         :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
         >
             <el-table-column
-            v-for="column in state.columns"
+            v-for="column in columns"
             :key="column.prop"
             :label="column.label"
             :prop="column.prop"
@@ -99,7 +104,7 @@ watch(pageData, (val) => {
         :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
         >
             <el-table-column
-            v-for="column in state.columns"
+            v-for="column in columns"
             :key="column.prop"
             :label="column.label"
             :prop="column.prop"
@@ -120,7 +125,7 @@ watch(pageData, (val) => {
         :data="state.outData"
         >
             <el-table-column
-            v-for="column in state.columns"
+            v-for="column in columns"
             :key="column.prop"
             :label="column.label"
             :prop="column.prop"
