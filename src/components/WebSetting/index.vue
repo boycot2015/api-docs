@@ -26,7 +26,7 @@ const rules = reactive<FormRules>({
     apiUrl: [{ required: true, message: 'swagger地址不能为空' }]
 })
 const emits = defineEmits(['update:modelValue'])
-const accordion = ref(['1', '2'])
+const accordion = ref('1')
 const apiObj = ref({ name: '', url: '' })
 const drawerFormRef = ref<FormInstance|undefined>()
 const { appConfig, setAppConfig } = useAppConfigStore()
@@ -93,7 +93,7 @@ const onReload = () => {
 const onSubmit = () => {
     drawerFormRef.value?.validate((valid) => {
         if (!valid) {
-            accordion.value = ['1', '2']
+            accordion.value = '1'
             return
         }
         emits('update:modelValue', false)
@@ -128,12 +128,35 @@ const onLinksSort = (lindex:number, type:string) => {
     }
 }
 const onExport = () => {
-    let data = storage.getItem('websiteConfig')
-    downloadFile(data, 'webSiteConfig', 'json')
+    downloadFile(form.value, 'webSiteConfig', 'json')
 }
-const onImport:UploadProps['beforeUpload'] = (rawFile) => {
-    // let data = storage.getItem('websiteConfig')
-    // downloadFile(data, 'webSiteConfig', 'json')
+const onImportSuccess = (data:any) => {
+    form.value = {
+        ...form.value,
+        ...data
+    }
+    accordion.value = '1'
+    fileList.value = []
+    Loading({ text: '正在导入数据，请稍后...' })
+    setTimeout(() => {
+        setAppConfig({ ...form.value })
+        Loading().close()
+        ElMessageBox.alert('导入成功：' + '<div style="width: 360px;overflow:auto;background: #f8f8f8;padding: 10px;" v-highlight><code class="">'+JSON.stringify(data)+'</code></div>', '温馨提示', {
+            dangerouslyUseHTMLString: true,
+        }).then(() => {
+            emits('update:modelValue', false)
+            window.location.reload()
+        }).catch(() => {})
+    }, 1000);
+}
+const onFileChange = (file:any) => {
+    if (file.raw.type !== 'application/json') {
+        ElMessage.error('仅支持导入json格式的文件!')
+        return false
+    } else if (file.raw.size / 1024 / 1024 > 100) {
+        ElMessage.error('文件大小不能超过 100MB!')
+        return false
+    }
     let reader = new FileReader()   //先new 一个读文件的对象 FileReader
     if (typeof FileReader === "undefined") {  //用来判断你的浏览器是否支持 FileReader
         ElMessage({
@@ -142,7 +165,7 @@ const onImport:UploadProps['beforeUpload'] = (rawFile) => {
         })
         return
     }
-    reader.readAsArrayBuffer(rawFile) //读任意文件
+    reader.readAsArrayBuffer(file.raw) //读任意文件
     reader.onload = function (e:any) {
         var ints = new Uint8Array(e.target.result) //要使用读取的内容，所以将读取内容转化成Uint8Array
         ints = ints.slice(0, 5000) //截取一段读取的内容
@@ -152,21 +175,8 @@ const onImport:UploadProps['beforeUpload'] = (rawFile) => {
         } catch (error) {
             data = {}
         }
-        form.value = {
-            ...form.value,
-            ...data
-        }
-        ElMessageBox.alert('导入成功，数据如下：' + '<div style="width: 360px;overflow:auto;background: #f8f8f8;padding: 10px;" v-highlight><code class="">'+JSON.stringify(data)+'</code></div>', '温馨提示', {
-            dangerouslyUseHTMLString: true,
-        })
+        onImportSuccess(data)
         // console.log(rawFile, data, 'rawFile');
-    }
-    if (rawFile.type !== 'application/json') {
-        ElMessage.error('file must be json format!')
-        return false
-    } else if (rawFile.size / 1024 / 1024 > 50) {
-        ElMessage.error('file size can not exceed 50MB!')
-        return false
     }
     return false
 }
@@ -211,21 +221,8 @@ watch(appConfig, (val) => {
     :model-value="modelValue"
     @close="onClose">
         <el-form class="web-setting-form" ref="drawerFormRef" :model="form" label-width="110px" :rules="rules">
-            <el-collapse v-model="accordion">
-                <el-collapse-item name="1" title="接口设置">
-                    <el-form-item label="基础公共地址" prop="baseUrl">
-                        <el-input placeholder="接口地址前缀，如：/api" v-model="form.baseUrl"></el-input>
-                    </el-form-item>
-                    <el-form-item label="应用名称" prop="apiUrl">
-                        <el-select v-model="form.apiUrl" style="width: 100%;margin-bottom: 5px;">
-                            <el-option v-for="api in form.apiList" :label="api.name" :value="api.url" :key="api.name"></el-option>
-                        </el-select>
-                        <el-input style="width:45%" placeholder="链接名称" v-model="apiObj.name"></el-input>
-                        <el-input style="margin-left: 5px;width:45%" placeholder="不存在跨域的或者项目中代理的地址" v-model="apiObj.url"></el-input>
-                        <el-icon style="margin-left: 5px;cursor: pointer;" @click="form.apiList.push({ name: apiObj.name || apiObj.url, url: apiObj.url, id: form.apiList.length+1 });apiObj = {name: '', url: ''}"><Plus /></el-icon>
-                    </el-form-item>
-                </el-collapse-item>
-                <el-collapse-item name="2" title="基础设置">
+            <el-tabs v-model="accordion" accordion>
+                <el-tab-pane name="1" label="基础设置">
                     <el-form-item label="主题色" prop="primaryColor" class="color-picker">
                         <el-color-picker style="width: 200px;" v-model="form.primaryColor" @change="() => onColorPickerChange(true)" show-alpha />
                         <span>{{ form.primaryColor }}</span>
@@ -265,14 +262,31 @@ watch(appConfig, (val) => {
                     <el-form-item label="显示导航" prop="showBreadcrumb">
                         <el-switch v-model="form.showBreadcrumb"></el-switch>
                     </el-form-item>
-                </el-collapse-item>
-                <el-collapse-item name="3" title="导入导出">
+                </el-tab-pane>
+                <el-tab-pane name="2" label="接口设置">
+                    <el-form-item label="基础公共地址" prop="baseUrl">
+                        <el-input placeholder="接口地址前缀，如：/api" v-model="form.baseUrl"></el-input>
+                    </el-form-item>
+                    <el-form-item label="应用名称" prop="apiUrl">
+                        <el-select v-model="form.apiUrl" style="width: 100%;margin-bottom: 5px;">
+                            <el-option v-for="api in form.apiList" :label="api.name" :value="api.url" :key="api.name"></el-option>
+                        </el-select>
+                        <el-input style="width:45%" placeholder="链接名称" v-model="apiObj.name"></el-input>
+                        <el-input style="margin-left: 5px;width:45%" placeholder="不存在跨域的或者项目中代理的地址" v-model="apiObj.url"></el-input>
+                        <el-icon style="margin-left: 5px;cursor: pointer;" @click="form.apiList.push({ name: apiObj.name || apiObj.url, url: apiObj.url, id: form.apiList.length+1 });apiObj = {name: '', url: ''}"><Plus /></el-icon>
+                    </el-form-item>
+                </el-tab-pane>
+                <el-tab-pane name="3" label="导入导出">
                     <div class="btns" style="margin-top: 10px;">
                         <el-upload
                         class="upload fl"
                         accept=".json"
+                        action="/"
+                        :limit="1"
+                        :auto-upload="false"
+                        show-file-list
                         v-model:file-list="fileList"
-                        :before-upload="onImport">
+                        :on-change="onFileChange">
                             <el-button class="fl" @click="onExport">下载导入模板</el-button>
                             <template #trigger>
                                 <el-button style="margin-left: 10px;" type="primary">导入数据</el-button>
@@ -284,10 +298,10 @@ watch(appConfig, (val) => {
                             </template>
                         </el-upload>
                     </div>
-                </el-collapse-item>
-            </el-collapse>
+                </el-tab-pane>
+            </el-tabs>
         </el-form>
-        <div class="el-drawer__footer">
+        <div class="el-drawer__footer" v-if="accordion!=='3'">
             <el-button @click="onReset" type="danger">重置</el-button>
         <el-button type="primary" @click="onSubmit">确 定</el-button>
         </div>

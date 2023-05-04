@@ -13,7 +13,7 @@
                 <el-input placeholder="项目名称" v-model="form.name"></el-input>
             </el-form-item>
             <el-form-item label="项目地址" prop="url">
-                <el-input placeholder="不存在跨域的或者项目中代理的地址" v-model="form.url"></el-input>
+                <el-input placeholder="项目地址, 如：http/https://xxx.com" v-model="form.url"></el-input>
             </el-form-item>
             <el-form-item label="替换为当前项目" prop="replace">
                 <el-radio-group v-model="form.replace">
