@@ -1,7 +1,7 @@
 <template>
-  <div class="anchor" :offset="150" :class="activeIndex===anchors.length && 'hide'" v-show="anchors && anchors.length">
+  <div class="anchor" :class="activeIndex===anchors.length && 'hide'" v-show="anchors && anchors.length">
     <div class="wrapper">
-        <a class="anchor-item" @click="setAnchorIndex(index)" :class="{'is-active': index === activeIndex}" v-for="(item, index) in anchors as any" :href="'#' + item.className.split(' ')[0] + index" :key="item">{{item.innerText}}</a>
+        <a class="anchor-item" @click="setAnchorIndex(index)" :class="{'is-active': index === activeIndex}" v-for="(item, index) in anchors" :href="'#' + item.className.split(' ')[0] + index" :key="item.innerText">{{item.innerText}}</a>
     </div>
   </div>
 </template>
@@ -10,7 +10,7 @@
     position: fixed;
     top: auto;
     left: auto;
-    right: 60px;
+    right: 130px;
     bottom: auto;
     z-index: 9;
     min-width: 150px;
@@ -27,8 +27,10 @@
     }
     .wrapper {
         width: 100%;
+        max-height: 300px;
         border-left: 2px solid var(--vt-c-black-light);
         padding: 16px 0;
+        overflow-y: auto;
     }
     &-item {
         display: block;
@@ -54,10 +56,14 @@
 import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAnchorStore } from '@/stores/app'
+interface ElProp {
+    className: string
+    innerText: string
+}
 const router = useRouter()
 const appPageAnchors = useAnchorStore()
 const activeIndex = computed(() => appPageAnchors.anchorIndex)
-const anchors = computed(() => appPageAnchors.anchors)
+const anchors = computed<ElProp[]>(() => appPageAnchors.anchors)
 watch(router.currentRoute, (to, from) => {
     if (to.path !== from.path) {
         appPageAnchors.setAnchorIndex(0)

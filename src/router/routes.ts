@@ -51,30 +51,6 @@ export default [
     //     ]
     // },
     {
-        path: '/log',
-        name: 'log',
-        redirect: '/log/index',
-        meta: {
-            title: '更新日志',
-            hideChildren: true,
-            icon: 'Promotion'
-        },
-        component: Layout,
-        children: [
-            {
-                path: '/log/index',
-                name: 'logList',
-                meta: {
-                    title: '更新日志',
-                    // hideHeader: true,
-                    showAnchor: true,
-                    icon: 'Menu'
-                },
-                component: () => import('@/views/log.vue'),
-            }
-        ]
-    },
-    {
         path: '/apps',
         name: 'apps',
         redirect: '/apps/index',
@@ -97,5 +73,30 @@ export default [
                 component: () => import('@/views/apps/index.vue'),
             }
         ]
-    }
+    },
+    {
+        path: '/log',
+        name: 'log',
+        redirect: '/log/index',
+        meta: {
+            title: '更新日志',
+            hideChildren: true,
+            showInHeader: true,
+            icon: 'Promotion'
+        },
+        component: Layout,
+        children: [
+            {
+                path: '/log/index',
+                name: 'logList',
+                meta: {
+                    title: '更新日志',
+                    showInHeader: true,
+                    showAnchor: true,
+                    icon: 'Menu'
+                },
+                component: () => import('@/views/log.vue'),
+            }
+        ]
+    },
 ]

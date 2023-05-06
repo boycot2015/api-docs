@@ -54,7 +54,6 @@
 
     --color-border: var(--vt-c-divider-dark-2);
     --color-border-hover: var(--vt-c-divider-dark-1);
-
     --color-heading: var(--vt-c-text-dark-1);
     --color-text: var(--vt-c-text-dark-2);
   }
@@ -196,6 +195,11 @@ input::-webkit-input-placeholder {
   .app-page-anchor {
     margin: 20px 0;
   }
+.el-button.el-button--primary:hover, .el-button.el-button--primary:focus, .el-button.el-button--primary:active {
+    border-color: var(--el-color-primary);
+    background-color: var(--el-color-primary);
+    opacity: 0.8;
+}
 // .el-menu-item,
 // .el-sub-menu__title {
 //     max-width: 180px;

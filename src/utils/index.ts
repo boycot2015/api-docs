@@ -66,7 +66,7 @@ export const JSONStringify = (option:any) => {
         }
         return val;
       },
-      2
+      4
     )
 }
 // 对象序列化解析
@@ -136,16 +136,16 @@ export const getValidRoute = (routes:any) => {
 export const downloadFile = (data:any, fileName = 'file', fileType = 'json') => {
     let uri = 'data:text/csv;charset=utf-8,\ufeff'
     try {
+        //encodeURIComponent解决中文乱码
         uri += encodeURIComponent(JSON.stringify(data || {}))
     } catch (error) {
         uri += data + ''
     }
-    //encodeURIComponent解决中文乱码
     //通过创建a标签实现
     let link = document.createElement('a')
     link.href = uri;
     //对下载的文件命名
-    link.download = fileName + '-' + new Date().toLocaleString().replace(/\//g, '-') + '.' + fileType
+    link.download = fileName + '-' + new Date().toLocaleString().trim().replace(/:/g, '').replace(/\//g, '').split(' ').join('-') + '.' + fileType
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)

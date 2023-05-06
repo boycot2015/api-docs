@@ -2,7 +2,7 @@
 import { useRouter } from 'vue-router'
 import type { FormInstance } from 'element-plus'
 import { ElMessage } from 'element-plus'
-import{ copyToClipboard } from '@/utils'
+import{ copyToClipboard, JSONStringify, JSONParse } from '@/utils'
 import type { ColumnProps, FormProps } from '../tools'
 import { getParams, arr2obj, getCustomParams } from '../tools'
 import http from '@/api/request'
@@ -15,7 +15,7 @@ const router = useRouter()
 const loading = ref(false)
 const [ showParams, toggleShowParams ] = useState(true)
 const pageData:any = computed(() => router.currentRoute.value.meta?.pageData)
-const [ responses, setResponses ] = useState(arr2obj(pageData.value.data?.responses[200]?.schema?.$ref))
+const [ responses, setResponses ] = useState(arr2obj(pageData.value.method, pageData.value.data?.responses[200]?.schema?.$ref || []))
 
 const ruleFormRef = ref<FormInstance>()
 let state = reactive({
@@ -32,16 +32,16 @@ let state = reactive({
         description: '',
     },
     inData: [...getCustomParams(pageData.value), ...getParams(pageData.value.data?.parameters || [])],
-    outData: getParams(pageData.value.data?.responses[200].schema.$ref),
+    outData: getParams(pageData.value.data?.responses[200]?.schema?.$ref || []),
     name: pageData.value.name
 })
 const initFormData = (arr:any) => {
     let form:FormProps = {}
-    form.bodyParams = state.method === 'post' ? '{}': JSON.stringify(arr2obj(arr.filter((el:any) => el.in === 'query'), 'children'), null, 2)  
+    form.bodyParams = state.method === 'post' ? '{}': JSONStringify(arr2obj(pageData.value.method, arr.filter((el:any) => el.in === 'query'), 'children'))  
     arr.map((el:ColumnProps) => {
         if (el.in === 'body') {
             form.bodyRequired = Boolean(el.required)
-            form.bodyParams = JSON.stringify(arr2obj(el.children || [el], 'children'), null, 2)            
+            form.bodyParams = JSONStringify(arr2obj(pageData.value.method, el.children || [el], 'children'))            
         }
     })
     form.Method = baseServeUrl + state.url
@@ -71,7 +71,7 @@ const onSubmit = (formEl: FormInstance | undefined) => {
             }
             try {
                 params.data = {
-                    ...JSON.parse(form.value.bodyParams || '{}'),
+                    ...JSONParse(form.value.bodyParams || '{}'),
                     loading: true
                 }
             } catch (error) {
@@ -86,7 +86,7 @@ const onSubmit = (formEl: FormInstance | undefined) => {
                 import.meta.hot.send('getDataByApiUrl', params)
                 import.meta.hot.on('getDataByApiUrl', (res) => {
                     if (res) {
-                        setResponses(JSON.stringify(res, null, 2))
+                        setResponses(JSONStringify(res))
                         setForm({
                             ...form.value,
                             Timestamp: new Date().toLocaleString().replace(/\//g, '-'),
@@ -94,7 +94,7 @@ const onSubmit = (formEl: FormInstance | undefined) => {
                         })
                     } else {
                         try {
-                            setResponses(JSON.stringify(res || {}, null, 2))
+                            setResponses(JSONStringify(res || {}))
                         } catch (error) {
                             setResponses(error)
                         }
@@ -107,7 +107,7 @@ const onSubmit = (formEl: FormInstance | undefined) => {
                 })
             } else {
                 http.request(params).then((res:any) => {
-                    setResponses(JSON.stringify(res, null, 2))
+                    setResponses(JSONStringify(res))
                     setForm({
                         ...form.value,
                         Timestamp: new Date().toLocaleString().replace(/\//g, '-'),
@@ -115,7 +115,7 @@ const onSubmit = (formEl: FormInstance | undefined) => {
                     })
                 }).catch((err:any) => {
                     try {
-                        setResponses(JSON.stringify(err, null, 2))
+                        setResponses(JSONStringify(err))
                     } catch (error) {
                         setResponses(error)
                     }
@@ -137,7 +137,7 @@ const onReset = (formEl: FormInstance | undefined) => {
     setForm({
         ...initFormData(state.inData)
     })
-    setResponses(arr2obj(pageData.value.data?.responses[200]?.schema?.$ref))
+    setResponses(arr2obj(pageData.value.method, pageData.value.data?.responses[200]?.schema?.$ref || []))
 }
 const delParams = (item:any, index:number) => {
     state.inData = state.inData.filter((el: any) => item.name !== el.name)
@@ -178,7 +178,7 @@ watch(pageData, (val) => {
         outData: val.data && val.data.responses[200] ? getParams(val.data?.responses[200]?.schema?.$ref || []) : []
     }
     toggleShowParams(true)
-    setResponses(arr2obj(val.data?.responses[200]?.schema?.$ref))
+    setResponses(arr2obj(pageData.value.method, val.data?.responses[200]?.schema?.$ref || []))
     ruleFormRef.value?.resetFields()
     setForm({ ...form, ...initFormData([...getCustomParams(pageData.value), ...getParams(val.data?.parameters || [])]) })
     loading.value = true
@@ -200,7 +200,7 @@ watch(pageData, (val) => {
                 <el-button @click="onReset(ruleFormRef)">重置</el-button>
             </div>
         </div>
-        <el-form :model="form" ref="ruleFormRef" label-width="120px" v-show="showParams">
+        <el-form :model="form" ref="ruleFormRef" label-width="120px">
             <el-form-item label="请求头参数" :inline="false" v-if="state.inData && state.inData.length">
                 <el-form-item style="width: 100%;margin-bottom: 20px;" v-for="(item, index) in state.inData.filter((el:any) => el.in === 'header')" :prop="item.name" :rules="[{required: item.required, message: item.name + '不能为空', tigger: 'change'}]" :label="item.name" :key="item.name">
                     <div class="action">
@@ -223,6 +223,7 @@ watch(pageData, (val) => {
                     <el-input rows="8" type="textarea" v-model="form.bodyParams" :style="{marginBottom: '10px'}" :placeholder="`请输入${state.method === 'post'?'body':'query'}参数，示例：{ &quot;id&quot;: 1 }`"></el-input>
             </el-form-item>
         </el-form>
+        <div class="name">响应数据</div>
         <div v-highlight class="code" v-show="showParams">
             <span class="copy" @click="onCopy">json 复制代码</span>
             <pre><code class="hljs language-kotlin"> {{ responses }}</code></pre>
@@ -246,6 +247,7 @@ watch(pageData, (val) => {
                 background-color: var(--vt-c-white-soft);
                 border-radius: var(--border-radius);
                 overflow: auto;
+                max-width: 900px;
             }
         }
     }

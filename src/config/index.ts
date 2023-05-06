@@ -28,7 +28,12 @@ interface AppConfigProps {
     effect?: effectProps[]
     baseUrl?:string
     apiUrl?:string
-    footer?: FooterProps
+    footer?: FooterProps,
+    gitConfig?:{
+        owner:string
+        repo:string
+        access_token:string
+    }
 }
 export type {
     effectProps,
@@ -72,5 +77,10 @@ export default <AppConfigProps>({
             href: 'https://www.yunzhonghe.com/',
             target: '_blank'
         }]
+    },
+    gitConfig: { // git仓库配置
+        owner: 'boycot',
+        repo: 'api-docs',
+        access_token: 'c9a430a278c549ce82abd2e19a2b36ed'
     }
 })

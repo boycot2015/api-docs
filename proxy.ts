@@ -77,4 +77,9 @@ export default {
         //     })
         // }
     },
+    '/gitee': {
+        target: 'https://gitee.com/',
+        changeOrigin: true,
+        rewrite: (path:string) => path.replace(/^\/gitee/, ''),
+    }
 }

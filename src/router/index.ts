@@ -15,7 +15,7 @@ router.beforeEach(async (to:any, from, next) => {
     let routeStore = useRouteStore()
     to.meta.websiteName = config.websiteName
     to.meta.websiteConfig = config
-    document.title = to.meta.title  + '-' + config.websiteName
+    document.title = (to.meta.title  ? to.meta.title + '-' : '') + config.websiteName
     if (!storage.getItem('websiteConfig')) {
         storage.setItem('websiteConfig', config)
     }

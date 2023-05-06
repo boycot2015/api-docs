@@ -42,23 +42,34 @@ interface ResponseTypes {
 }
 
 const getCustomParams = (data:any) => {
-    return data?.info?.title?.includes('B2C商城前端') ? [{
+    let defaultParams = [
+        {
             description : "token令牌",
             in: "header",
             name: "Authorization",
             required: false,
             type: "string"
-    },
-    {
+        },
+        {
             description : "商城域名",
             in: "header",
             name: "website-path",
             required: true,
             type: "string"
-    }] : []
+        }
+    ]
+    let hasProps = false
+    let isB2C = data?.info?.title?.includes('B2C')
+    data.data?.parameters?.map((el:any) => {
+        if (defaultParams.map((val:any) => val.name).includes(el.name)) {
+            hasProps = true
+        }
+    })
+    if (hasProps && !isB2C) return []
+    return hasProps ? (isB2C ? [] : '') : isB2C ? [] : [defaultParams[0]]
 }
 
-const getParams = (data:ColumnProps[], child?:boolean, name?:string) => {
+const getParams = (data:ColumnProps[], child?:boolean, name?:string) => {    
     return data && data.map && data.map((el:ColumnProps|any) => {
         let children =  el.children ?  el.children || '' : el.schema ? el.schema.$ref || '' : ''
         if (children && children.length) {
@@ -67,21 +78,21 @@ const getParams = (data:ColumnProps[], child?:boolean, name?:string) => {
         return { ...el, in: el.in || (el.type === 'array' ? 'body': el.type === 'object' ? 'object': name), children, child }
     })
 }
-const arr2obj = (arr:ColumnProps[] | undefined, prop = 'children') => {
+const arr2obj = (method:string, arr:ColumnProps[] | undefined, prop = 'children') => {
     let obj:any = {}
     let types:ResponseTypes | any = {
         string: '',
         number: 0,
-        array: [],
+        array: method === 'get' ? '' : [],
         boolean: false,
         integer: 1
     }
     arr && arr.map && arr.map((el:ColumnProps | any) => {
         obj[el.name] = el.example || types[el.type] !== undefined ? types[el.type] : ''
         if (el[prop] && el[prop].length) {
-            obj[el.name] = arr2obj(el[prop], prop)
+            obj[el.name] = arr2obj(method, el[prop], prop)
             if (el.type === 'array') {
-                obj[el.name] = [arr2obj(el[prop], prop)]
+                obj[el.name] = [arr2obj(method, el[prop], prop)]
             }
         }
     })

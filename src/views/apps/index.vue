@@ -1,32 +1,39 @@
 <template>
     <div class="api-docs-app" key="api-docs-app" v-loading="loading">
-      <el-row class="list clearfix">
-          <el-col :span="3" class="list-item fl" v-for="app in appList" :key="app.name">
+      <el-row class="list" :gutter="30">
+          <el-col
+          :span="4"
+          :xl="{ span: 3 }"
+          class="list-item"
+          :class="{ 'is-active' : app.replace }"
+          v-for="app in appList" :key="app.name">
               <div class="icon" @click="onAdd(app)">
                   <el-icon v-if="app.icon">
                       <component :is="app.icon"></component>
                   </el-icon>
                   <span v-else>
                     <template v-if="app.url.split('/')[1]">
-                        {{ app.url.split('/')[1][0]?.toUpperCase() }}
+                        {{ app.url.split('/')[1].slice(0, 2)?.toUpperCase() }}
                     </template>
-                    <template v-else>{{ app.name[0]?.toUpperCase() }}</template>
+                    <template v-else>{{ app.name.slice(0, 2)?.toUpperCase() }}</template>
                   </span>
               </div>
               <div class="name">{{ app.name }}</div>
           </el-col>
-          <div class="list-item fl">
-              <div class="icon" @click="onAdd()">
-                  <el-icon>
-                      <Plus />
-                  </el-icon>
+          <el-col :span="4" :xl="{ span: 3 }">
+              <div class="list-item">
+                  <div class="icon" @click="onAdd()">
+                      <el-icon>
+                          <Plus />
+                      </el-icon>
+                  </div>
+                  <div class="name">新增项目</div>
               </div>
-              <div class="name">新增项目</div>
-          </div>
+          </el-col>
       </el-row>
-      <div class="export-btn">
-            <el-button size="small" type="primary" @click="onExport">导出数据</el-button>
-      </div>
+      <!-- <div class="export-btn">
+            <el-button size="" type="primary" @click="onExport">导出数据</el-button>
+      </div> -->
       <AddOrEdit v-model="visible" :data="rowData"></AddOrEdit>
     </div>
 </template>
@@ -42,6 +49,7 @@ interface AppProps {
     icon: string
     url: string
     name: string
+    replace?:boolean
 }
 const appList = computed<AppProps[]>(() => appConfig.apiList)
 const router = useRouter()
@@ -66,9 +74,8 @@ onMounted(() => {
 .api-docs-app {
     width: 100%;
     .list {
-        padding: 15px;
+        // margin-top: 30px;
         &-item {
-            margin-right: 20px;
             text-align: center;
             .icon {
                 cursor: pointer;
@@ -78,7 +85,7 @@ onMounted(() => {
                 width: 60px;
                 height: 60px;
                 line-height: 60px;
-                font-size: 32px;
+                font-size: 22px;
                 font-weight: bold;
                 border-radius: var(--border-radius);
                 border: 1px solid var(--vt-c-ccc);
@@ -92,6 +99,15 @@ onMounted(() => {
             }
             .name {
                 max-width: 100px;
+            }
+            &.is-active {
+                .icon {
+                    background-color: var(--el-color-primary);
+                    color: var(--vt-c-ccc);
+                }
+                .name {
+                    color: var(--el-color-primary);
+                }
             }
         }
     }

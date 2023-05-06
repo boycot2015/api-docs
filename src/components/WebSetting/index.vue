@@ -69,7 +69,7 @@ const onColorPickerChange = (select?:boolean) => {
 
 const onClose = () => {
   emits('update:modelValue', false)
-  resetForm(config)
+  resetForm({ ...config, ...appConfig })
 }
 const onReload = () => {
     if (form.value.apiUrl !== appConfig.apiUrl) {
@@ -268,12 +268,13 @@ watch(appConfig, (val) => {
                         <el-input placeholder="接口地址前缀，如：/api" v-model="form.baseUrl"></el-input>
                     </el-form-item>
                     <el-form-item label="应用名称" prop="apiUrl">
-                        <el-select v-model="form.apiUrl" style="width: 100%;margin-bottom: 5px;">
+                        <el-select filterable v-model="form.apiUrl" style="width: 92%;margin-bottom: 5px;">
                             <el-option v-for="api in form.apiList" :label="api.name" :value="api.url" :key="api.name"></el-option>
                         </el-select>
-                        <el-input style="width:45%" placeholder="链接名称" v-model="apiObj.name"></el-input>
-                        <el-input style="margin-left: 5px;width:45%" placeholder="不存在跨域的或者项目中代理的地址" v-model="apiObj.url"></el-input>
-                        <el-icon style="margin-left: 5px;cursor: pointer;" @click="form.apiList.push({ name: apiObj.name || apiObj.url, url: apiObj.url, id: form.apiList.length+1 });apiObj = {name: '', url: ''}"><Plus /></el-icon>
+                        <!-- <el-input style="width:45%" placeholder="链接名称" v-model="apiObj.name"></el-input>
+                        <el-input style="margin-left: 5px;width:45%" placeholder="不存在跨域的或者项目中代理的地址" v-model="apiObj.url"></el-input> -->
+                        <!-- <el-icon style="margin-left: 5px;cursor: pointer;" @click="apiObj.name &&form.apiList.push({ name: apiObj.name || apiObj.url, url: apiObj.url, id: form.apiList.length+1 });apiObj = {name: '', url: ''}"><Plus /></el-icon> -->
+                        <el-icon title="新增项目" style="margin-left: 5px;cursor: pointer;" @click="$router.push('/apps/index');onClose();"><Plus  /></el-icon>
                     </el-form-item>
                 </el-tab-pane>
                 <el-tab-pane name="3" label="导入导出">

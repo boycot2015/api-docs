@@ -100,6 +100,15 @@ const onSubmit = () => {
         if (!valid) {
             return
         }
+        let config:any = {
+        }
+        if (form.value.replace) {
+            config.apiUrl = form.value.url
+            config.apiName = form.value.name
+            apiList.value.map((el:any) => {
+                el.replace = false
+            })
+        }
         if (form.value.id) {
             let index = apiList.value.findIndex((el:any) => el.id === form.value.id)
             apiList.value.splice(index, 1, { ...form.value })
@@ -109,13 +118,7 @@ const onSubmit = () => {
             }
             apiList.value.push({ ...form.value, id: apiList.value.length + 1 })
         }
-        let config:any = {
-            apiList: apiList.value
-        }
-        if (form.value.replace) {
-            config.apiUrl = form.value.url
-            config.apiName = form.value.name
-        }
+        config.apiList = apiList.value
         setAppConfig({ ...config })
         onReload()
     })

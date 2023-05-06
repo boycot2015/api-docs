@@ -17,6 +17,7 @@ const dynamicRoutes = (data:any, parent = baseApiStr) => {
                 meta: {
                     parent,
                     ...item.meta,
+                    // showAnchor: true,
                     auth: true
                 }
             })
@@ -29,6 +30,7 @@ const dynamicRoutes = (data:any, parent = baseApiStr) => {
                 meta: {
                     parent,
                     ...item.meta,
+                    // showAnchor: true,
                     auth: true
                 }
             }
@@ -51,14 +53,12 @@ const fetchRouteData = (to:any, from:any, next: any) => {
         } else {
             dyRoutes = []
         }
-        let loopRefs = ['DepartmentPurchaseCategoryOutputVO', 'WebsiteDepartmentCategoryOutputVO', 'WebsiteDepartmentCategoryOutputVO', 'DepartmentTreeOutputVO', 'DeptTreeVo', 'MenuTreeVo', '客户虚拟商品池查询条件', '分类加载VO', 'SupplierInfoPageVo', 'CategoryBaeInfoVo', 'CategoryTreeVo', 'VirtualGoodsCateVo', '军网重点商品分类树返回模型']
+        let loopRefs = ['DepartmentPurchaseCategoryOutputVO', 'WebsiteDepartmentCategoryOutputVO', 'WebsiteDepartmentCategoryOutputVO', 'DepartmentTreeOutputVO', 'DeptTreeVo', 'MenuTreeVo', '客户虚拟商品池查询条件', '分类加载VO', 'SupplierInfoPageVo', 'CategoryBaeInfoVo', 'CategoryTreeVo', 'VirtualGoodsCateVo', '军网重点商品分类树返回模型', '开票申请DTO(基于订单)', '财务系统售后订单查询条件']
         let apiUrl = ''
         if (storage.getItem('websiteConfig')) {
             apiUrl = storage.getItem('websiteConfig').apiUrl || ''
-            // apiUrl = apiUrl === baseUrl ? '' : apiUrl
         }
         const handleRoutes = (res: { data: any; }, dyRoutes: any[]) => {
-            console.log(res, 'res');
             const { tags, paths, definitions, host, info } = (res.data  || res) as any
             const getParameters = (obj:any) => {
                 if (!obj || obj === null) return {}
@@ -146,7 +146,6 @@ const fetchRouteData = (to:any, from:any, next: any) => {
             })
             return dyRoutes
         }
-        // console.log(import.meta, 'import.meta');
         if (import.meta.hot) {
             import.meta.hot.send('getRoutes', { url: apiUrl + '/v2/api-docs' })
             import.meta.hot.on('getRoutes', (res) => {

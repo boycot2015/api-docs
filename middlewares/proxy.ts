@@ -11,7 +11,7 @@ const request = (url: any, data: any, fn: ((arg0: string) => any) | undefined) =
     let options = {
         host: parse_u.hostname,
         port: parse_u.port || (isHttp? 80 : 443),
-        path: parse_u.path,
+        path: data.method === 'post' ? parse_u.path : parse_u.path + content,
         method: data.method,
         headers:{
             ...data.headers,
@@ -35,7 +35,7 @@ const request = (url: any, data: any, fn: ((arg0: string) => any) | undefined) =
 export const proxyPlugin = () => ({
     name: 'configure-server',
     configureServer(server:any) {
-        // 1. 处理特殊请求处理跨域
+        // 1. 特殊请求处理跨域
         // 返回一个钩子，会在其他中间件安装完成后调用
         //   return () => {
         //     server.middlewares.use((req:any, res:any, next:any) => {
@@ -75,16 +75,20 @@ export const proxyPlugin = () => ({
                     client.send('getRoutes', {})
                     return
                 }
-                http.get(data.url, (res) => {
-                    let list:any = [];
-                    res.on('data', chunk => {
-                        list.push(chunk);
+                try {
+                    http.get(data.url, (res) => {
+                        let list:any = [];
+                        res.on('data', chunk => {
+                            list.push(chunk);
+                        })
+                        res.on('end', () => {
+                            const data = JSON.parse(Buffer.concat(list).toString());
+                            client.send('getRoutes', data)
+                        })
                     })
-                    res.on('end', () => {
-                        const data = JSON.parse(Buffer.concat(list).toString());
-                        client.send('getRoutes', data)
-                    })
-                })
+                } catch (error) {
+                    console.log(error, 'error');
+                }
             })
             //  获取api数据
             server.ws.on('getDataByApiUrl', (data: { url: any, method: any,  headers: any }, client: { send: (arg0: string, arg1: {}) => void }) => {

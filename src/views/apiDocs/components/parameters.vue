@@ -13,7 +13,7 @@ const props = defineProps({
         { prop: 'type', label: '类型', width: 80 },
         { prop: 'required', label: '是否必传', width: 100 },
         { prop: 'description', label: '说明', width: 220 },
-        { prop: 'format', label: '其他信息', formatter: (row:ColumnProps, column:TableColumnCtx<Column>) => row.format ? 'format:'+ row.format : '', width: 120 },
+        { prop: 'format', label: '其他', formatter: (row:ColumnProps, column:TableColumnCtx<Column>) => row.format ? 'format:'+ row.format : '', width: 120 },
     ],
   }
 })
@@ -26,7 +26,7 @@ const [ state, setState ] = useState({
     data: pageData.value.data,
     inData: [...getCustomParams(pageData.value), ...getParams(pageData.value.data?.parameters || [])],
     columns: props.columns,
-    outData: getParams(pageData.value.data?.responses[200].schema.$ref)
+    outData: getParams(pageData.value.data?.responses[200]?.schema?.$ref || [])
 })
 
 const objectSpanMethod = ({
@@ -62,7 +62,7 @@ watch(pageData, (val) => {
         ...state.value,
         data: val.data || {},
         inData: [...getCustomParams(pageData.value), ...getParams(val.data?.parameters || [])],
-        outData: val.data && val.data?.responses[200] ? getParams(val.data.responses[200].schema.$ref) : []
+        outData: val.data && val.data?.responses[200] ? getParams(val.data.responses[200]?.schema?.$ref || []) : []
     })
 })
 </script>
