@@ -20,6 +20,7 @@ const [ responses, setResponses ] = useState(arr2obj(pageData.value.method, page
 const ruleFormRef = ref<FormInstance>()
 let state = reactive({
     loading: false,
+    responseLoading: false,
     data: pageData.value.data,
     url: (appConfigStore.appConfig?.apiUrl || baseUrl) + (appConfigStore.appConfig?.baseUrl || '') + pageData.value.url,
     method: pageData.value.method,
@@ -36,14 +37,15 @@ let state = reactive({
     name: pageData.value.name
 })
 const initFormData = (arr:any) => {
-    let form:FormProps = {}
-    form.bodyParams = state.method === 'post' ? '{}': JSONStringify(arr2obj(pageData.value.method, arr.filter((el:any) => el.in === 'query'), 'children'))  
+    let form:FormProps = {}    
+    let bodyParams = state.method === 'post' ? {}: arr2obj(pageData.value.method, arr.filter((el:any) => el.in === 'query'), 'children')
     arr.map((el:ColumnProps) => {
         if (el.in === 'body') {
             form.bodyRequired = Boolean(el.required)
-            form.bodyParams = JSONStringify(arr2obj(pageData.value.method, el.children || [el], 'children'))            
+            bodyParams = { ...bodyParams, ...arr2obj(pageData.value.method, el.children || [el], 'children') }
         }
     })
+    form.bodyParams = JSONStringify(bodyParams)
     form.Method = baseServeUrl + state.url
     form.Timestamp = new Date().toLocaleString().replace(/\//g, '-')
     form['Random-Code'] = Math.floor(Math.random() * 100000) + ''
@@ -78,10 +80,16 @@ const onSubmit = (formEl: FormInstance | undefined) => {
                 ElMessage.error('参数格式不正确，请重新输入！'+ error)
                 return
             }
+            for (const key in params.data) {
+                if (!params.data[key]) {
+                    delete params.data[key]
+                }
+            }
             if (state.method === 'get') {
                 params.params = params.data
                 delete params.data
             }
+            state.responseLoading = true
             if (import.meta.hot) {
                 import.meta.hot.send('getDataByApiUrl', params)
                 import.meta.hot.on('getDataByApiUrl', (res) => {
@@ -104,6 +112,7 @@ const onSubmit = (formEl: FormInstance | undefined) => {
                             ['Random-Code']: Math.floor(Math.random() * 100000) + ''
                         })
                     }
+                    state.responseLoading = false
                 })
             } else {
                 http.request(params).then((res:any) => {
@@ -113,6 +122,7 @@ const onSubmit = (formEl: FormInstance | undefined) => {
                         Timestamp: new Date().toLocaleString().replace(/\//g, '-'),
                         ['Random-Code']: Math.floor(Math.random() * 100000) + ''
                     })
+                    state.responseLoading = false
                 }).catch((err:any) => {
                     try {
                         setResponses(JSONStringify(err))
@@ -124,6 +134,7 @@ const onSubmit = (formEl: FormInstance | undefined) => {
                         Timestamp: new Date().toLocaleString().replace(/\//g, '-'),
                         ['Random-Code']: Math.floor(Math.random() * 100000) + ''
                     })
+                    state.responseLoading = false
                 })
             }
         } else {
@@ -224,7 +235,7 @@ watch(pageData, (val) => {
             </el-form-item>
         </el-form>
         <div class="name">响应数据</div>
-        <div v-highlight class="code" v-show="showParams">
+        <div v-highlight class="code" v-show="showParams" v-loading="state.responseLoading">
             <span class="copy" @click="onCopy">json 复制代码</span>
             <pre><code class="hljs language-kotlin"> {{ responses }}</code></pre>
         </div>

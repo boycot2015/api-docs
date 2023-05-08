@@ -11,7 +11,7 @@ const request = (url: any, data: any, fn: ((arg0: string) => any) | undefined) =
     let options = {
         host: parse_u.hostname,
         port: parse_u.port || (isHttp? 80 : 443),
-        path: data.method === 'post' ? parse_u.path : parse_u.path + content,
+        path: data.method === 'post' ? parse_u.path : parse_u.path + '?' + content,
         method: data.method,
         headers:{
             ...data.headers,
@@ -82,8 +82,12 @@ export const proxyPlugin = () => ({
                             list.push(chunk);
                         })
                         res.on('end', () => {
-                            const data = JSON.parse(Buffer.concat(list).toString());
-                            client.send('getRoutes', data)
+                            try {
+                                const data = JSON.parse(Buffer.concat(list).toString());
+                                client.send('getRoutes', data)
+                            } catch (error) {
+                                client.send('getRoutes', {})
+                            }
                         })
                     })
                 } catch (error) {
@@ -97,7 +101,11 @@ export const proxyPlugin = () => ({
                     return
                 }
                 request(data.url, data, (res) => {
-                    client.send('getDataByApiUrl', JSON.parse(res))
+                    try {
+                        client.send('getDataByApiUrl', JSON.parse(res))
+                    } catch (error) {
+                        client.send('getDataByApiUrl', {})
+                    }
                 })
             })
         }

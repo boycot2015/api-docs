@@ -85,7 +85,7 @@ const arr2obj = (method:string, arr:ColumnProps[] | undefined, prop = 'children'
         number: 0,
         array: method === 'get' ? '' : [],
         boolean: false,
-        integer: 1
+        integer: ''
     }
     arr && arr.map && arr.map((el:ColumnProps | any) => {
         obj[el.name] = el.example || types[el.type] !== undefined ? types[el.type] : ''

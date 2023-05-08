@@ -24,7 +24,6 @@ router.beforeEach(async (to:any, from, next) => {
     } else {
         Loading()
         dyRoutes = await dynamicRoutes(to, from, next)
-        Loading().close()
         routeStore.setRoutes([...routes, ...dyRoutes], true)
         storage.setItem('routes', [...dyRoutes])
         // console.log(getValidRoute(dyRoutes).map((el:any) => el.path), to.path, 'getValidRoute');
@@ -33,6 +32,7 @@ router.beforeEach(async (to:any, from, next) => {
         } else {
             next({ ...to, replace: true })
         }
+        Loading().close()
     }
 })
 router.afterEach(() => {
