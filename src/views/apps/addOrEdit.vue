@@ -12,6 +12,9 @@
             <el-form-item label="项目名称" prop="name">
                 <el-input placeholder="项目名称" v-model="form.name"></el-input>
             </el-form-item>
+            <el-form-item label="项目图标" prop="icon">
+                <el-input placeholder="项目图标, IconifyIcon" v-model="form.icon"></el-input>
+            </el-form-item>
             <el-form-item label="项目地址" prop="url">
                 <el-input placeholder="项目地址, 如：http/https://xxx.com" v-model="form.url"></el-input>
             </el-form-item>
@@ -60,6 +63,7 @@ watch(props, (val:any) => {
 const form = ref({
     id: props.data?.id || '',
     name: props.data?.name || '',
+    icon: props.data?.icon || '',
     url: props.data?.url || '',
     replace: false
 })

@@ -100,7 +100,7 @@ watch(pageData, (val) => {
         :span-method="(...args:[SpanMethodProps]) => objectSpanMethod(...args, state.inData)"
         v-loading="state.loading"
         default-expand-all
-        :data="state.inData.filter((l:any) => state.method === 'post' ? l.in === 'body': l.in === 'query')"
+        :data="state.inData.filter((l:any) => state.method === 'post' ? l.in === 'body': (l.in === 'query' || l.in === 'body'))"
         :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
         >
             <el-table-column

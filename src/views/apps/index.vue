@@ -8,23 +8,17 @@
           :class="{ 'is-active' : app.replace }"
           v-for="app in appList" :key="app.name">
               <div class="icon" @click="onAdd(app)">
-                  <el-icon v-if="app.icon">
-                      <component :is="app.icon"></component>
-                  </el-icon>
-                  <span v-else>
-                    <template v-if="app.url.split('/')[1]">
-                        {{ app.url.split('/')[1].slice(0, 2)?.toUpperCase() }}
-                    </template>
-                    <template v-else>{{ app.name.slice(0, 2)?.toUpperCase() }}</template>
-                  </span>
+                    <el-icon :size="30">
+                        <IconifyIcon :name="app.icon || 'ep:menu'" color="var(--el-primary-color)" :icon-style="{fontSize: 30}" />
+                    </el-icon>
               </div>
               <div class="name">{{ app.name }}</div>
           </el-col>
           <el-col :span="4" :xl="{ span: 3 }">
               <div class="list-item">
                   <div class="icon" @click="onAdd()">
-                      <el-icon>
-                          <Plus />
+                      <el-icon :size="30">
+                        <IconifyIcon :name="'ep:plus'" color="var(--el-primary-color)" :icon-style="{fontSize: 30}" />
                       </el-icon>
                   </div>
                   <div class="name">新增项目</div>
@@ -84,8 +78,9 @@ onMounted(() => {
                 padding: 15px;
                 width: 60px;
                 height: 60px;
-                line-height: 60px;
-                font-size: 22px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 font-weight: bold;
                 border-radius: var(--border-radius);
                 border: 1px solid var(--vt-c-ccc);
@@ -103,7 +98,7 @@ onMounted(() => {
             &.is-active {
                 .icon {
                     background-color: var(--el-color-primary);
-                    color: var(--vt-c-ccc);
+                    color: var(--vt-c-white);
                 }
                 .name {
                     color: var(--el-color-primary);

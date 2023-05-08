@@ -4,11 +4,13 @@ import axios from 'axios'
 import router from './index';
 import Layout from '@/layout/index.vue'
 import storage from '@/utils/storage'
-import { baseUrl } from '@/api/baseUrl'
+import { getDynamicIcon } from '@/utils'
 const baseApiStr = 'apiDocs'
 const dynamicRoutes = (data:any, parent = baseApiStr) => {
     for (let item of data) {
         //多级菜单
+        console.log(getDynamicIcon(item.path), 'icons');
+        
         if (item.children && item.children.length > 0) {
             router.addRoute(parent, {
                 path: item.path,
@@ -17,6 +19,7 @@ const dynamicRoutes = (data:any, parent = baseApiStr) => {
                 meta: {
                     parent,
                     ...item.meta,
+                    icon: getDynamicIcon(item.path),
                     // showAnchor: true,
                     auth: true
                 }
@@ -30,6 +33,7 @@ const dynamicRoutes = (data:any, parent = baseApiStr) => {
                 meta: {
                     parent,
                     ...item.meta,
+                    icon: getDynamicIcon(item.path),
                     // showAnchor: true,
                     auth: true
                 }
@@ -126,6 +130,7 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                 route.path += route.name || ''
                 route.meta.showInHeader = false
                 route.meta.hideInMenu = route.path === `/${baseApiStr}/`
+                route.meta.icon = getDynamicIcon(route.name)
                 if (route.meta.pageData.length >= 1) {
                     route.meta.showInHeader = route.meta.pageData.length > 2 && route.meta.pageData.length < 15
                     route.children = route.meta.pageData.map((val:any, idx: number) => {
@@ -136,6 +141,7 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                             meta: {
                                 title: val.name.replace(/接口/g, ''),
                                 // icon: 'Menu',
+                                // icon: getDynamicIcon(path),
                                 hideInMenu: path === `/${baseApiStr}/`,
                                 pageData: val
                             }

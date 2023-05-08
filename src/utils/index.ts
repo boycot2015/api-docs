@@ -114,14 +114,38 @@ export const copyToClipboard = (textToCopy:string) => {
         });
     }
 }
-
+export const getDynamicIcon = (name:string) => {
+    if (!name) return 'ep:menu'
+    let icons = [{ name: 'goods',icon: 'ep:goods'},
+    { name: 'address', icon: 'mdi:address-marker-outline' },
+    { name: 'finance', icon: 'icon-park-outline:finance' },
+    { name: 'order', icon: 'icon-park-outline:transaction-order' },
+    { name: 'stock', icon: 'mdi:warehouse' },
+    { name: 'activity', icon: 'material-symbols:auto-activity-zone-outline' },
+    { name: 'supplier', icon: 'iconoir:house-rooms' },
+    { name: 'warehouse', icon: 'mdi:warehouse' },
+    { name: 'user', icon: 'ph:user' },
+    { name: 'redpacket', icon: 'mingcute:red-packet-line' },
+    { name: 'points', icon: 'ic:outline-control-point' },
+    { name: 'customer', icon: 'raphael:customer' },
+    // raphael:customer
+    { name: 'group', icon: 'uit:object-ungroup' },
+    { name: 'message', icon: 'ri:message-3-line' },
+    { name: 'virtual', icon: 'mdi:virtual-reality' },
+    { name: 'website', icon: 'ic:outline-store' }]
+    let icon = ''
+    icons.some(el => {
+        if (name.includes(el.name.toLowerCase())) icon = el.icon
+    })
+    return icon
+}
 export const getValidRoute = (routes:any) => {
     let arr:any = []
     routes?.map((el:any) => {
         if (el.children && el.children.length) {
             arr = [...arr, ...getValidRoute(el.children)]
         } else {
-            arr.push({ ...el, value: el.meta?.pageData?.url || el.path, name: el.meta?.title || el.name })
+            arr.push({ ...el, value: el.meta?.pageData?.url || el.path, name: el.meta?.title || el.name, meta: { ...el.meta, icon: getDynamicIcon(el.path) } })
         }
     })
     return arr

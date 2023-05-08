@@ -16,20 +16,22 @@
         :style="appConfig.logoPosition === 'bottom' && activeIndex!=='/' ? 'width: 800px': ''"
         @select="handleSelect"
     >
-        <template v-for="item in routes as any" :key="item.path">
+        <template v-for="item in routes" :key="item.path">
             <el-sub-menu :index="item.path" v-if="item.children && item.children.length && !item.meta.hideChildren">
                 <template #title>
-                    <el-icon v-if="item.meta && item.meta.icon"><component :is="item.meta.icon" /></el-icon>
-                    <el-icon v-else>{{ item.name.slice(0,2).toUpperCase() }}</el-icon>
+                    <el-icon v-if="item.meta && item.meta.icon"><IconifyIcon :name="item.meta.icon" /></el-icon>
+                    <!-- <el-icon v-else>{{ item.name.slice(0,2).toUpperCase() }}</el-icon> -->
                     <span>{{item.meta.title}}</span>
                 </template>
                 <el-menu-item v-for="child in item.children" :key="child.path" :index="child.path">
-                    <el-icon v-if="child.meta && item.meta.icon"><component :is="child.meta.icon" /></el-icon>
+                    <!-- <el-icon v-if="child.meta && item.meta.icon"><component :is="child.meta.icon" /></el-icon> -->
+                    <el-icon v-if="child.meta && child.meta.icon"><IconifyIcon :name="child.meta.icon" /></el-icon>
                     <template #title v-if="child.meta">{{child.meta.title}}</template>
                 </el-menu-item>
             </el-sub-menu>
             <el-menu-item :index="item.path" v-else>
-                <el-icon v-if="item.meta && item.meta.icon"><component :is="item.meta.icon" /></el-icon>
+                <!-- <el-icon v-if="item.meta && item.meta.icon"><component :is="item.meta.icon" /></el-icon> -->
+                <el-icon v-if="item.meta && item.meta.icon"><IconifyIcon :name="item.meta.icon" /></el-icon>
                 <template #title v-if="item.meta">{{item.meta.title}}</template>
             </el-menu-item>
         </template>
@@ -96,13 +98,14 @@
 import { useRouter } from 'vue-router'
 import { useCollapseStore, useRouteStore, useAppConfigStore } from '@/stores/app'
 import useState from '@/hooks/useState'
+import type { RouteProps } from '@/router'
 const [ visible, toggleVisible ] = useState(false)
 let routeStore = useRouteStore()
 const collapse = useCollapseStore()
 const router = useRouter()
 const appConfigStore = useAppConfigStore()
 const appConfig = computed(() => appConfigStore.appConfig) as any
-const routes = computed(() => routeStore.routes.filter((el:any) => el.meta?.showInHeader))
+const routes = computed<RouteProps[]>(() => routeStore.routes.filter((el:any) => el.meta?.showInHeader))
 const activeIndex = computed(() => {
     let path = router.currentRoute.value.path    
     let hideChildren = router.currentRoute.value.meta.hideChildren

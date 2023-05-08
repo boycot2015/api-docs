@@ -65,8 +65,7 @@ const getCustomParams = (data:any) => {
             hasProps = true
         }
     })
-    if (hasProps && !isB2C) return []
-    return hasProps ? (isB2C ? [] : '') : isB2C ? [] : [defaultParams[0]]
+    return hasProps ? (isB2C ? [] : '') : isB2C ? defaultParams : [defaultParams[0]]
 }
 
 const getParams = (data:ColumnProps[], child?:boolean, name?:string) => {    

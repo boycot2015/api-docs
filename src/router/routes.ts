@@ -7,7 +7,7 @@ export default [
         meta: {
           title: '首页',
           hideInSearch: true,
-          icon: 'House'
+          icon: 'ep:house'
         },
         component: () => import('@/views/home.vue')
       },
@@ -58,7 +58,7 @@ export default [
             title: '项目',
             hideChildren: true,
             showInHeader: true,
-            icon: 'Menu'
+            icon: 'ri:app-store-line'
         },
         component: Layout,
         children: [
@@ -68,7 +68,7 @@ export default [
                 meta: {
                     title: '项目列表',
                     showInHeader: true,
-                    icon: 'Menu'
+                    icon: 'ri:app-store-line'
                 },
                 component: () => import('@/views/apps/index.vue'),
             }
@@ -82,7 +82,7 @@ export default [
             title: '更新日志',
             hideChildren: true,
             showInHeader: true,
-            icon: 'Promotion'
+            icon: 'icon-park-outline:log'
         },
         component: Layout,
         children: [
@@ -93,7 +93,7 @@ export default [
                     title: '更新日志',
                     showInHeader: true,
                     showAnchor: true,
-                    icon: 'Menu'
+                    icon: 'icon-park-outline:log'
                 },
                 component: () => import('@/views/log.vue'),
             }

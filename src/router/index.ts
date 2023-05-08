@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, RouterView } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import config from '@/config'
 import storage from '@/utils/storage'
 import routes from './routes'
@@ -6,11 +6,22 @@ import dynamicRoutes from './dynamicRoutes'
 import { useRouteStore } from '@/stores/app'
 import Loading from '@/hooks/loading'
 import { getValidRoute } from '@/utils'
+interface RouteProps {
+    path: string
+    name: string
+    meta: {
+        title: string
+        icon?: string
+        hideInMenu?:boolean
+        hideChildren?:boolean
+    }
+    children?: RouteProps[]
+}
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: routes as any
 })
-router.beforeEach(async (to:any, from, next) => {
+router.beforeEach(async (to, from, next) => {
     let dyRoutes:any = []
     let routeStore = useRouteStore()
     to.meta.websiteName = config.websiteName
@@ -38,4 +49,7 @@ router.beforeEach(async (to:any, from, next) => {
 router.afterEach(() => {
     // console.log(document.querySelectorAll('body .body'), '1231');
 })
+export type {
+    RouteProps
+}
 export default router

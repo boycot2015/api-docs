@@ -35,7 +35,7 @@ watch(pageData, (val) => {
     <div class="api-docs-section api-desc">
         <h3 class="app-page-anchor sub-title" id="app-page-anchor0">1. 接口说明</h3>
         <div class="api-desc-item">
-            <!-- {{pageData}} -->
+            <!-- {{pageData.info}} -->
             <div class="name sub-title-item">1.1 接口请求地址</div>
             <div class="value" v-highlight>【{{state.method}}】{{baseServeUrl}}{{ appConfigStore.appConfig?.baseUrl || '' }}{{state.url}}</div>
         </div>
