@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 // import ElementPlus from 'element-plus'
 // import * as ElementPlusIconsVue from '@element-plus/icons-vue'
-import zhCn from 'element-plus/es/locale/lang/zh-cn'
+// import zhCn from 'element-plus/es/locale/lang/zh-cn'
 
 import { createPinia } from 'pinia' // store
 

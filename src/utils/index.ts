@@ -118,24 +118,57 @@ export const getDynamicIcon = (name:string) => {
     if (!name) return 'ep:menu'
     let icons = [{ name: 'goods',icon: 'ep:goods'},
     { name: 'address', icon: 'mdi:address-marker-outline' },
-    { name: 'finance', icon: 'icon-park-outline:finance' },
     { name: 'order', icon: 'icon-park-outline:transaction-order' },
-    { name: 'stock', icon: 'mdi:warehouse' },
-    { name: 'activity', icon: 'material-symbols:auto-activity-zone-outline' },
     { name: 'supplier', icon: 'iconoir:house-rooms' },
+    { name: 'stock', icon: 'mdi:warehouse' },
     { name: 'warehouse', icon: 'mdi:warehouse' },
     { name: 'user', icon: 'ph:user' },
     { name: 'redpacket', icon: 'mingcute:red-packet-line' },
-    { name: 'points', icon: 'ic:outline-control-point' },
-    { name: 'customer', icon: 'raphael:customer' },
-    // raphael:customer
+    { name: 'address', icon: 'mdi:address-marker-outline' },
+    { name: 'Address', icon: 'mdi:address-marker-outline' },
+    { name: 'department', icon: 'mingcute:department-line' },
+    { name: 'market', icon: 'ic:outline-control-point' },
+    { name: 'Points', icon: 'ic:outline-control-point' },
+    { name: 'member', icon: 'icon-park-outline:level' },
+    { name: 'integral', icon: 'mdi:star-four-points-circle-outline' },
+    { name: 'finance', icon: 'icon-park-outline:finance' },
+    { name: 'invoice', icon: 'uil:invoice' },
+    { name: 'customer', icon: 'mingcute:user-5-line' },
+    { name: 'custom', icon: 'mingcute:user-5-line' },
+    { name: 'login', icon: 'material-symbols:shield-lock-outline-rounded' },
+    { name: 'auth', icon: 'mingcute:safe-lock-line' },
+    { name: 'purchase', icon: 'fluent-mdl2:activate-orders' },
+    { name: 'phone', icon: 'material-symbols:phone-android-outline' },
+    { name: 'Phone', icon: 'material-symbols:phone-android-outline' },
+    { name: 'lottery', icon: 'fluent:lottery-24-regular' },
+    { name: 'heartBeat', icon: 'tabler:heartbeat' },
+    { name: 'postal', icon: 'mdi:bank-outline' },
+    { name: 'Postal', icon: 'mdi:bank-outline' },
+    { name: 'military', icon: 'ph:medal-military' },
+    { name: 'after', icon: 'iconoir:delivery-truck' },
+    { name: 'After', icon: 'iconoir:delivery-truck' },
+    { name: 'brand', icon: 'tabler:brand-bootstrap' },
+    { name: 'comment', icon: 'mdi:comment-quote-outline' },
+    { name: 'product', icon: 'icon-park-outline:ad-product' },
+    { name: 'supply', icon: 'bx:store-alt' },
+    { name: 'promotion', icon: 'ep:promotion' },
+    { name: 'activity', icon: 'mingcute:drawing-board-line' },
+    { name: 'Activity', icon: 'mingcute:drawing-board-line' },
     { name: 'group', icon: 'uit:object-ungroup' },
+    { name: 'Group', icon: 'uit:object-ungroup' },
+    { name: 'seckill', icon: 'streamline:interface-time-stop-watch-sixty-second-minute-time-stopwatch-measure-hour-whole-clock' },
     { name: 'message', icon: 'ri:message-3-line' },
-    { name: 'virtual', icon: 'mdi:virtual-reality' },
+    { name: 'virtual', icon: 'tabler:badge-vr' },
+    { name: 'business', icon: 'ic:outline-business' },
+    { name: 'ladder', icon: 'ph:ladder-light' },
+    { name: 'categorylist', icon: 'tabler:category' },
+    // ic:outline-business ph:ladder-light tabler:category
     { name: 'website', icon: 'ic:outline-store' }]
-    let icon = ''
-    icons.some(el => {
-        if (name.includes(el.name.toLowerCase())) icon = el.icon
+    let icon = name.slice(0,2).toUpperCase()
+    icons.map(el => {
+        if (name.includes(el.name)) {
+            icon = el.icon
+        }
     })
     return icon
 }

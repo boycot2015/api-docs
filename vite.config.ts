@@ -35,22 +35,27 @@ export default defineConfig({
             ]
         }),
         AutoImport({
-            imports: ['vue'],
+            imports: ['vue', 'vue-router'],
             dts: 'src/auto-import.d.ts',
             resolvers: [ElementPlusResolver()],
         }),
         Components({
+            dirs: ['src/components/'],
             resolvers: [
                 ElementPlusResolver({
                 importStyle: "sass",
                 // directives: true,
                 // version: "2.1.5",
                 }),
-                IconsResolver()
+                IconsResolver({ enabledCollections: ['ep'] })
             ],
+            dts: true,
+            deep: true
         }),
         Icons({
             compiler: 'vue3',
+            scale: 1,
+            defaultClass: 'inline-block',
             autoInstall: true
         }),
     ],

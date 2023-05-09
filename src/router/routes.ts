@@ -82,7 +82,7 @@ export default [
             title: '更新日志',
             hideChildren: true,
             showInHeader: true,
-            icon: 'icon-park-outline:log'
+            icon: 'mdi:math-log'
         },
         component: Layout,
         children: [
@@ -93,7 +93,7 @@ export default [
                     title: '更新日志',
                     showInHeader: true,
                     showAnchor: true,
-                    icon: 'icon-park-outline:log'
+                    icon: 'mdi:math-log'
                 },
                 component: () => import('@/views/log.vue'),
             }

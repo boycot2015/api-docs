@@ -39,7 +39,7 @@
     <div class="right">
         <Search style="margin-right: 10px;"></Search>
         <div class="setting" @click="toggleVisible(true)">
-            <el-icon><Setting /></el-icon>
+            <el-icon :size="40"><IconifyIcon name="ep:setting" :iconStyle="{ }" /></el-icon>
         </div>
         <WebSetting v-model="visible"></WebSetting>
     </div>

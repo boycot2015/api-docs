@@ -9,7 +9,6 @@ const baseApiStr = 'apiDocs'
 const dynamicRoutes = (data:any, parent = baseApiStr) => {
     for (let item of data) {
         //多级菜单
-        console.log(getDynamicIcon(item.path), 'icons');
         
         if (item.children && item.children.length > 0) {
             router.addRoute(parent, {
@@ -135,6 +134,7 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                     route.meta.showInHeader = route.meta.pageData.length > 2 && route.meta.pageData.length < 15
                     route.children = route.meta.pageData.map((val:any, idx: number) => {
                         let path:string = `/${baseApiStr}/` + (route.name + (val.url ? '/' + val.url.split('/').join('') : ''))
+                        // route.meta.icon = getDynamicIcon(val.url?.split('/').join(''))
                         return {
                             path,
                             name: baseApiStr + val.url?.split('/').join('') || '',

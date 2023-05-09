@@ -164,7 +164,7 @@ onMounted(() => {
     }
     .logo {
         display: flex;
-        flex-basis: 200px;
+        flex-basis: 220px;
         align-items: center;
         justify-content: space-between;
         height: 60px;

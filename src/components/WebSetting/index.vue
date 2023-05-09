@@ -288,9 +288,15 @@ watch(appConfig, (val) => {
                         show-file-list
                         v-model:file-list="fileList"
                         :on-change="onFileChange">
-                            <el-button class="fl" @click="onExport">下载导入模板</el-button>
+                            <el-button icon="el:download" class="fl" @click="onExport">
+                                <el-icon :size="20"><IconifyIcon name="ep:download" :iconStyle="{ }" /></el-icon>
+                                下载导入模板
+                            </el-button>
                             <template #trigger>
-                                <el-button style="margin-left: 10px;" type="primary">导入数据</el-button>
+                                <el-button style="margin-left: 10px;" type="primary">
+                                    <el-icon :size="20"><IconifyIcon name="ep:upload" :iconStyle="{ }" /></el-icon>
+                                    导入数据
+                                </el-button>
                             </template>
                             <template #tip>
                                 <div class="el-upload__tip">
