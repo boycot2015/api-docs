@@ -39,8 +39,9 @@ export type {
     effectProps,
     AppConfigProps
 }
+// #f8711a #2458b3
 export default <AppConfigProps>({
-    primaryColor: '#2458b3',
+    primaryColor: '#f8711a',
     websitePrefix: 'yzh_openapi',
     websiteName: '云中鹤开放平台', // 网站名称
     showBreadcrumb: true, // 是否显示面包屑导航 false/true

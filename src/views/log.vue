@@ -12,7 +12,7 @@
 </template>
 <script setup lang="ts">
 import { useAnchorStore, useAppConfigStore } from '@/stores/app'
-import axios from '@/api/request'
+import axios from 'axios'
 interface InfoProps {
     name:string
     date:Date
@@ -36,7 +36,7 @@ const getData = () => {
             per_page: 100
         }
     }).then((res:any) => {
-        logs.value = res.map((el:any) => el.commit)
+        logs.value = res.data.map((el:any) => el.commit)
         setTimeout(() => {
             appPageAnchors.setAnchor(document.querySelectorAll('.app-page-anchor'))
             appPageAnchors.setAnchorIndex(0)
@@ -55,5 +55,8 @@ onMounted(() => {
 } */
 .app-page-anchor {
     font-weight: bold;
+}
+.log {
+    width: calc(100vw - 200px);
 }
 </style>

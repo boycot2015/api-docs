@@ -73,6 +73,7 @@ watch(pageData, (val) => {
         <h3 class="sub-title-item">Headers</h3>
         <el-table
         border
+        ref="tableRef"
         row-key="name"
         header-cell-class-name="bg-header"
         :span-method="(...args:[SpanMethodProps]) => objectSpanMethod(...args, state.inData)"
@@ -96,6 +97,7 @@ watch(pageData, (val) => {
         <el-table
         border
         row-key="name"
+        ref="tableRef"
         header-cell-class-name="bg-header"
         :span-method="(...args:[SpanMethodProps]) => objectSpanMethod(...args, state.inData)"
         v-loading="state.loading"
@@ -117,6 +119,7 @@ watch(pageData, (val) => {
         <h3 class="app-page-anchor sub-title" id="app-page-anchor2">3. 返回数据</h3>
         <el-table
         border
+        ref="tableRef"
         row-key="name"
         v-loading="state.loading"
         default-expand-all

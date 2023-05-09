@@ -3,18 +3,19 @@
     <slot name="logo">
         <div class="logo" :class="{'is-collapse': collapse.isCollapse }" v-if="appConfig.logoPosition === 'top'">
             <RouterLink class="title" to="/" v-if="!collapse.isCollapse">{{appConfig.websiteName}}</RouterLink>
-            <el-icon size="24"><Operation @click="collapse.toggleCollapse()" /></el-icon>
+            <!-- <el-icon size="24"><Operation @click="collapse.toggleCollapse()" /></el-icon> -->
+            <el-icon :size="24"><IconifyIcon name="ep:operation" :iconStyle="{ }" @click="collapse.toggleCollapse()" /></el-icon>
         </div>
     </slot>
     <el-menu
+        v-if="showMenu"
         :default-active="activeIndex"
         class="el-header-menu"
         mode="horizontal"
-        background-color="#000000"
-        text-color="#fff"
+        background-color="#fff"
+        text-color="#333"
         router
         :style="appConfig.logoPosition === 'bottom' && activeIndex!=='/' ? 'width: 800px': ''"
-        @select="handleSelect"
     >
         <template v-for="item in routes" :key="item.path">
             <el-sub-menu :index="item.path" v-if="item.children && item.children.length && !item.meta.hideChildren">
@@ -36,7 +37,7 @@
             </el-menu-item>
         </template>
     </el-menu>
-    <div class="right">
+    <div class="right" :class="{ 'centered' : !showMenu }">
         <Search style="margin-right: 10px;"></Search>
         <div class="setting" @click="toggleVisible(true)">
             <el-icon :size="40"><IconifyIcon name="ep:setting" :iconStyle="{ }" /></el-icon>
@@ -52,6 +53,11 @@
     justify-content: space-between;
     width: 1200px;
     margin: 0 auto;
+    height: 58px;
+    background-image: radial-gradient(transparent 1px,var(--bg-color) 1px);
+    background-size: 4px 4px;
+    backdrop-filter: saturate(50%) blur(4px);
+    background-color: var(--vt-c-white);
     .logo {
         flex-basis: 200px;
         text-align: center;
@@ -64,7 +70,7 @@
             flex-basis: 140px;
         }
         i {
-            color: var(--el-menu-border-color);
+            color: var( --vt-c-black);
         }
         a {
             font-size: 18px;
@@ -85,11 +91,17 @@
         height: 100%;
         display: flex;
         align-items: center;
+        &.centered {
+            width: 80%;
+            padding: 0 25px;
+            box-sizing: border-box;
+            justify-content: space-between;
+        }
         .setting {
             font-size: 26px;
             cursor: pointer;
             line-height: 100%;
-            color: var(--vt-c-white);
+            color: var(--vt-c-black);
         }
     }
 }
@@ -112,8 +124,17 @@ const activeIndex = computed(() => {
     let matched = router.currentRoute.value.matched
     return path === '/home' ? '/' : hideChildren ? matched[0].path : path
 })
-const handleSelect = (key: string, keyPath: string[]) => {
-//   console.log(key, keyPath)
-
+const showMenu = ref(true)
+const toggleShow = (e?:any) => {
+    let innerWidth = e && e.target ? Math.floor(e.target.innerWidth) : window.innerWidth
+    if (innerWidth <= 1200) {
+        showMenu.value = false
+    } else {
+        showMenu.value = true
+    }
 }
+onMounted(() => {
+    toggleShow()
+    window.addEventListener('resize', toggleShow)
+})
 </script>

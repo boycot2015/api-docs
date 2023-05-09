@@ -7,8 +7,8 @@ import storage from '@/utils/storage'
 // 折叠菜单
 export const useCollapseStore = defineStore('collapse', () => {
   const isCollapse = ref(false)
-  function toggleCollapse() {
-    isCollapse.value = !isCollapse.value
+  function toggleCollapse(value?:boolean) {
+    isCollapse.value = value !==undefined ? value: !isCollapse.value
   }
   return { isCollapse, toggleCollapse }
 })

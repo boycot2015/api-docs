@@ -24,7 +24,7 @@ const getCavans = () => {
     
     //创建线性渐变
     let lingrad = ctx.createLinearGradient(0, 0, width, 0);
-    //规定渐变对象中的颜色和停止位置
+    //规定渐变对象中的颜色和停止位置 rgba(114,114,114,0.8)
     lingrad.addColorStop(0, 'rgba(114,114,114,0.8)');
     lingrad.addColorStop(1, 'rgba(0,0,0,1)');
     
@@ -291,5 +291,10 @@ onMounted(() => {
 }
 .process > ul li a:hover {
   color: var(--el-color-primary);
+}
+</style>
+<style lang="scss">
+html,body {
+    overflow: auto;
 }
 </style>

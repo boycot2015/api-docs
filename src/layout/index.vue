@@ -16,7 +16,7 @@ watch(appConfig, (val) => {
     showBreadcrumb.value = val.showBreadcrumb && !router.currentRoute.value.meta.hideBreadcrumb
     computedStyle()
 })
-
+const styles = ref({})
 watch(router.currentRoute, () => {
     if (scrollRef.value && scrollRef.value) {
         scrollRef.value.scrollTop = 0
@@ -32,22 +32,36 @@ const getOffset = (el:any) => {
     }
     return scrollTop - 150
 }
-const computedStyle = () => {
+const computedStyle:any|undefined = (autoWidth?:boolean) => {
     const { hideHeader } = router.currentRoute.value.meta  as any
-    return { height: !hideHeader ? (showBreadcrumb.value ? 'calc(100vh - 152px)':'calc(100vh - 122px)') : showBreadcrumb.value ? 'calc(100vh - 102px)': 'calc(100vh - 69px)' }
+    styles.value = { height: !hideHeader ? (showBreadcrumb.value ? 'calc(100vh - 152px)':'calc(100vh - 122px)') : showBreadcrumb.value ? 'calc(100vh - 102px)': 'calc(100vh - 69px)', width: collapse.isCollapse ? 'calc((90vw - 64px)' : '',overflowX: collapse.isCollapse ? 'auto': '' }
+}
+const setAnchorIndex = (e?:any) => {
+    let scrollTop = e && e.target ? Math.floor(e.target.scrollTop) : window.scrollY
+    let achorIndex = 0
+    appPageAnchors.anchors.forEach((el: any, index: number) => {
+        if (scrollTop > Math.abs(getOffset(el))) {
+            achorIndex = index
+        }
+    })
+    window.scrollTo(0, 0)
+    appPageAnchors.setAnchorIndex(achorIndex)
+}
+const toggleCollapse = (e?:any) => {
+    let innerWidth = e && e.target ? Math.floor(e.target.innerWidth) : window.innerWidth
+    if (innerWidth <= 1200) {
+        collapse.toggleCollapse(true)
+    } else {
+        collapse.toggleCollapse(false)
+    }
+    computedStyle(innerWidth <= 1200)
 }
 onMounted(() => {
-    scrollRef.value.addEventListener('scroll', (e:any) => {
-        let scrollTop = Math.floor(e.target.scrollTop)
-        let achorIndex = 0
-        appPageAnchors.anchors.forEach((el: any, index: number) => {
-            if (scrollTop > Math.abs(getOffset(el))) {
-                achorIndex = index
-            }
-        })
-        window.scrollTo(0, 0)
-        appPageAnchors.setAnchorIndex(achorIndex)
-    })
+    setAnchorIndex()
+    toggleCollapse()
+    computedStyle()
+    scrollRef.value.addEventListener('scroll', setAnchorIndex)
+    window.addEventListener('resize', toggleCollapse)
 })
 </script>
 <template>
@@ -58,7 +72,7 @@ onMounted(() => {
                 <el-aside :style="{height: !$route.meta.hideHeader ? '': '100vh'}" :width="collapse.isCollapse ? '65px': '200px'" v-if="!$route.meta.hideAside"><Aside /></el-aside>
                 <el-main>
                     <Breadcrumb v-if="showBreadcrumb"></Breadcrumb>
-                    <div class="body" ref="scrollRef" :style="computedStyle()">
+                    <div class="body" ref="scrollRef" :style="styles">
                         <RouterView v-slot="{ Component }">
                             <Transition name="slide-fade" mode="out-in">
                                 <keep-alive :include="[]">
@@ -77,7 +91,7 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-#app .layout {
+#api-docs .layout {
     width: 100%;
     // height: 100vh;
     overflow: hidden;
@@ -86,7 +100,12 @@ onMounted(() => {
     width: 100%;
     padding: 0;
     height: 58px;
-    background-color: var(--vt-c-black-mute);
+    // background-color: var(--vt-c-black-mute);
+    background-image: radial-gradient(transparent 1px,var(--bg-color) 1px);
+    background-size: 4px 4px;
+    backdrop-filter: saturate(50%) blur(4px);
+    background-color: var(--vt-c-white);
+    box-shadow: 0 5px 15px var(--vt-c-ccc);
 }
 .el-aside {
     height: calc(100vh - 58px);
@@ -99,31 +118,36 @@ onMounted(() => {
     overflow: hidden;
     overflow-y: auto;
     height: calc(100vh - 58px);
+    box-shadow: 0 0 15px var(--vt-c-ccc);
 }
 .el-container {
     background-color: var(--vt-c-white-soft);
     .el-container {
-        width: 1200px;
+        max-width: 1200px;
         margin: 0 auto;
     }
 }
 .el-main {
     /* overflow: auto; */
     padding: 0;
+    overflow-x: hidden;
     background-color: var(--vt-c-white-soft);
     .body {
         position: relative;
         margin: var(--section-padding);
-        margin-right: 10px;
+        // margin-right: 20px;
         // border: 16px solid var(--vt-c-white-soft);
         padding: var(--section-padding);
         background-color: var(--vt-c-white);
-        min-width: 800px;
+        // max-width: calc(100vw - 220px);
         // max-width: 1200px;
+        // min-width: 800px;
         display: flex;
-        overflow: hidden;
-        overflow-y: auto;
+        // overflow: hidden;
+        overflow: auto;
+        box-sizing: border-box;
         border-radius: var(--border-radius);
+        box-shadow: 0 0 15px var(--vt-c-ccc);
     }
 }
 .slide-fade-enter-active {

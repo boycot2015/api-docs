@@ -27,7 +27,6 @@ const rules = reactive<FormRules>({
 })
 const emits = defineEmits(['update:modelValue'])
 const accordion = ref('1')
-const apiObj = ref({ name: '', url: '' })
 const drawerFormRef = ref<FormInstance|undefined>()
 const { appConfig, setAppConfig } = useAppConfigStore()
 const root:any = document.querySelector(':root')
@@ -96,8 +95,8 @@ const onSubmit = () => {
             accordion.value = '1'
             return
         }
-        emits('update:modelValue', false)
         setAppConfig({ ...form.value })
+        emits('update:modelValue', false)
         onReload()
     })
 }
@@ -141,7 +140,7 @@ const onImportSuccess = (data:any) => {
     setTimeout(() => {
         setAppConfig({ ...form.value })
         Loading().close()
-        ElMessageBox.alert('导入成功：' + '<div style="width: 360px;overflow:auto;background: #f8f8f8;padding: 10px;" v-highlight><code class="">'+JSON.stringify(data)+'</code></div>', '温馨提示', {
+        ElMessageBox.alert('导入成功：' + '<div style="width: 360px;max-height:400px;overflow:auto;background: #f8f8f8;padding: 10px;" v-highlight><code class="">'+JSON.stringify(data)+'</code></div>', '温馨提示', {
             dangerouslyUseHTMLString: true,
         }).then(() => {
             emits('update:modelValue', false)
@@ -246,10 +245,10 @@ watch(appConfig, (val) => {
                         :rules="[{required: true, message: '友情链接不能为空', trigger: 'change'}]"
                         :key="lindex">
                             <el-input style="margin-bottom: 5px;width:82%" placeholder="链接名称" v-model="form.footer.links[lindex].name"></el-input>
-                            <el-icon v-if="lindex !== form.footer.links.length - 1" style="margin-left: 5px;cursor: pointer;" @click="onLinksSort(lindex, 'down')"><SortDown /></el-icon>
-                            <el-icon v-if="lindex" style="cursor: pointer;" @click="onLinksSort(lindex, 'up')"><SortUp /></el-icon>
-                            <el-icon v-if="form.footer.links.length > 1" style="margin-left: 5px;cursor: pointer;" @click="form.footer.links.splice(lindex, 1)"><Delete /></el-icon>
-                            <el-icon v-if="lindex === form.footer.links.length - 1 && !isLimit" style="margin-left: 5px;cursor: pointer;" @click="form.footer.links.push({name: '', href: '',  target: '_blank'})"><Plus /></el-icon>
+                            <el-icon v-if="lindex !== form.footer.links.length - 1" style="margin-left: 5px;cursor: pointer;" @click="onLinksSort(lindex, 'down')"><IconifyIcon name="ep:sort-down" :iconStyle="{ }" /></el-icon>
+                            <el-icon v-if="lindex" style="cursor: pointer;" @click="onLinksSort(lindex, 'up')"><IconifyIcon name="ep:sort-up" :iconStyle="{ }" /></el-icon>
+                            <el-icon v-if="form.footer.links.length > 1" style="margin-left: 5px;cursor: pointer;" @click="form.footer.links.splice(lindex, 1)"><IconifyIcon name="ep:delete" :iconStyle="{ }" /></el-icon>
+                            <el-icon v-if="lindex === form.footer.links.length - 1 && !isLimit" style="margin-left: 5px;cursor: pointer;" @click="form.footer.links.push({name: '', href: '',  target: '_blank'})"><IconifyIcon name="ep:plus" :iconStyle="{ }" /></el-icon>
                             <el-input style="margin-bottom: 5px" placeholder="链接地址" v-model="form.footer.links[lindex].href"></el-input>
                         </el-form-item>
                     </el-form-item>
@@ -274,7 +273,7 @@ watch(appConfig, (val) => {
                         <!-- <el-input style="width:45%" placeholder="链接名称" v-model="apiObj.name"></el-input>
                         <el-input style="margin-left: 5px;width:45%" placeholder="不存在跨域的或者项目中代理的地址" v-model="apiObj.url"></el-input> -->
                         <!-- <el-icon style="margin-left: 5px;cursor: pointer;" @click="apiObj.name &&form.apiList.push({ name: apiObj.name || apiObj.url, url: apiObj.url, id: form.apiList.length+1 });apiObj = {name: '', url: ''}"><Plus /></el-icon> -->
-                        <el-icon title="新增项目" style="margin-left: 5px;cursor: pointer;" @click="$router.push('/apps/index');onClose();"><Plus  /></el-icon>
+                        <el-icon title="新增项目" style="margin-left: 5px;cursor: pointer;" @click="$router.push('/apps/index');onClose();"><IconifyIcon name="ep:plus" :iconStyle="{ }" /></el-icon>
                     </el-form-item>
                 </el-tab-pane>
                 <el-tab-pane name="3" label="导入导出">

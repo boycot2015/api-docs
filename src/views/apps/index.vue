@@ -2,7 +2,9 @@
     <div class="api-docs-app" key="api-docs-app" v-loading="loading">
       <el-row class="list" :gutter="30">
           <el-col
-          :span="4"
+          :span="8"
+          :sm="{ span: 6 }"
+          :md="{ span: 4 }"
           :xl="{ span: 3 }"
           class="list-item"
           :class="{ 'is-active' : app.replace }"
@@ -14,7 +16,11 @@
               </div>
               <div class="name">{{ app.name }}</div>
           </el-col>
-          <el-col :span="4" :xl="{ span: 3 }">
+          <el-col
+          :span="8"
+          :sm="{ span: 6 }"
+          :md="{ span: 4 }"
+          :xl="{ span: 3 }">
               <div class="list-item">
                   <div class="icon" @click="onAdd()">
                       <el-icon :size="30">
@@ -66,11 +72,12 @@ onMounted(() => {
 </script>
 <style lang="scss">
 .api-docs-app {
-    width: 100%;
+    width: calc(100vw - 200px);
     .list {
         // margin-top: 30px;
         &-item {
             text-align: center;
+            margin-bottom: 20px;
             .icon {
                 cursor: pointer;
                 background-color: var(--vt-c-white-soft);
@@ -78,6 +85,7 @@ onMounted(() => {
                 padding: 15px;
                 width: 60px;
                 height: 60px;
+                margin: 0 auto;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -93,7 +101,7 @@ onMounted(() => {
                 }
             }
             .name {
-                max-width: 100px;
+                // max-width: 100px;
             }
             &.is-active {
                 .icon {

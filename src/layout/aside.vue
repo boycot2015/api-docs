@@ -29,7 +29,8 @@
     </el-menu>
     <div class="logo" :style="{width: collapse.isCollapse? '20px': '160px'}" v-if="appConfig.logoPosition === 'bottom'">
         <p v-show="!collapse.isCollapse"><RouterLink to="/">{{$route.meta.websiteName}}</RouterLink></p>
-        <el-icon :style="{margin: collapse.isCollapse ? '0': '0 0 0 20px'}" size="24"><Operation @click="collapse.toggleCollapse()" /></el-icon>
+        <!-- <el-icon :style="{margin: collapse.isCollapse ? '0': '0 0 0 20px'}" size="24"><Operation @click="collapse.toggleCollapse()" /></el-icon> -->
+        <el-icon :style="{margin: collapse.isCollapse ? '0': '0 0 0 20px'}" size="24"><IconifyIcon name="ep:operation" :iconStyle="{ }" @click="collapse.toggleCollapse()" /></el-icon>
     </div>
 </template>
 

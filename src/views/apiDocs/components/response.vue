@@ -206,7 +206,7 @@ watch(pageData, (val) => {
                 4. 响应示例
             </h3>
             <div class="action fr">
-                <el-link class="mr16" v-if="(state.inData && state.inData.length) || form.bodyParams" @click="toggleShowParams(!showParams)">{{!showParams ? '展开' : '收起'}} <el-icon style="margin-left:5px;"><ArrowDownBold v-if="!showParams" /> <ArrowUpBold v-else /></el-icon> </el-link>
+                <el-link class="mr16" v-if="(state.inData && state.inData.length) || form.bodyParams" @click="toggleShowParams(!showParams)">{{!showParams ? '展开' : '收起'}} <el-icon style="margin-left:5px;"><IconifyIcon name="ep:arrow-down-bold" v-if="!showParams" :iconStyle="{ }" /><IconifyIcon  v-else name="ep:arrow-up-bold" :iconStyle="{ }" /></el-icon> </el-link>
                 <el-button type="primary" @click="onSubmit(ruleFormRef)">测试一下</el-button>
                 <el-button @click="onReset(ruleFormRef)">重置</el-button>
             </div>
@@ -258,7 +258,7 @@ watch(pageData, (val) => {
                 background-color: var(--vt-c-white-soft);
                 border-radius: var(--border-radius);
                 overflow: auto;
-                max-width: 900px;
+                // max-width: 900px;
             }
         }
     }
