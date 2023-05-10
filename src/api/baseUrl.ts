@@ -13,7 +13,7 @@ let env = process.env.NODE_ENV === 'development'
 switch (env) {
 case 'development':
     prefix = `http://121.41.51.167:10001` // dev环境url
-    // prefix = `http://192.168.1.225:5101` // dev环境url
+    // prefix = `http://api.boycot.top/swagger.json` // dev环境url
     // prefix = '/openApi'
     // prefix = '/mallAdminDev'
     baseServeUrl = `` // dev环境url
@@ -22,29 +22,28 @@ case 'development':
     ws = 'http://127.0.0.1:3008'
     break
 case 'dev':
-    prefix = 'https://gateway-show.yunzhonghe.com'
+    prefix = 'http://121.41.51.167:10001'
     baseServeUrl = `` // dev环境url
     baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'
     ws = 'http://127.0.0.1:3008'
     break
 case 'test':
-    prefix = 'http://gateway.test.limofang.cn'
+    prefix = 'http://121.41.51.167:10001'
     baseServeUrl = `` // dev环境url
     baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'
     ws = 'http://127.0.0.1'
     break
 case 'show':
-    prefix = 'https://gateway-show.yunzhonghe.com'
+    prefix = 'http://121.41.51.167:10001'
     baseServeUrl = `` // dev环境url
     baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'
     ws = 'http://127.0.0.1'
     break
 case 'production':
-    // prefix = 'https://gateway.yunzhonghe.com' // aliyun生产环境url
-    prefix = 'http://192.168.4.42:5101'
+    prefix = 'http://121.41.51.167:10001'
     baseServeUrl = `` // dev环境url
     baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'

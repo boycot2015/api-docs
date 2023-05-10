@@ -7,7 +7,6 @@ import router from '@/router'
 import { downloadFile } from '@/utils'
 import Loading from '@/hooks/loading'
 import type { FormInstance, FormRules, UploadProps, UploadFile } from 'element-plus'
-import { ElMessage, ElMessageBox } from 'element-plus'
 interface AppProps {
     id: number
     url: string

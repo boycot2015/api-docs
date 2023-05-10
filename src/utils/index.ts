@@ -162,7 +162,8 @@ export const getDynamicIcon = (name:string) => {
     { name: 'business', icon: 'ic:outline-business' },
     { name: 'ladder', icon: 'ph:ladder-light' },
     { name: 'categorylist', icon: 'tabler:category' },
-    // ic:outline-business ph:ladder-light tabler:category
+    { name: 'weather', icon: 'uil:forecastcloud-moon-tear' },
+    // ic:outline-business ph:ladder-light tabler:category uil:forecastcloud-moon-tear
     { name: 'website', icon: 'ic:outline-store' }]
     let icon = name.slice(0,2).toUpperCase()
     icons.map(el => {

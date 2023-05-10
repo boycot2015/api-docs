@@ -68,9 +68,13 @@ const onSubmit = (formEl: FormInstance | undefined) => {
             }
             let params:any = {
                 method: state.method,
-                url: (appConfigStore.appConfig?.apiUrl || '') + pageData.value.url,
+                url: (appConfigStore.appConfig?.apiUrl || ''),
                 headers: { ...headerParams }
             }
+            // 处理json请求地址
+            let urlObj = new URL(params.url)
+            params.url = params.url.includes('.json') ? urlObj.origin + (pageData.value.basePath || '') : params.url
+            params.url += pageData.value.url
             try {
                 params.data = {
                     ...JSONParse(form.value.bodyParams || '{}'),

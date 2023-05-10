@@ -62,7 +62,9 @@ const fetchRouteData = (to:any, from:any, next: any) => {
             apiUrl = storage.getItem('websiteConfig').apiUrl || ''
         }
         const handleRoutes = (res: { data: any; }, dyRoutes: any[]) => {
-            const { tags, paths, definitions, host, info } = (res.data  || res) as any
+            const { tags, paths, definitions, host, info, basePath } = (res.data  || res) as any
+            // console.log((res.data  || res), '(res.data  || res)');
+            
             const getParameters = (obj:any) => {
                 if (!obj || obj === null) return {}
                 for (const k in obj) {
@@ -105,7 +107,7 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                     name: '',
                     component: baseApiStr,
                     meta: {
-                        title: el.name.replace(/接口/g, ''),
+                        title: el.name?.replace(/接口/g, '') || '',
                         // icon: 'Menu',
                         pageData: []
                     }
@@ -117,8 +119,9 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                         route.meta.pageData.push({
                             data: { ...getParameters(data) },
                             url: key,
+                            basePath,
                             component: baseApiStr,
-                            name: data.summary.replace(/[`~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘'，。、]/g, ''),
+                            name: data.summary?.replace(/[`~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘'，。、]/g, '') || data.description,
                             host,
                             info,
                             method: paths[key].post ? 'post' : 'get'
@@ -139,7 +142,7 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                             path,
                             name: baseApiStr + val.url?.split('/').join('') || '',
                             meta: {
-                                title: val.name.replace(/接口/g, ''),
+                                title: val.name?.replace(/接口/g, ''),
                                 // icon: 'Menu',
                                 // icon: getDynamicIcon(path),
                                 hideInMenu: path === `/${baseApiStr}/`,
@@ -152,8 +155,9 @@ const fetchRouteData = (to:any, from:any, next: any) => {
             })
             return dyRoutes
         }
+        if (!apiUrl.includes('.json')) apiUrl += '/v2/api-docs'
         if (import.meta.hot) {
-            import.meta.hot.send('getRoutes', { url: apiUrl + '/v2/api-docs' })
+            import.meta.hot.send('getRoutes', { url: apiUrl })
             import.meta.hot.on('getRoutes', (res) => {
                 if (res) {
                     let routes = handleRoutes(res, dyRoutes)
@@ -164,7 +168,7 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                 }
             })
         } else {
-            axios.get(apiUrl + '/v2/api-docs', { params: { url: apiUrl + '/v2/api-docs' } }).then((res:any) => {
+            axios.get(apiUrl, { params: { url: apiUrl } }).then((res:any) => {
                 if (res) {
                     let routes = handleRoutes(res, dyRoutes)
                     dynamicRoutes(routes)
