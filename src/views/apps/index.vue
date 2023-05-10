@@ -100,9 +100,6 @@ onMounted(() => {
                     box-shadow: 0 5px 20px var(--vt-c-ccc);
                 }
             }
-            .name {
-                // max-width: 100px;
-            }
             &.is-active {
                 .icon {
                     background-color: var(--el-color-primary);

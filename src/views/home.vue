@@ -168,6 +168,7 @@ onMounted(() => {
         align-items: center;
         justify-content: space-between;
         height: 60px;
+        font-weight: bold;
         img {
             height: 24px;
             margin-right: 16px;
