@@ -103,3 +103,8 @@
         padding: var(--el-dialog-padding-primary) 0 0 0;
     }
 }
+
+
+#nprogress .bar {
+    background-color: var(--el-color-primary);
+}

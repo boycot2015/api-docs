@@ -34,7 +34,7 @@ const getOffset = (el:any) => {
 }
 const computedStyle:any|undefined = (autoWidth?:boolean) => {
     const { hideHeader } = router.currentRoute.value.meta  as any
-    styles.value = { height: !hideHeader ? (showBreadcrumb.value ? 'calc(100vh - 152px)':'calc(100vh - 122px)') : showBreadcrumb.value ? 'calc(100vh - 102px)': 'calc(100vh - 69px)', width: collapse.isCollapse ? 'calc((90vw - 64px)' : '',overflowX: collapse.isCollapse ? 'auto': '' }
+    styles.value = { height: !hideHeader ? (showBreadcrumb.value ? 'calc(100vh - 122px)':'calc(100vh - 92px)') : showBreadcrumb.value ? 'calc(100vh - 102px)': 'calc(100vh - 69px)', width: collapse.isCollapse ? 'calc((90vw - 64px)' : '',overflowX: collapse.isCollapse ? 'auto': '' }
 }
 const setAnchorIndex = (e?:any) => {
     let scrollTop = e && e.target ? Math.floor(e.target.scrollTop) : window.scrollY

@@ -294,7 +294,8 @@ onMounted(() => {
 }
 </style>
 <style lang="scss">
-html,body {
-    overflow: auto;
-}
+// html,body {
+//     height: auto;
+//     overflow: auto;
+// }
 </style>

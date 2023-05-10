@@ -4,6 +4,7 @@ import Loading from '@/hooks/loading'
 import { ElMessage } from 'element-plus'
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import storage from '@/utils/storage'
+import { npStart, npClose } from '@/plugins/nprogress'
 type Result<T> = {
   code: number;
   message: string;
@@ -22,6 +23,7 @@ export class Request {
     
     this.instance.interceptors.request.use(
         (config) => {
+        npStart()
         let apiUrl = storage.getItem('websiteConfig').apiUrl || baseUrl
         if (config.url?.includes('http') || config.url?.includes('https') || apiUrl !== baseUrl) {
             config.baseURL = '/'
@@ -47,6 +49,7 @@ export class Request {
 
     this.instance.interceptors.response.use(
       (res: AxiosResponse) => {
+        npClose()
         Loading().close()
         // 直接返回res，当然你也可以只返回res.data
         // 系统如果有自定义code也可以在这里处理
@@ -55,6 +58,7 @@ export class Request {
       (err: any) => {
         // 这里用来处理http常见错误，进行全局提示
         let message = "";
+        npClose()
         Loading().close()
         switch (err.response.status) {
           case 400:

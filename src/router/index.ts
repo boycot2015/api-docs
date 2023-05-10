@@ -6,6 +6,7 @@ import dynamicRoutes from './dynamicRoutes'
 import { useRouteStore } from '@/stores/app'
 import Loading from '@/hooks/loading'
 import { getValidRoute } from '@/utils'
+import { npStart, npClose } from '@/plugins/nprogress'
 interface RouteProps {
     path: string
     name: string
@@ -22,6 +23,9 @@ const router = createRouter({
   routes: routes as any
 })
 router.beforeEach(async (to, from, next) => {
+    if (to.path !== from.path) {
+        npStart()
+    }
     let dyRoutes:any = []
     let routeStore = useRouteStore()
     to.meta.websiteName = config.websiteName
@@ -48,6 +52,7 @@ router.beforeEach(async (to, from, next) => {
 })
 router.afterEach(() => {
     // console.log(document.querySelectorAll('body .body'), '1231');
+    npClose()
 })
 export type {
     RouteProps

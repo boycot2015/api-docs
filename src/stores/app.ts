@@ -37,11 +37,10 @@ export const useRouteStore = defineStore('router', () => {
 // 应用配置
 export const useAppConfigStore = defineStore('appConfig', () => {
     let configs = storage.getItem('websiteConfig') || config
-    
     const appConfig = ref(configs)
     function setAppConfig(val:AppConfigProps|any) {
-        appConfig.value = { ...appConfig.value, ...val }
         storage.setItem('websiteConfig', { ...storage.getItem('websiteConfig'), ...val })
+        appConfig.value = { ...appConfig.value, ...storage.getItem('websiteConfig'), ...val }
     }
     return { appConfig, setAppConfig }
 })

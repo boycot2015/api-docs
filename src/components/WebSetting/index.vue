@@ -28,25 +28,30 @@ const rules = reactive<FormRules>({
 const emits = defineEmits(['update:modelValue'])
 const accordion = ref('1')
 const drawerFormRef = ref<FormInstance|undefined>()
-const { appConfig, setAppConfig } = useAppConfigStore()
+const { setAppConfig } = useAppConfigStore()
+const appConfig:any = computed(() => useAppConfigStore().appConfig)
 const root:any = document.querySelector(':root')
 const fileList = ref<UploadFile[]>([])
+
 const form = ref({
-    primaryColor: appConfig.primaryColor || getComputedStyle(root).getPropertyValue('--el-color-primary'),
-    showBreadcrumb: appConfig.showBreadcrumb,
-    logoPosition: appConfig.logoPosition,
-    baseUrl: appConfig.baseUrl || '',
-    apiUrl: appConfig.apiUrl || baseUrl,
-    apiList: appConfig.apiList as AppProps[],
+    primaryColor: appConfig.value.primaryColor || getComputedStyle(root).getPropertyValue('--el-color-primary'),
+    showBreadcrumb: appConfig.value.showBreadcrumb,
+    logoPosition: appConfig.value.logoPosition,
+    baseUrl: appConfig.value.baseUrl || '',
+    apiUrl: appConfig.value.apiUrl || baseUrl,
+    apiList: appConfig.value.apiList as AppProps[],
     footer: {
-        ...appConfig.footer
+        ...appConfig.value.footer
     },
-    currentEffect: appConfig.currentEffect || 3
+    currentEffect: appConfig.value.currentEffect || 3
 })
 const isLimit = ref(form.value.footer.links ? form.value.footer.links.length > 6 : false)
 watch(form.value.footer.links, (val) => {
     isLimit.value = val.length > 5
 })
+const initData = () => {
+    resetForm({ ...config, ...appConfig.value })
+}
 const onEffectChange = (index?:number, select?:boolean) => {
     window.onclick = null
     window.onmousedown = null
@@ -59,8 +64,8 @@ const onEffectChange = (index?:number, select?:boolean) => {
     }
     select && setAppConfig({ primaryColor: form.value.primaryColor, currentEffect:  index })
     if (index!== undefined && index < 0) return
-    index !== -1 && appConfig.effect[3]?.cb()
-    index !== undefined && appConfig.effect[index]?.cb()
+    index !== -1 && appConfig.value.effect[3]?.cb()
+    index !== undefined && appConfig.value.effect[index]?.cb()
 }
 const onColorPickerChange = (select?:boolean) => {
     root.style.setProperty('--el-color-primary', form.value.primaryColor)
@@ -68,10 +73,9 @@ const onColorPickerChange = (select?:boolean) => {
 
 const onClose = () => {
   emits('update:modelValue', false)
-  resetForm({ ...config, ...appConfig })
 }
 const onReload = () => {
-    if (form.value.apiUrl !== appConfig.apiUrl) {
+    if (form.value.apiUrl !== appConfig.value.apiUrl) {
         Loading({ text: '正在同步数据，请稍后...' })
         storage.removeItem('routes')
         if (router.currentRoute.value.path !== '/') {
@@ -181,10 +185,12 @@ const onFileChange = (file:any) => {
 }
 onEffectChange(form.value.currentEffect)
 onColorPickerChange()
-watch(appConfig, (val) => {
-    resetForm(val)
-})
 </script>
+<style lang="scss" scoped>
+html,body {
+    overflow: hidden;
+}
+</style>
 <style lang="scss">
 .web-setting-form {
     padding: 0;
@@ -218,6 +224,7 @@ watch(appConfig, (val) => {
     :lock-scroll="true"
     :append-to-body="true"
     :model-value="modelValue"
+    @opened="initData"
     @close="onClose">
         <el-form class="web-setting-form" ref="drawerFormRef" :model="form" label-width="110px" :rules="rules">
             <el-tabs v-model="accordion" accordion>

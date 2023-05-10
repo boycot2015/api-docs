@@ -1,6 +1,6 @@
 <template>
-<div class="header">
-    <slot name="logo">
+<div class="header" :style="{maxWidth: showMenu ? '1200px': '1150px'}">
+    <slot name="logo" v-if="showMenu">
         <div class="logo" :class="{'is-collapse': collapse.isCollapse }" v-if="appConfig.logoPosition === 'top'">
             <RouterLink class="title" to="/" v-if="!collapse.isCollapse">{{appConfig.websiteName}}</RouterLink>
             <!-- <el-icon size="24"><Operation @click="collapse.toggleCollapse()" /></el-icon> -->
@@ -51,7 +51,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 1200px;
+    max-width: 1200px;
     margin: 0 auto;
     height: 58px;
     background-image: radial-gradient(transparent 1px,var(--bg-color) 1px);
@@ -92,7 +92,7 @@
         display: flex;
         align-items: center;
         &.centered {
-            width: 80%;
+            width: 100%;
             padding: 0 25px;
             box-sizing: border-box;
             justify-content: space-between;
