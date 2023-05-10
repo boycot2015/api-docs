@@ -71,5 +71,18 @@ export default defineConfig({
         '@': fileURLToPath(new URL('./src', import.meta.url)),
         '_coms': fileURLToPath(new URL('./src/components', import.meta.url)),
         }
+    },
+    build: {
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    'element-plus': ['element-plus'],
+                    // 'axios': ['axios'],
+                    // 'pinia': ['pinia'],
+                    'highlight': ['highlight.js'],
+                    'nprogress': ['nprogress']
+                }
+            }
+        }
     }
 })

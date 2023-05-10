@@ -237,7 +237,7 @@ watch(pageData, (val) => {
         <div class="name">响应数据</div>
         <div v-highlight class="code" v-show="showParams" v-loading="state.responseLoading">
             <span class="copy" @click="onCopy">json 复制代码</span>
-            <pre><code class="hljs language-kotlin"> {{ responses }}</code></pre>
+            <pre><code class="JSON"> {{ responses }}</code></pre>
         </div>
     </div>
   </div>

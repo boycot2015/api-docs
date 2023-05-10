@@ -1,4 +1,4 @@
-.el-button:hover, .el-button:focus {
+.el-button.el-button--default:hover, .el-button.el-button--default:focus {
     color: var(--el-button-hover-text-color);
     border-color: var(--el-color-primary);
     background-color: var(--vt-c-white);

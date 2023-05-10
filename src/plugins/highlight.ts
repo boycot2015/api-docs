@@ -1,10 +1,10 @@
 import type { App } from 'vue-demi';
-import hljs from 'highlight.js' //导入代码高亮文
+import hljs from 'highlight.js/lib/core';
 import 'highlight.js/styles/default.css' // 代码高亮的样式
 import 'highlight.js/styles/github.css'
-// import 'highlight.js/styles/arduino-light.css'
-// import 'highlight.js/styles/monokai-light.css'
-
+// import 'highlight.js/styles/idea.css'
+import javascript from 'highlight.js/lib/languages/javascript'
+hljs.registerLanguage('javascript', javascript)
 export default {
     install: (app: App) => {
         //自定义一个代码高亮指令
