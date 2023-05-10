@@ -14,6 +14,8 @@ const [ state, setState ] = useState({
     method: pageData.value.method,
     name: pageData.value.name
 })
+const urlObj:any = new URL(appConfigStore.appConfig?.apiUrl)
+
 watch(pageData, (val) => {
     if (!val) return
     loading.value = true
@@ -37,7 +39,7 @@ watch(pageData, (val) => {
         <div class="api-desc-item">
             <!-- {{pageData.info}} -->
             <div class="name sub-title-item">1.1 接口请求地址</div>
-            <div class="value" v-highlight>【{{state.method}}】{{baseServeUrl || pageData.basePath}}{{ appConfigStore.appConfig?.baseUrl || '' }}{{state.url}}</div>
+            <div class="value" v-highlight>【{{state.method}}】{{ urlObj.origin || '' }}{{baseServeUrl || pageData.basePath === '/' ? '': pageData.basePath}}{{ appConfigStore.appConfig?.baseUrl || '' }}{{state.url}}</div>
         </div>
         <div class="api-desc-item">
             <div class="name sub-title-item">1.2 请求类型</div>
