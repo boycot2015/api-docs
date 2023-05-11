@@ -7,7 +7,6 @@ import type { ColumnProps, FormProps } from '../tools'
 import { getParams, arr2obj, getCustomParams } from '../tools'
 import http from '@/api/request'
 import { useAppConfigStore } from '@/stores/app'
-import { baseUrl } from '@/api/baseUrl'
 import useState from '@/hooks/useState'
 const appConfigStore = useAppConfigStore()
 
@@ -22,7 +21,7 @@ let state = reactive({
     loading: false,
     responseLoading: false,
     data: pageData.value.data,
-    url: (appConfigStore.appConfig?.apiUrl || baseUrl) + (appConfigStore.appConfig?.baseUrl || '') + pageData.value.url,
+    url: (appConfigStore.appConfig?.baseUrl || pageData.value.basePath?.replace(/\//i, '') || '') + pageData.value.url,
     method: pageData.value.method,
     pramsObj: {
         name: '',
