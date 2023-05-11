@@ -1,9 +1,7 @@
-/* eslint-disable no-undef */
 // 根据不同的环境设定不同的baseUrl，
 let prefix = ''
-let baseUrl = '' // 本地代理y
-let loginUrl = '' // 本地代理y
-let baseServeUrl = '' // 本地代理y
+let baseUrl = ''
+let loginUrl = ''
 let ws = 'http://127.0.0.1:3008'
 let env = process.env.NODE_ENV === 'development'
     ? 'development' : process.env.NODE_ENV === 'dev'
@@ -16,42 +14,36 @@ case 'development':
     // prefix = `http://api.boycot.top/swagger.json` // dev环境url
     // prefix = '/openApi'
     // prefix = '/mallAdminDev'
-    baseServeUrl = `` // dev环境url
     baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'
     ws = 'http://127.0.0.1:3008'
     break
 case 'dev':
     prefix = 'http://121.41.51.167:10001'
-    baseServeUrl = `` // dev环境url
     baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'
     ws = 'http://127.0.0.1:3008'
     break
 case 'test':
     prefix = 'http://121.41.51.167:10001'
-    baseServeUrl = `` // dev环境url
     baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'
     ws = 'http://127.0.0.1'
     break
 case 'show':
     prefix = 'http://121.41.51.167:10001'
-    baseServeUrl = `` // dev环境url
     baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'
     ws = 'http://127.0.0.1'
     break
 case 'production':
     prefix = 'http://121.41.51.167:10001'
-    baseServeUrl = `` // dev环境url
     baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'
     ws = 'http://127.0.0.1'
     break
 }
 export {
-    baseServeUrl,
     loginUrl,
     baseUrl,
     ws

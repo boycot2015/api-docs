@@ -7,7 +7,7 @@ import type { ColumnProps, FormProps } from '../tools'
 import { getParams, arr2obj, getCustomParams } from '../tools'
 import http from '@/api/request'
 import { useAppConfigStore } from '@/stores/app'
-import { baseServeUrl, baseUrl } from '@/api/baseUrl'
+import { baseUrl } from '@/api/baseUrl'
 import useState from '@/hooks/useState'
 const appConfigStore = useAppConfigStore()
 
@@ -46,7 +46,7 @@ const initFormData = (arr:any) => {
         }
     })
     form.bodyParams = JSONStringify(bodyParams)
-    form.Method = baseServeUrl + state.url
+    form.Method = state.url
     form.Timestamp = new Date().toLocaleString().replace(/\//g, '-')
     form['Random-Code'] = Math.floor(Math.random() * 100000) + ''
     return form
