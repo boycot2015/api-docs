@@ -211,6 +211,9 @@ onMounted(() => {
   margin-right: 75px;
   width: 168px;
   font-size: 14px;
+  &:last-child {
+    margin-right: 0;
+  }
 }
 .process > ul li .process_logo {
   width: 60px;
