@@ -97,7 +97,7 @@ export default defineConfig({
         // extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'], // 导入时想要忽略的扩展名列表
     },
     esbuild: {
-        drop: ["console", "debugger"],
+        // drop: ["console", "debugger"],
     },
     build: {
         modulePreload: { // 是否自动注入 module preload 的 polyfill

@@ -23,16 +23,21 @@ onMounted(() => {
 </script>
 <template>
   <div class="api-docs" :key="pageData.url" v-loading="loading">
-    <ApiDesc></ApiDesc>
+    <el-row>
+        <el-col><ApiDesc /></el-col>
+        <el-col><ApiParameters /></el-col>
+        <el-col><ApiResponse /></el-col>
+    </el-row>
+    <!-- <ApiDesc></ApiDesc>
     <ApiParameters></ApiParameters>
-    <ApiResponse></ApiResponse>
+    <ApiResponse></ApiResponse> -->
   </div>
 </template>
 <style lang="scss">
 .api-docs {
     padding: 30px 0;
     z-index: 2;
-    width: 100%;
+    max-width: 100%;
     .title {
         font-size: 32px;
         // font-weight: bold;

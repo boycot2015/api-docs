@@ -6,7 +6,9 @@ export default [
         name: 'index',
         meta: {
           title: '首页',
+          affix: true,
           hideInSearch: true,
+          hideInMenu: true,
           icon: 'ep:house'
         },
         component: () => import('@/views/home.vue')
@@ -58,6 +60,8 @@ export default [
             title: '项目',
             hideChildren: true,
             showInHeader: true,
+            hideInMenu: true,
+            affix: true,
             icon: 'ri:app-store-line'
         },
         component: Layout,
@@ -79,9 +83,11 @@ export default [
         name: 'log',
         redirect: '/log/index',
         meta: {
+            affix: true,
             title: '更新日志',
             hideChildren: true,
-            showInHeader: true,
+            showInHeader: false,
+            hideInMenu: true,
             icon: 'mdi:math-log'
         },
         component: Layout,

@@ -50,6 +50,8 @@ export default <AppConfigProps>({
     apiUrl: baseUrl,
     apiList: [{
         id: 1,
+        replace: true,
+        icon: 'fluent:developer-board-16-regular',
         name: '开发文档',
         url: baseUrl
     }],

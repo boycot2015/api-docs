@@ -163,6 +163,7 @@ export const getDynamicIcon = (name:string) => {
     { name: 'ladder', icon: 'ph:ladder-light' },
     { name: 'categorylist', icon: 'tabler:category' },
     { name: 'weather', icon: 'uil:forecastcloud-moon-tear' },
+    { name: 'api', icon: 'fluent:developer-board-16-regular' },
     // ic:outline-business ph:ladder-light tabler:category uil:forecastcloud-moon-tear
     { name: 'website', icon: 'ic:outline-store' }]
     let icon = name.slice(0,2).toUpperCase()
@@ -207,4 +208,17 @@ export const downloadFile = (data:any, fileName = 'file', fileType = 'json') => 
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
+}
+
+// 处理字母、中文展示...
+export const getMenuTitleStr = (key: string, len = 6) => {
+    let count = 0
+    for (let index = 0; index < key.length; index++) {
+        if (/[\u4e00-\u9fa5]/g.test(key[index])) {
+            count++
+        }
+    }
+    if (count === key.length) return key.length > len ? key.substring(0, len) + '...' : key
+    if (count > 0 && count < key.length) return key.length > len + 6 ? key.substring(0, len + 2) + '...' : key
+    return key.length > len + count * 4 ? key.substring(0, len + 8 + count * 4) + '...' : key
 }

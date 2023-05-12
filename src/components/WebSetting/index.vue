@@ -11,6 +11,7 @@ import type { FormInstance, FormRules, UploadProps, UploadFile } from 'element-p
 interface AppProps {
     id: number
     url: string
+    replace: boolean
     name: string
 }
 defineProps({
@@ -32,7 +33,6 @@ const { setAppConfig } = useAppConfigStore()
 const appConfig:any = computed(() => useAppConfigStore().appConfig)
 const root:any = document.querySelector(':root')
 const fileList = ref<UploadFile[]>([])
-
 const form = ref({
     primaryColor: appConfig.value.primaryColor || getComputedStyle(root).getPropertyValue('--el-color-primary'),
     showBreadcrumb: appConfig.value.showBreadcrumb,
@@ -45,6 +45,7 @@ const form = ref({
     },
     currentEffect: appConfig.value.currentEffect || 3
 })
+const apiObj = ref<{apiUrl:string}>({ apiUrl: appConfig.value.apiUrl || baseUrl })
 const isLimit = ref(form.value.footer.links ? form.value.footer.links.length > 6 : false)
 watch(form.value.footer.links, (val) => {
     isLimit.value = val.length > 5
@@ -83,15 +84,24 @@ const onReload = () => {
         } else {
             window.location.href = '/'
         }
+        setAppConfig({ ...form.value, ...apiObj.value, apiList: form.value.apiList.map(el => {
+            el.replace = false
+            if (apiObj.value.apiUrl === el.url) {
+                el.replace = true
+            }
+            return el
+            })
+        })
         Loading().close()
     } else {
         Loading({ text: '正在保存设置，请稍后...' })
+        setAppConfig({ ...form.value, ...apiObj.value })
         setTimeout(() => {
-        Loading().close()
+            Loading().close()
             ElMessage.success('保存成功')
         }, 500);
-        emits('update:modelValue', false)
     }
+    emits('update:modelValue', false)
 }
 const onSubmit = () => {
     drawerFormRef.value?.validate((valid) => {
@@ -99,8 +109,6 @@ const onSubmit = () => {
             accordion.value = '1'
             return
         }
-        setAppConfig({ ...form.value })
-        emits('update:modelValue', false)
         onReload()
     })
 }
@@ -112,14 +120,23 @@ const resetForm = (val?:any) => {
     form.value.baseUrl = val.baseUrl
     form.value.apiUrl = val.apiUrl
     form.value.footer = val.footer
+    apiObj.value = {
+        apiUrl: val.apiUrl
+    }
 }
 const onReset = () => {
     ElMessageBox.confirm('重置操作会清空本地数据，恢复初始状态，确认重置？', '温馨提示').then(() => {
         resetForm(config)
+        storage.removeItem('routes')
+        storage.removeItem('websiteConfig')
         setAppConfig(config)
         onEffectChange(config.currentEffect)
         root.style.setProperty('--el-color-primary', config.primaryColor)
-        onReload()
+        Loading({ text: '正在保存设置，请稍后...' })
+        setTimeout(() => {
+            Loading().close()
+            window.location.reload()
+        }, 500);
     }).catch(() => {})
 }
 const onLinksSort = (lindex:number, type:string) => {
@@ -143,6 +160,7 @@ const onImportSuccess = (data:any) => {
     Loading({ text: '正在导入数据，请稍后...' })
     setTimeout(() => {
         setAppConfig({ ...form.value })
+        onColorPickerChange()
         Loading().close()
         ElMessageBox.alert('导入成功：' + '<div style="width: 360px;max-height:400px;overflow:auto;background: #f8f8f8;padding: 10px;" v-highlight><code class="">'+JSON.stringify(data)+'</code></div>', '温馨提示', {
             dangerouslyUseHTMLString: true,
@@ -273,14 +291,14 @@ html,body {
                     <el-form-item label="基础公共地址" prop="baseUrl">
                         <el-input placeholder="接口地址前缀，如：/api" v-model="form.baseUrl"></el-input>
                     </el-form-item>
-                    <el-form-item label="应用名称" prop="apiUrl">
-                        <el-select filterable v-model="form.apiUrl" style="width: 92%;margin-bottom: 5px;">
+                    <el-form-item label="项目名称" prop="apiUrl">
+                        <el-select filterable v-model="form.apiUrl" @change="apiObj.apiUrl = form.apiUrl" style="width: 92%;margin-bottom: 5px;">
                             <el-option v-for="api in form.apiList" :label="api.name" :value="api.url" :key="api.name"></el-option>
                         </el-select>
-                        <!-- <el-input style="width:45%" placeholder="链接名称" v-model="apiObj.name"></el-input>
-                        <el-input style="margin-left: 5px;width:45%" placeholder="不存在跨域的或者项目中代理的地址" v-model="apiObj.url"></el-input> -->
-                        <!-- <el-icon style="margin-left: 5px;cursor: pointer;" @click="apiObj.name &&form.apiList.push({ name: apiObj.name || apiObj.url, url: apiObj.url, id: form.apiList.length+1 });apiObj = {name: '', url: ''}"><Plus /></el-icon> -->
-                        <el-icon title="新增项目" style="margin-left: 5px;cursor: pointer;" @click="$router.push('/apps/index');onClose();"><IconifyIcon name="ep:plus" :iconStyle="{ }" /></el-icon>
+                        <el-icon title="新增项目" style="margin-left: 5px;margin-bottom: 5px;cursor: pointer;" @click="$router.push('/apps/index');onClose();"><IconifyIcon name="ep:plus" :iconStyle="{ }" /></el-icon>
+                    </el-form-item>
+                    <el-form-item label="项目地址" prop="apiUrl">
+                        <el-input style="width:100%" placeholder="链接名称" v-model="apiObj.apiUrl"></el-input>
                     </el-form-item>
                 </el-tab-pane>
                 <el-tab-pane name="3" label="导入导出">

@@ -134,15 +134,14 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                 route.meta.hideInMenu = route.path === `/${baseApiStr}/`
                 route.meta.icon = getDynamicIcon(route.name)
                 if (route.meta.pageData.length >= 1) {
-                    route.meta.showInHeader = route.meta.pageData.length > 2 && route.meta.pageData.length < 15
+                    route.meta.showInHeader = route.meta.pageData.length > 1 && route.meta.pageData.length < 15
                     route.children = route.meta.pageData.map((val:any, idx: number) => {
                         let path:string = `/${baseApiStr}/` + (route.name + (val.url ? '/' + val.url.split('/').join('') : ''))
-                        // route.meta.icon = getDynamicIcon(val.url?.split('/').join(''))
                         return {
                             path,
                             name: baseApiStr + val.url?.split('/').join('') || '',
                             meta: {
-                                title: val.name?.replace(/接口/g, ''),
+                                title: val.name?.replace(/接口/g, '') || '',
                                 // icon: 'Menu',
                                 // icon: getDynamicIcon(path),
                                 hideInMenu: path === `/${baseApiStr}/`,

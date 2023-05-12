@@ -11,6 +11,7 @@ interface RouteProps {
     path: string
     name: string
     meta: {
+        realTitle?:string
         title: string
         icon?: string
         hideInMenu?:boolean

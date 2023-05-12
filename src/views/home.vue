@@ -167,12 +167,15 @@ onMounted(() => {
         flex-basis: 220px;
         align-items: center;
         justify-content: space-between;
-        height: 60px;
+        height: 58px;
         font-weight: bold;
         img {
             height: 24px;
             margin-right: 16px;
         }
+    }
+    :deep(.el-menu) {
+        width: 630px;
     }
 }
 .process {

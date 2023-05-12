@@ -23,10 +23,14 @@
 .el-menu--horizontal .el-menu-item:not(.is-disabled):focus {
     background-color: transparent;
 }
+.el-sub-menu.el-sub-menu__hide-arrow .el-sub-menu__title.el-tooltip__trigger.el-tooltip__trigger {
+    padding-right: 10px;
+    padding-left: 10px;
+}
 .el-header {
     width: 100%;
     padding: 0;
-    height: 60px;
+    height: 58px;
     position: relative;
     z-index: 10;
     background-color: var(--vt-c-white);

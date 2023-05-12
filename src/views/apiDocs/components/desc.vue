@@ -33,7 +33,7 @@ watch(pageData, (val) => {
 </script>
 <template>
   <div class="api-docs-desc"  v-loading="loading">
-    <h1 class="tc title">{{state.name}}</h1>
+    <h1 class="tc title" :class="{'font22': state.name?.length > 40}">{{state.name}}</h1>
     <div class="api-docs-section api-desc">
         <h3 class="app-page-anchor sub-title" id="app-page-anchor0">1. 接口说明</h3>
         <div class="api-desc-item">
@@ -57,4 +57,7 @@ watch(pageData, (val) => {
   </div>
 </template>
 <style lang="scss" scoped>
+.font22 {
+    font-size: 22px;
+}
 </style>
