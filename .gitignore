@@ -20,6 +20,7 @@ coverage
 # Editor directories and files
 .vscode/*
 package-lock.json
+yarn.lock
 !.vscode/extensions.json
 .idea
 *.suo

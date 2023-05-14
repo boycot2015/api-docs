@@ -10,8 +10,8 @@ let env = process.env.NODE_ENV === 'development'
                 ? 'test' : 'production'
 switch (env) {
 case 'development':
-    prefix = `http://121.41.51.167:10001` // dev环境url
-    // prefix = `http://api.boycot.top/swagger.json` // dev环境url
+    // prefix = `http://121.41.51.167:10001` // dev环境url
+    prefix = `http://api.boycot.top/swagger.json` // dev环境url
     // prefix = '/openApi'
     // prefix = '/mallAdminDev'
     baseUrl = prefix
