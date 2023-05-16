@@ -119,7 +119,10 @@ export const getDynamicIcon = (name:string) => {
     let icons = [{ name: 'goods',icon: 'ep:goods'},
     { name: 'address', icon: 'mdi:address-marker-outline' },
     { name: 'order', icon: 'icon-park-outline:transaction-order' },
+    { name: 'api', icon: 'fluent:developer-board-16-regular' },
+    { name: 'role', icon: 'carbon:user-role' },
     { name: 'supplier', icon: 'iconoir:house-rooms' },
+    { name: 'excel', icon: 'uiw:file-excel' },
     { name: 'stock', icon: 'mdi:warehouse' },
     { name: 'warehouse', icon: 'mdi:warehouse' },
     { name: 'user', icon: 'ph:user' },
@@ -139,11 +142,9 @@ export const getDynamicIcon = (name:string) => {
     { name: 'auth', icon: 'mingcute:safe-lock-line' },
     { name: 'purchase', icon: 'fluent-mdl2:activate-orders' },
     { name: 'phone', icon: 'material-symbols:phone-android-outline' },
-    { name: 'Phone', icon: 'material-symbols:phone-android-outline' },
     { name: 'lottery', icon: 'fluent:lottery-24-regular' },
-    { name: 'heartBeat', icon: 'tabler:heartbeat' },
+    { name: 'heart', icon: 'tabler:heartbeat' },
     { name: 'postal', icon: 'mdi:bank-outline' },
-    { name: 'Postal', icon: 'mdi:bank-outline' },
     { name: 'military', icon: 'ph:medal-military' },
     { name: 'after', icon: 'iconoir:delivery-truck' },
     { name: 'After', icon: 'iconoir:delivery-truck' },
@@ -155,7 +156,6 @@ export const getDynamicIcon = (name:string) => {
     { name: 'activity', icon: 'mingcute:drawing-board-line' },
     { name: 'Activity', icon: 'mingcute:drawing-board-line' },
     { name: 'group', icon: 'uit:object-ungroup' },
-    { name: 'Group', icon: 'uit:object-ungroup' },
     { name: 'seckill', icon: 'streamline:interface-time-stop-watch-sixty-second-minute-time-stopwatch-measure-hour-whole-clock' },
     { name: 'message', icon: 'ri:message-3-line' },
     { name: 'virtual', icon: 'tabler:badge-vr' },
@@ -163,12 +163,21 @@ export const getDynamicIcon = (name:string) => {
     { name: 'ladder', icon: 'ph:ladder-light' },
     { name: 'categorylist', icon: 'tabler:category' },
     { name: 'weather', icon: 'uil:forecastcloud-moon-tear' },
-    { name: 'api', icon: 'fluent:developer-board-16-regular' },
+    { name: 'decoration', icon: 'ph:paint-brush-broad-light' },
+    { name: 'operation', icon: 'icon-park-outline:code-computer' },
+    { name: 'quota', icon: 'eos-icons:quota-outlined' },
+    { name: 'enterprise', icon: 'carbon:enterprise' },
+    { name: 'installment', icon: 'fluent:payment-16-regular' },
+    { name: 'yzf', icon: 'uiw:pay' },
+    { name: 'receipt', icon: 'ic:sharp-receipt-long' },
+    { name: 'shipment', icon: 'streamline:shipping-box-2-box-package-label-delivery-shipment-shipping-3d' },
+    { name: 'lmf', icon: 'icon-park-outline:cube' },
+    // ph:cube-light
     // ic:outline-business ph:ladder-light tabler:category uil:forecastcloud-moon-tear
     { name: 'website', icon: 'ic:outline-store' }]
     let icon = name.slice(0,2).toUpperCase()
     icons.map(el => {
-        if (name.includes(el.name)) {
+        if (name.toLowerCase().includes(el.name)) {
             icon = el.icon
         }
     })
