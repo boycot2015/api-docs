@@ -56,7 +56,7 @@ const fetchRouteData = (to:any, from:any, next: any) => {
         } else {
             dyRoutes = []
         }
-        let loopRefs = ['DepartmentPurchaseCategoryOutputVO', 'WebsiteDepartmentCategoryOutputVO', 'WebsiteDepartmentCategoryOutputVO', 'DepartmentTreeOutputVO', 'DeptTreeVo', 'MenuTreeVo', '客户虚拟商品池查询条件', '分类加载VO', 'SupplierInfoPageVo', 'CategoryBaeInfoVo', 'CategoryTreeVo', 'VirtualGoodsCateVo', '军网重点商品分类树返回模型', '开票申请DTO(基于订单)', '财务系统售后订单查询条件']
+        let loopRefs = ['DepartmentPurchaseCategoryOutputVO', 'WebsiteDepartmentCategoryOutputVO', 'WebsiteDepartmentCategoryOutputVO', 'DepartmentTreeOutputVO', 'DeptTreeVo', 'MenuTreeVo', '客户虚拟商品池查询条件', '分类加载VO', 'SupplierInfoPageVo', 'CategoryBaeInfoVo', 'CategoryTreeVo', 'VirtualGoodsCateVo', '军网重点商品分类树返回模型', '开票申请DTO(基于订单)', '财务系统售后订单查询条件', 'CheckFlashSaleGoodsExclusionOutputDTO']
         let apiUrl = ''
         if (storage.getItem('websiteConfig')) {
             apiUrl = storage.getItem('websiteConfig').apiUrl || ''
@@ -71,7 +71,7 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                     if (k === '$ref') {
                         for (const key in definitions) {
                             if (obj[k] && typeof obj[k] === 'string' && obj[k].split('/')[2] && key === obj[k].split('/')[2]) {
-                                // console.log(key, 'key');
+                                console.log(key, 'key');
                                 if (loopRefs.includes(key)) { // 剔除树结构，防止递归死循环
                                     obj[k] = ''
                                 } else {

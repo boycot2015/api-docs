@@ -79,6 +79,32 @@ export default [
         ]
     },
     {
+        path: '/files',
+        name: 'files',
+        redirect: '/files/index',
+        meta: {
+            title: '文件',
+            hideChildren: true,
+            showInHeader: true,
+            hideInMenu: true,
+            affix: true,
+            icon: 'ri:app-store-line'
+        },
+        component: Layout,
+        children: [
+            {
+                path: '/files/index',
+                name: 'fileList',
+                meta: {
+                    title: '文件列表',
+                    showInHeader: true,
+                    icon: 'ri:app-store-line'
+                },
+                component: () => import('@/views/files/index.vue'),
+            }
+        ]
+    },
+    {
         path: '/log',
         name: 'log',
         redirect: '/log/index',
