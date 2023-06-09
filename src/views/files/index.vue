@@ -87,6 +87,11 @@ const initData = (name?:string) => {
         fileList.value = res.data as unknown as AppProps[]
     })
 }
+watch (visible, (val) => {
+    if (!val) {
+        initData()
+    }
+})
 initData()
 const onAdd = (row?:any) => {
     rowData.value = row || {}

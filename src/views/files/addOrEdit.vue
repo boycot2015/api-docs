@@ -68,21 +68,6 @@ const onClose = () => {
     formRef.value?.resetFields()
     emits('update:modelValue', false)
 }
-const onReload = () => {
-    if (form.value.replace) {
-        Loading({ text: '正在同步数据，请稍后...' })
-        storage.removeItem('routes')
-        window.location.reload()
-        Loading().close()
-    } else {
-        Loading({ text: '正在保存设置，请稍后...' })
-        setTimeout(() => {
-        Loading().close()
-            ElMessage.success('保存成功')
-        }, 500);
-    }
-    onClose()
-}
 const onSubmit = () => {
     formRef.value?.validate((valid) => {
         if (!valid) {
@@ -97,10 +82,10 @@ const onSubmit = () => {
             if (res.success) {
                 ElMessage.success('操作成功')
                 Loading().close()
+                onClose()
             }
         })
         }
-        onReload()
     })
 }
 </script>
