@@ -1,16 +1,18 @@
 <template>
     <el-dialog
-    width="400"
+    width="460"
     :title="`${form.id?'编辑':'新增'}文件`"
     centered
-    top="30vh"
+    top="20vh"
     :lock-scroll="true"
     :append-to-body="true"
     :model-value="modelValue"
     @close="onClose">
         <el-form class="web-setting-form" ref="formRef" :model="form" label-width="120px" :rules="rules">
-            <el-form-item label="" prop="icon">
-                <el-image :src="form.url"></el-image>
+            <el-form-item label="" prop="icon" label-width="0px">
+                <div class="tc flexbox-h align-c just-c" style="width:100%;height: 240px;padding: 10px;border:1px dashed #ccc;overflow: hidden;">
+                    <el-image fit="cover" :src="form.url"></el-image>
+                </div>
             </el-form-item>
             <el-form-item label="文件名称" prop="name">
                 <el-input placeholder="文件名称" v-model="form.name"></el-input>
@@ -30,6 +32,8 @@ import { ElMessage, ElMessageBox, type FormInstance, type FormRules } from 'elem
 import { useAppConfigStore } from '@/stores/app'
 import Loading from '@/hooks/loading'
 import storage from '@/utils/storage'
+import { apiUrl } from '@/api/baseUrl'
+import http from '@/api/request'
 const { appConfig, setAppConfig } = useAppConfigStore()
 const apiList = computed(() => appConfig.apiList)
 const props = defineProps({
@@ -85,25 +89,17 @@ const onSubmit = () => {
             return
         }
         let config:any = {
-        }
-        if (form.value.replace) {
-            config.apiUrl = form.value.url
-            config.apiName = form.value.name
-            apiList.value.map((el:any) => {
-                el.replace = false
-            })
+            url: form.value.url,
+            name: form.value.name
         }
         if (form.value.id) {
-            let index = apiList.value.findIndex((el:any) => el.id === form.value.id)
-            apiList.value.splice(index, 1, { ...form.value })
-        } else {
-            if (apiList.value.map((el:any) => el.name).includes(form.value.name)) {
-                ElMessage.error('应用已存在，请勿重复添加')
+            http.post(apiUrl + '/files/update', { id:form.value.id, name: config.name, url: config.url }).then((res: any) => {
+            if (res.success) {
+                ElMessage.success('操作成功')
+                Loading().close()
             }
-            apiList.value.push({ ...form.value, id: apiList.value.length + 1 })
+        })
         }
-        config.apiList = apiList.value
-        setAppConfig({ ...config })
         onReload()
     })
 }

@@ -20,7 +20,7 @@ export class Request {
   constructor(config: AxiosRequestConfig) {
     // 使用axios.create创建axios实例
     this.instance = axios.create(Object.assign(this.baseConfig, config));
-    
+    this.instance.defaults.headers.post['Content-Type'] = 'application/json'
     this.instance.interceptors.request.use(
         (config) => {
         npStart()

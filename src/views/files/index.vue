@@ -8,10 +8,10 @@
                     multiple
                     :drag="true"
                     :limit="10"
-                    :on-success="handleSuccess"/>
+                    @on-success="handleSuccess"/>
             </el-col>
             <el-col>
-                <el-table :data="appList" maxHeight="340px" style="width: 100%;">
+                <el-table :data="fileList" maxHeight="340px" style="width: 100%;">
                     <el-table-column
                     label=""
                     width="100px">
@@ -60,9 +60,7 @@
 <script setup lang="ts">
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useAppConfigStore } from '@/stores/app'
-import storage from '@/utils/storage'
 import Loading from '@/hooks/loading'
-import { downloadFile } from '@/utils'
 import useState from '@/hooks/useState'
 import { useRouter } from 'vue-router'
 import AddOrEdit from './addOrEdit.vue'
@@ -74,21 +72,19 @@ const currentPage = ref(1)
 const pageSize  = ref(10)
 const {appConfig, setAppConfig } = useAppConfigStore()
 interface AppProps {
-    icon: string
+    id: string
     url: string
     name: string
     replace?:boolean
 }
-let appList = ref<AppProps[]>(appConfig.apiList)
+let fileList = ref<AppProps[]>([])
 const router = useRouter()
 const loading = ref(true)
 const [ visible, toggleVisible ] = useState(false)
 const rowData = ref({})
-const pageData:any = computed(() => router.currentRoute.value.meta.pageData)
 const initData = (name?:string) => {
-    http.get(apiUrl + '/files', { name } as any).then(res => {
-        console.log(res.data, '123');
-        appList.value = res.data as unknown as AppProps[]
+    http.get(apiUrl + '/files', { params: { name } } as any).then(res => {
+        fileList.value = res.data as unknown as AppProps[]
     })
 }
 initData()
@@ -99,14 +95,13 @@ const onAdd = (row?:any) => {
 const onDelete = (row: { id: any }) => {
     ElMessageBox.confirm('确认删除？', '温馨提示').then(() => {
         Loading({ text: '正在删除，请稍后...' })
-        setTimeout(() => {
-            let index = appList.value.findIndex((el:any) => el.id === row.id)
-            appList.value.splice(index, 1)
-            setAppConfig({ apiList: appList.value })
-            emits('update:modelValue', false)
-            ElMessage.success('删除成功')
-            Loading().close()
-        }, 200);
+        http.post(apiUrl + '/files/delete', { ids: [row.id] }).then((res: any) => {
+            if (res.success) {
+                ElMessage.success('删除成功')
+                Loading().close()
+                initData()
+            }
+        })
     }).catch(() => {})
 }
 const handleSizeChange = () => {}
@@ -119,6 +114,7 @@ onMounted(() => {
 const handleSuccess: UploadProps['onSuccess'] = (response: any, uploadFile, uploadFiles) => {
     //   console.log(response, fileList.value, 'response')
     ElMessage.success('操作成功')
+    initData()
 }
 </script>
 <style lang="scss">
