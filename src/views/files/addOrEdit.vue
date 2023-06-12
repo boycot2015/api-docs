@@ -11,7 +11,7 @@
         <el-form class="web-setting-form" ref="formRef" :model="form" label-width="120px" :rules="rules">
             <el-form-item label="" prop="icon" label-width="0px">
                 <div class="tc flexbox-h align-c just-c" style="width:100%;height: 240px;padding: 10px;border:1px dashed #ccc;overflow: hidden;">
-                    <el-image fit="cover" :src="form.url"></el-image>
+                    <Image fit="cover" :src="form.origionUrl" lazy></Image>
                 </div>
             </el-form-item>
             <el-form-item label="文件名称" prop="name">
@@ -62,6 +62,7 @@ const form = ref({
     name: props.data?.name || '',
     icon: props.data?.icon || '',
     url: props.data?.url || '',
+    origionUrl: props.data?.origionUrl || '',
     replace: false
 })
 const onClose = () => {

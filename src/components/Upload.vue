@@ -73,5 +73,13 @@ const beforeRemove: UploadProps['beforeRemove'] = (uploadFile, uploadFiles) => {
     )
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+:deep(.el-upload-dragger) {
+    padding: 10px;
+    .el-icon--upload {
+        font-size: 28px;
+        line-height: 32px;
+        margin-bottom: 10px;
+    }
+}
 </style>

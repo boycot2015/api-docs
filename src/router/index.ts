@@ -7,6 +7,7 @@ import { useRouteStore } from '@/stores/app'
 import Loading from '@/hooks/loading'
 import { getValidRoute } from '@/utils'
 import { npStart, npClose } from '@/plugins/nprogress'
+let loading:any = null
 interface RouteProps {
     path: string
     name: string
@@ -38,7 +39,7 @@ router.beforeEach(async (to, from, next) => {
     if (routeStore.hasRoutes) {
         next()
     } else {
-        Loading()
+        loading = Loading()
         dyRoutes = await dynamicRoutes(to, from, next)
         routeStore.setRoutes([...routes, ...dyRoutes], true)
         storage.setItem('routes', [...dyRoutes])
@@ -48,7 +49,7 @@ router.beforeEach(async (to, from, next) => {
         } else {
             next({ ...to, replace: true })
         }
-        Loading().close()
+        loading.close()
     }
 })
 router.afterEach(() => {
