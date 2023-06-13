@@ -3,9 +3,10 @@
     :fit="props.fit"
     :src="props.src"
     :alt="props.alt"
-    :preview-src-list="props['preview-src-list']"
+    :preview-src-list="props.previewList"
     :z-index="props['z-index']"
     :initial-index="props['initial-index']"
+    preview-teleported
     :scroll-container="props['scroll-container']" lazy>
         <template #placeholder>
             <slot name="placeholder">
@@ -26,5 +27,5 @@
 </template>
 <script setup>
 import { Picture as IconPicture, Loading as IconLoading } from '@element-plus/icons-vue'
-const props = defineProps(['fit', 'src', 'alt', 'scroll-container', 'preview-src-list', 'z-index', 'initial-index'])
+const props = defineProps(['fit', 'src', 'alt', 'scroll-container', 'previewList', 'z-index', 'initial-index', 'compress'])
 </script>

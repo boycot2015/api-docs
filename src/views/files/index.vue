@@ -38,7 +38,8 @@
                     label=""
                     width="100px">
                         <template #default="{row}">
-                            <Image :preview-src-list="fileList.map((el:any) => el.origionUrl)" style="width: auto;height: 60px;" :src="row.url" lazy></Image>
+                            <Image :compress="true" :preview-list="fileList.map((el:any) => el.origionUrl)" style="min-width:60px;width: auto;height: 60px;" :src="row.url" lazy></Image>
+                            <!-- <img :src="row.url" alt=""> -->
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -83,7 +84,7 @@
                 </div>
             </el-col>
         </el-row>
-        <AddOrEdit v-model="visible" :data="rowData"></AddOrEdit>
+        <AddOrEdit v-model="visible" :data="rowData" @on-submit="initData()"></AddOrEdit>
     </div>
 </template>
 <script setup lang="ts">
@@ -127,11 +128,6 @@ const reset = () => {
     }
     initData()
 }
-watch (visible, (val) => {
-    if (!val) {
-        initData()
-    }
-})
 initData()
 const onAdd = (row?:any) => {
     rowData.value = row || {}

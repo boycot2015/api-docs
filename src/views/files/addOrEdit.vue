@@ -1,16 +1,16 @@
 <template>
     <el-dialog
-    width="460"
+    width="520"
     :title="`${form.id?'编辑':'新增'}文件`"
     centered
-    top="20vh"
+    top="10vh"
     :lock-scroll="true"
     :append-to-body="true"
     :model-value="modelValue"
     @close="onClose">
         <el-form class="web-setting-form" ref="formRef" :model="form" label-width="120px" :rules="rules">
             <el-form-item label="" prop="icon" label-width="0px">
-                <div class="tc flexbox-h align-c just-c" style="width:100%;height: 240px;padding: 10px;border:1px dashed #ccc;overflow: hidden;">
+                <div class="tc flexbox-h align-c just-c" style="width:100%;height: 160px;padding: 10px;border:1px dashed #ccc;overflow: hidden;">
                     <Image fit="cover" :src="form.origionUrl" lazy></Image>
                 </div>
             </el-form-item>
@@ -18,7 +18,7 @@
                 <el-input placeholder="文件名称" v-model="form.name"></el-input>
             </el-form-item>
             <el-form-item label="文件地址" prop="url">
-                <el-input placeholder="文件地址, 如：http/https://xxx.com" v-model="form.url"></el-input>
+                <el-input type="textarea" :rows="5" placeholder="文件地址, 如：http/https://xxx.com" v-model="form.url"></el-input>
             </el-form-item>
         </el-form>
         <div class="el-dialog__footer">
@@ -30,12 +30,8 @@
 <script lang="ts" setup>
 import { ElMessage, ElMessageBox, type FormInstance, type FormRules } from 'element-plus'
 import { useAppConfigStore } from '@/stores/app'
-import Loading from '@/hooks/loading'
-import storage from '@/utils/storage'
 import { apiUrl } from '@/api/baseUrl'
 import http from '@/api/request'
-const { appConfig, setAppConfig } = useAppConfigStore()
-const apiList = computed(() => appConfig.apiList)
 const props = defineProps({
     modelValue: {
         type: Boolean,
@@ -46,7 +42,7 @@ const props = defineProps({
     }
 })
 const formRef = ref<FormInstance>()
-const emits = defineEmits(['update:modelValue'])
+const emits = defineEmits(['update:modelValue', 'onSubmit'])
 const rules = reactive<FormRules>({
     name: [{ required: true, message: '文件名称不能为空' }],
     url: [{ required: true, message: '文件地址不能为空' }]
@@ -82,7 +78,7 @@ const onSubmit = () => {
             http.post(apiUrl + '/files/update', { id:form.value.id, name: config.name, url: config.url }).then((res: any) => {
             if (res.success) {
                 ElMessage.success('操作成功')
-                Loading().close()
+                emits('onSubmit', config)
                 onClose()
             }
         })
