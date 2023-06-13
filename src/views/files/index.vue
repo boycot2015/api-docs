@@ -161,9 +161,6 @@ const handleCurrentChange = (val: number) => {
     currentPage.value = val
     initData()
 }
-onMounted(() => {
-    loading.value = false
-})
 
 
 const handleSuccess: UploadProps['onSuccess'] = (response: any, uploadFile, uploadFiles) => {
