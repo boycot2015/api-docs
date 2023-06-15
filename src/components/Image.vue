@@ -25,7 +25,7 @@
         </template>
     </el-image>
 </template>
-<script setup>
+<script setup lang="tsx">
 import { Picture as IconPicture, Loading as IconLoading } from '@element-plus/icons-vue'
 const props = defineProps(['fit', 'src', 'alt', 'scroll-container', 'previewList', 'z-index', 'initial-index', 'compress'])
 </script>

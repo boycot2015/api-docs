@@ -17,8 +17,8 @@ case 'development':
     // prefix = '/mallAdminDev'
     baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'
-    // apiUrl = 'http://119.29.254.62:8090/api'
-    apiUrl = 'http://127.0.0.1:8090/api'
+    apiUrl = 'http://119.29.254.62:8090/api'
+    // apiUrl = 'http://127.0.0.1:8090/api'
     ws = 'http://127.0.0.1:3008'
     break
 case 'dev':
