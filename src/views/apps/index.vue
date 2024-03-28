@@ -75,7 +75,7 @@ const appList = computed<AppProps[]>(() => appConfig.apiList)
 const router = useRouter()
 const loading = ref(true)
 const [ visible, toggleVisible ] = useState(false)
-const [ viewType, toggleViewType ] = useState(1)
+const [ viewType, toggleViewType ] = useState(2)
 const rowData = ref({})
 const pageData:any = computed(() => router.currentRoute.value.meta.pageData)
 const onAdd = (row?:any) => {

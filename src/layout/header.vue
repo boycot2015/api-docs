@@ -45,7 +45,7 @@
     <div class="right" :class="{ 'centered' : !showMenu }">
         <Search style="margin-right: 10px;"></Search>
         <div class="setting" @click="toggleVisible(true)">
-            <el-icon :size="40"><IconifyIcon name="ep:setting" :iconStyle="{ }" /></el-icon>
+            <el-icon :size="20"><IconifyIcon name="ep:setting" :iconStyle="{ }" /></el-icon>
         </div>
         <WebSetting v-model="visible"></WebSetting>
     </div>
@@ -73,6 +73,7 @@
         // flex-wrap: nowrap;
         .title {
             flex-basis: 140px;
+            line-height: 22px;
         }
         i {
             color: var( --vt-c-black);
@@ -108,6 +109,7 @@
         .setting {
             font-size: 26px;
             cursor: pointer;
+            margin-top: 5px;
             line-height: 100%;
             color: var(--vt-c-black);
         }

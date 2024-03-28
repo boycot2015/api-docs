@@ -2,8 +2,14 @@
 import { useAnchorStore } from '@/stores/app'
 import Header from '@/layout/header.vue'
 import Footer from '@/layout/footer.vue'
-import config from '@/config'
+// import config from '@/config'
+import { useAppConfigStore } from '@/stores/app'
 import logo from '@/assets/image/logo.png'
+const { appConfig } = useAppConfigStore()
+const config = ref({ ...appConfig }) as any
+watch(appConfig, (val) => {
+    config.value = val
+})
 const appPageAnchors = useAnchorStore()
 const getCavans = () => {
     let canvas:any = document.getElementById("canvas"),
@@ -124,7 +130,7 @@ onMounted(() => {
         <template #logo>
             <RouterLink class="logo" to="/">
                 <img :src="logo" />
-                {{config.websiteName}}
+                <!-- {{config.websiteName}} -->
             </RouterLink>
         </template>
     </Header></el-header>
@@ -144,6 +150,7 @@ onMounted(() => {
         </div>
         <!--foot_nav部分-->
         <Footer></Footer>
+        <el-backtop style="zIndex: 999;box-shadow: 0 0 30px #999;" :right="70" :bottom="80" />
     </div>
   </div>
 </template>
@@ -164,13 +171,13 @@ onMounted(() => {
     }
     .logo {
         display: flex;
-        flex-basis: 220px;
+        flex-basis: 100px;
         align-items: center;
         justify-content: space-between;
         height: 58px;
         font-weight: bold;
         img {
-            height: 24px;
+            height: 36px;
             margin-right: 16px;
         }
     }

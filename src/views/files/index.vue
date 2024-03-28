@@ -23,7 +23,7 @@
                     </div>
                 </el-form>
             </el-col>
-            <el-col class="btns mb16">
+            <el-col class="btns mb16 tr">
                 <el-button :disabled="!selectList.length" @click="onDelete()">删除</el-button>
             </el-col>
             <el-col>
@@ -31,14 +31,14 @@
                 :data="fileList"
                 @selection-change="(val:any) => selectList = val"
                 v-loading="loading"
-                maxHeight="350px"
+                maxHeight="calc(100vh - 410px)"
                 style="width: 100%;">
                     <el-table-column prop="" type="selection"></el-table-column>
                     <el-table-column
                     label=""
                     width="100px">
                         <template #default="{row}">
-                            <Image :compress="true" :preview-list="fileList.map((el:any) => el.origionUrl)" style="min-width:60px;width: auto;height: 60px;" :src="row.url" lazy></Image>
+                            <Image :compress="true" :preview-list="[row.origionUrl,...fileList.map((el:any) => el.origionUrl)]" style="min-width:60px;width: auto;height: 60px;" :src="row.url" lazy></Image>
                             <!-- <img :src="row.url" alt=""> -->
                         </template>
                     </el-table-column>

@@ -88,7 +88,7 @@ export default [
             showInHeader: true,
             hideInMenu: true,
             affix: true,
-            icon: 'ri:app-store-line'
+            icon: 'ri:image-line'
         },
         component: Layout,
         children: [

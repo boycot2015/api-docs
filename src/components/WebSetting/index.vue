@@ -34,6 +34,7 @@ const appConfig:any = computed(() => useAppConfigStore().appConfig)
 const root:any = document.querySelector(':root')
 const fileList = ref<UploadFile[]>([])
 const form = ref({
+    websiteName: appConfig.value.websiteName,
     primaryColor: appConfig.value.primaryColor || getComputedStyle(root).getPropertyValue('--el-color-primary'),
     showBreadcrumb: appConfig.value.showBreadcrumb,
     logoPosition: appConfig.value.logoPosition,
@@ -247,6 +248,9 @@ html,body {
         <el-form class="web-setting-form" ref="drawerFormRef" :model="form" label-width="110px" :rules="rules">
             <el-tabs v-model="accordion" accordion>
                 <el-tab-pane name="1" label="基础设置">
+                    <el-form-item label="网站名称" :rules="[{required: true, message: '网站名称不能为空'}]" prop="websiteName">
+                        <el-input placeholder="网站名称" maxlength="15" v-model="form.websiteName"></el-input>
+                    </el-form-item>
                     <el-form-item label="主题色" prop="primaryColor" class="color-picker">
                         <el-color-picker style="width: 200px;" v-model="form.primaryColor" @change="() => onColorPickerChange(true)" show-alpha />
                         <span>{{ form.primaryColor }}</span>
