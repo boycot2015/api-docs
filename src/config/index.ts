@@ -42,8 +42,8 @@ export type {
 // #f8711a #2458b3
 export default <AppConfigProps>({
     primaryColor: '#f8711a',
-    websitePrefix: 'yzh_openapi',
-    websiteName: '云中鹤开放平台', // 网站名称
+    websitePrefix: 'boycot_openapi',
+    websiteName: 'boycot开放平台', // 网站名称
     showBreadcrumb: true, // 是否显示面包屑导航 false/true
     logoPosition: 'top', // logo位置 bottom/top
     effect,
@@ -64,18 +64,33 @@ export default <AppConfigProps>({
             target: '_blank'
         },
         links: [{
+            name: '博客系统',
+            href: 'https://www.boycot.top/',
+            target: '_blank'
+        },{
+            name: '博客管理系统',
+            href: 'https://blog-admin.boycot.top/',
+            target: '_blank'
+        },{
+            name: '网抑云音乐',
+            href: 'https://music.boycot.top/',
+            target: '_blank'
+        },{
             name: '云台系统',
             href: 'https://www.user.yunzhonghe.com/',
             target: '_blank'
-        },{
-            name: '积分中台',
-            href: 'https://www.admin-points.haoxiny.com/',
-            target: '_blank'
-        },{
+        },
+        // {
+        //     name: '积分中台',
+        //     href: 'https://www.admin-points.haoxiny.com/',
+        //     target: '_blank'
+        // },
+        {
             name: 'GitLab',
             href: 'http://192.168.1.218:8888/YZH-WEB',
             target: '_blank'
-        },{
+        },
+        {
             name: '云中鹤官网',
             href: 'https://www.yunzhonghe.com/',
             target: '_blank'

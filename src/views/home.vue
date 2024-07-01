@@ -158,16 +158,18 @@ onMounted(() => {
 .home {
     text-align: center;
     width: 100%;
+    min-width: 1200px;
     canvas {
         position: absolute;
         width: 100%;
+        min-width: 1200px;
         top: 0;
         left: 0;
         background-color: var(--vt-c-black-light);
-        height: 300px;
+        height: 400px;
     }
     .container {
-        padding-top: 220px;
+        padding-top: 320px;
     }
     .logo {
         display: flex;

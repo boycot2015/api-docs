@@ -55,7 +55,7 @@ const [form, setForm] = useState({...initFormData([...getCustomParams(pageData.v
 const onSubmit = (formEl: FormInstance | undefined) => {
     if (!formEl) return
     toggleShowParams(true)
-    formEl.validate((valid) => {
+    formEl.validate((valid):void => {
         if (valid) {
             // console.log('submit!')
             let headerParams:any = {}
@@ -140,8 +140,6 @@ const onSubmit = (formEl: FormInstance | undefined) => {
                     state.responseLoading = false
                 })
             }
-        } else {
-            return false
         }
     })
 }

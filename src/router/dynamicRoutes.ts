@@ -28,7 +28,7 @@ const dynamicRoutes = (data:any, parent = baseApiStr) => {
             let route:any = {
                 path: item.path,
                 name: item.name,
-                component: () => import( /* @vite-ignore */ `@/views/${baseApiStr}/index.vue`),
+                component: () => import(`@/views/${baseApiStr}/index.vue`),
                 meta: {
                     parent,
                     ...item.meta,
@@ -62,9 +62,8 @@ const fetchRouteData = (to:any, from:any, next: any) => {
             apiUrl = storage.getItem('websiteConfig').apiUrl || ''
         }
         const handleRoutes = (res: { data: any; }, dyRoutes: any[]) => {
-            const { tags, paths, definitions, host, info, basePath } = (res.data  || res) as any
+            let { tags, paths, definitions, host, info, basePath } = (res.data  || res) as any
             // console.log((res.data  || res), '(res.data  || res)');
-            
             const getParameters = (obj:any) => {
                 if (!obj || obj === null) return {}
                 for (const k in obj) {
@@ -100,6 +99,16 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                     }
                 }
                 return obj
+            }
+            if (tags && !tags.length) {
+                // if (tags && !tags.length) {
+                // tags = [{ name: '开发文档' }]
+                // }
+                for (const key in paths) {
+                    tags.push(paths[key].post?.tags[0] || paths[key].get?.tags[0])
+                }
+                tags = [...tags]
+                tags = tags.map((el:any) => ({ name: el }))
             }
             tags?.map((el:any, index: number) => {
                 let route:any = {
@@ -155,7 +164,8 @@ const fetchRouteData = (to:any, from:any, next: any) => {
             return dyRoutes
         }
         if (!apiUrl.includes('.json')) apiUrl += '/v2/api-docs'
-        if (import.meta.hot) {
+        
+        if (import.meta.hot && !apiUrl.includes('.json')) {
             import.meta.hot.send('getRoutes', { url: apiUrl })
             import.meta.hot.on('getRoutes', (res) => {
                 if (res) {
@@ -170,6 +180,7 @@ const fetchRouteData = (to:any, from:any, next: any) => {
             axios.get(apiUrl, { params: { url: apiUrl } }).then((res:any) => {
                 if (res) {
                     let routes = handleRoutes(res, dyRoutes)
+                    console.log(res, routes, 'apiUrl');
                     dynamicRoutes(routes)
                     resolve(routes)
                 } else {

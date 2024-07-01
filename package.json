@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "run-p type-check build-only",
     "test": "set NODE_ENV='test' && npm run build",
     "show": "set NODE_ENV='show' && npm run build",

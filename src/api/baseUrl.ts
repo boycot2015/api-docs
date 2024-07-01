@@ -11,42 +11,42 @@ let env = process.env.NODE_ENV === 'development'
                 ? 'test' : 'production'
 switch (env) {
 case 'development':
-    // prefix = `http://121.41.51.167:10001` // dev环境url
-    prefix = `http://api.boycot.top/swagger.json` // dev环境url
+    prefix = `http://api.boycot.top/swagger.json`
+    // prefix = `http://api.boycot.top` // dev环境url
     // prefix = '/openApi'
     // prefix = '/mallAdminDev'
     baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'
-    apiUrl = 'http://43.138.211.108:8090/api'
+    apiUrl = 'http://api.boycot.top/api'
     // apiUrl = 'http://127.0.0.1:8090/api'
     ws = 'http://127.0.0.1:3008'
     break
 case 'dev':
-    prefix = 'http://121.41.51.167:10001'
+    prefix = 'http://api.boycot.top'
     baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'
-    apiUrl = 'http://43.138.211.108:8090/api'
+    apiUrl = 'http://api.boycot.top/api'
     ws = 'http://127.0.0.1:3008'
     break
 case 'test':
-    prefix = 'http://121.41.51.167:10001'
+    prefix = 'http://api.boycot.top'
     baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'
-    apiUrl = 'http://43.138.211.108:8090/api'
+    apiUrl = 'http://api.boycot.top/api'
     ws = 'http://127.0.0.1'
     break
 case 'show':
-    prefix = 'http://121.41.51.167:10001'
+    prefix = 'http://api.boycot.top'
     baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'
-    apiUrl = 'http://43.138.211.108:8090/api'
+    apiUrl = 'http://api.boycot.top/api'
     ws = 'http://127.0.0.1'
     break
 case 'production':
-    prefix = 'http://121.41.51.167:10001'
+    prefix = 'http://api.boycot.top'
     baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'
-    apiUrl = 'http://43.138.211.108:8090/api'
+    apiUrl = 'http://api.boycot.top/api'
     ws = 'http://127.0.0.1'
     break
 }

@@ -86,6 +86,7 @@ export const proxyPlugin = () => ({
                                 const data = JSON.parse(Buffer.concat(list).toString());
                                 client.send('getRoutes', data)
                             } catch (error) {
+                                console.error(error, list, 'getRoutes')
                                 client.send('getRoutes', {})
                             }
                         })

@@ -17,6 +17,7 @@ const base = '/'
 export default defineConfig({
     server: {
         port: 3008,
+        // https: true,
         proxy
     },
     base,
@@ -143,9 +144,9 @@ export default defineConfig({
         }
     },
     preview: {
-        port: 80, // 指定预览服务器端口
+        port: 3380, // 指定预览服务器端口
         strictPort: true, // 若端口已被占用则会直接退出
-        https: true, // 启用 TLS + HTTP/2
+        // https: true, // 启用 TLS + HTTP/2
         open: true, // 启动时自动在浏览器中打开应用程序
         proxy,
         cors: true, // 配置 CORS

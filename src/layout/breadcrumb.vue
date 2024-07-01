@@ -1,5 +1,5 @@
 <template>
-  <el-breadcrumb :separator-icon="separatorIcon">
+  <el-breadcrumb>
     <el-breadcrumb-item v-for="(route, index) in activeRoutes"
     :key="route.path + index">{{route.meta.title}}</el-breadcrumb-item>
   </el-breadcrumb>
@@ -20,5 +20,6 @@ const router = useRouter()
 const activeRoutes = computed(() => {
    return router.currentRoute.value.matched.filter((el:any) => !el.meta.hideChildren)
 })
-const separatorIcon = <el-icon ><Icon icon="ep:arrow-right" /></el-icon>
+// const separatorIcon = '>'
+// const separatorIcon:any = <el-icon ><Icon icon="ep:arrow-right" /></el-icon>
 </script>
