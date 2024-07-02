@@ -25,28 +25,28 @@ case 'dev':
     prefix = 'http://api.boycot.top'
     baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'
-    apiUrl = 'http://api.boycot.top/api'
+    apiUrl = '/boycot-api'
     ws = 'http://127.0.0.1:3008'
     break
 case 'test':
     prefix = 'http://api.boycot.top'
     baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'
-    apiUrl = 'http://api.boycot.top/api'
+    apiUrl = '/boycot-api'
     ws = 'http://127.0.0.1'
     break
 case 'show':
     prefix = 'http://api.boycot.top'
     baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'
-    apiUrl = 'http://api.boycot.top/api'
+    apiUrl = '/boycot-api'
     ws = 'http://127.0.0.1'
     break
 case 'production':
     prefix = 'http://api.boycot.top'
     baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'
-    apiUrl = 'http://api.boycot.top/api'
+    apiUrl = '/boycot-api'
     ws = 'http://127.0.0.1'
     break
 }

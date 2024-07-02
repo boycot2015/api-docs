@@ -53,7 +53,7 @@ export class Request {
     this.instance.interceptors.response.use(
       (res: AxiosResponse) => {
         npClose()
-        loading.close()
+        loading && loading.close()
         // 直接返回res，当然你也可以只返回res.data
         // 系统如果有自定义code也可以在这里处理
         return res.data;
@@ -62,7 +62,7 @@ export class Request {
         // 这里用来处理http常见错误，进行全局提示
         let message = "";
         npClose()
-        loading.close()
+        loading && loading.close()
         switch (err.response.status) {
           case 400:
             message = "请求错误(400)";
