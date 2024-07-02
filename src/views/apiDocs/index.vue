@@ -28,16 +28,15 @@ onMounted(() => {
         <el-col><ApiParameters /></el-col>
         <el-col><ApiResponse /></el-col>
     </el-row>
-    <!-- <ApiDesc></ApiDesc>
-    <ApiParameters></ApiParameters>
-    <ApiResponse></ApiResponse> -->
   </div>
 </template>
 <style lang="scss">
 .api-docs {
     padding: 30px 0;
     z-index: 2;
-    max-width: 100%;
+    min-width: 300px;
+    margin: 0 auto;
+    max-width: var(--layout-max-width);
     .title {
         font-size: 32px;
         // font-weight: bold;

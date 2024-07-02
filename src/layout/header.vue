@@ -1,5 +1,5 @@
 <template>
-<div class="header" :style="{maxWidth: showMenu ? '1200px': '1150px'}">
+<div class="header" :style="{maxWidth: showMenu ? 'var(--layout-max-width)': '1100px'}">
     <slot name="logo">
         <!-- :class="{'is-collapse': collapse.isCollapse }" -->
         <div class="logo" v-if="appConfig.logoPosition === 'top' && showMenu">
@@ -56,7 +56,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    max-width: 1200px;
+    max-width: var(--layout-max-width);
     margin: 0 auto;
     height: 58px;
     background-image: radial-gradient(transparent 1px,var(--bg-color) 1px);

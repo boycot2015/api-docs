@@ -107,7 +107,7 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                 for (const key in paths) {
                     tags.push(paths[key].post?.tags[0] || paths[key].get?.tags[0])
                 }
-                tags = [...tags]
+                tags = [...new Set(tags)]
                 tags = tags.map((el:any) => ({ name: el }))
             }
             tags?.map((el:any, index: number) => {
@@ -137,7 +137,7 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                         })
                     }
                 }
-                route.name = route.meta.pageData[0]?.url.split('/').join('') || ''
+                route.name = route.meta.pageData[0]?.url.split('/').filter((el:string) => el !== baseApiStr).join('') || ''
                 route.path += route.name || ''
                 route.meta.showInHeader = false
                 route.meta.hideInMenu = route.path === `/${baseApiStr}/`
@@ -145,7 +145,8 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                 if (route.meta.pageData.length >= 1) {
                     route.meta.showInHeader = route.meta.pageData.length > 1 && route.meta.pageData.length < 15
                     route.children = route.meta.pageData.map((val:any, idx: number) => {
-                        let path:string = `/${baseApiStr}/` + (route.name + (val.url ? '/' + val.url.split('/').join('') : ''))
+                        // let path:string = `/${baseApiStr}/` + (route.name + (val.url ? '/' + val.url.split('/').join('') : ''))
+                        let path:string = `/${baseApiStr}/` + (val.url ? val.url.split('/').join('') : route.name)
                         return {
                             path,
                             name: baseApiStr + val.url?.split('/').join('') || '',
@@ -163,9 +164,10 @@ const fetchRouteData = (to:any, from:any, next: any) => {
             })
             return dyRoutes
         }
-        if (!apiUrl.includes('.json')) apiUrl += '/v2/api-docs'
+        let excludeExtends = ['.json']
+        if (!excludeExtends.find(el => apiUrl.includes(el))) apiUrl += '/v2/api-docs'
         
-        if (import.meta.hot && !apiUrl.includes('.json')) {
+        if (import.meta.hot && !excludeExtends.find(el => apiUrl.includes(el))) {
             import.meta.hot.send('getRoutes', { url: apiUrl })
             import.meta.hot.on('getRoutes', (res) => {
                 if (res) {
@@ -180,7 +182,6 @@ const fetchRouteData = (to:any, from:any, next: any) => {
             axios.get(apiUrl, { params: { url: apiUrl } }).then((res:any) => {
                 if (res) {
                     let routes = handleRoutes(res, dyRoutes)
-                    console.log(res, routes, 'apiUrl');
                     dynamicRoutes(routes)
                     resolve(routes)
                 } else {

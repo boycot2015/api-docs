@@ -105,6 +105,7 @@ export const proxyPlugin = () => ({
                     try {
                         client.send('getDataByApiUrl', JSON.parse(res))
                     } catch (error) {
+                        console.error(error, res, 'getRoutes')
                         client.send('getDataByApiUrl', {})
                     }
                 })

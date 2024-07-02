@@ -113,17 +113,19 @@ onMounted(() => {
     transition: width .3s;
     z-index: 2;
     background-color: var(--vt-c-white);
+    border-radius: var(--border-radius);
 }
 .el-aside {
     overflow: hidden;
     overflow-y: auto;
-    height: calc(100vh - 58px);
+    // height: calc(100vh - 58px);
     box-shadow: 0 0 15px var(--vt-c-ccc);
 }
 .el-container {
+    flex: auto;
     background-color: var(--vt-c-white-soft);
     .el-container {
-        max-width: 1200px;
+        max-width: var(--layout-max-width);
         margin: 0 auto;
     }
 }
@@ -140,7 +142,7 @@ onMounted(() => {
         padding: var(--section-padding);
         background-color: var(--vt-c-white);
         // max-width: calc(100vw - 220px);
-        // max-width: 1200px;
+        // max-width: var(--layout-max-width);
         // min-width: 800px;
         display: flex;
         // overflow: hidden;

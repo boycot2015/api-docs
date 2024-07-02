@@ -8,8 +8,8 @@ import { getParams, arr2obj, getCustomParams } from '../tools'
 import http from '@/api/request'
 import { useAppConfigStore } from '@/stores/app'
 import useState from '@/hooks/useState'
-const appConfigStore = useAppConfigStore()
 
+const appConfigStore = useAppConfigStore()
 const router = useRouter()
 const loading = ref(false)
 const [ showParams, toggleShowParams ] = useState(true)
@@ -35,8 +35,9 @@ let state = reactive({
     outData: getParams(pageData.value.data?.responses[200]?.schema?.$ref || []),
     name: pageData.value.name
 })
+
 const initFormData = (arr:any) => {
-    let form:FormProps = {}    
+    let form:FormProps = {}
     let bodyParams = state.method === 'post' ? {}: arr2obj(pageData.value.method, arr.filter((el:any) => el.in === 'query'), 'children')
     arr.map((el:ColumnProps) => {
         if (el.in === 'body') {
@@ -54,7 +55,7 @@ const [form, setForm] = useState({...initFormData([...getCustomParams(pageData.v
 
 const onSubmit = (formEl: FormInstance | undefined) => {
     if (!formEl) return
-    toggleShowParams(true)
+    toggleShowParams(false)
     formEl.validate((valid):void => {
         if (valid) {
             // console.log('submit!')
@@ -93,53 +94,55 @@ const onSubmit = (formEl: FormInstance | undefined) => {
                 delete params.data
             }
             state.responseLoading = true
-            if (import.meta.hot) {
-                import.meta.hot.send('getDataByApiUrl', params)
-                import.meta.hot.on('getDataByApiUrl', (res) => {
-                    if (res) {
-                        setResponses(JSONStringify(res))
-                        setForm({
-                            ...form.value,
-                            Timestamp: new Date().toLocaleString().replace(/\//g, '-'),
-                            ['Random-Code']: Math.floor(Math.random() * 100000) + ''
-                        })
-                    } else {
-                        try {
-                            setResponses(JSONStringify(res || {}))
-                        } catch (error) {
-                            setResponses(error)
-                        }
-                        setForm({
-                            ...form.value,
-                            Timestamp: new Date().toLocaleString().replace(/\//g, '-'),
-                            ['Random-Code']: Math.floor(Math.random() * 100000) + ''
-                        })
-                    }
-                    state.responseLoading = false
+            // if (import.meta.hot) {
+            //     import.meta.hot.send('getDataByApiUrl', params)
+            //     import.meta.hot.on('getDataByApiUrl', (res) => {
+            //         if (res) {
+            //             setResponses(JSONStringify(res))
+            //             setForm({
+            //                 ...form.value,
+            //                 Timestamp: new Date().toLocaleString().replace(/\//g, '-'),
+            //                 ['Random-Code']: Math.floor(Math.random() * 100000) + ''
+            //             })
+            //         } else {
+            //             try {
+            //                 setResponses(JSONStringify(res || {}))
+            //             } catch (error) {
+            //                 setResponses(error)
+            //             }
+            //             setForm({
+            //                 ...form.value,
+            //                 Timestamp: new Date().toLocaleString().replace(/\//g, '-'),
+            //                 ['Random-Code']: Math.floor(Math.random() * 100000) + ''
+            //             })
+            //         }
+            //         state.responseLoading = false
+            //     })
+            //     return
+            // }
+            http.request(params).then((res:any) => {
+                setResponses(JSONStringify(res))
+                setForm({
+                    ...form.value,
+                    Timestamp: new Date().toLocaleString().replace(/\//g, '-'),
+                    ['Random-Code']: Math.floor(Math.random() * 100000) + ''
                 })
-            } else {
-                http.request(params).then((res:any) => {
-                    setResponses(JSONStringify(res))
-                    setForm({
-                        ...form.value,
-                        Timestamp: new Date().toLocaleString().replace(/\//g, '-'),
-                        ['Random-Code']: Math.floor(Math.random() * 100000) + ''
-                    })
-                    state.responseLoading = false
-                }).catch((err:any) => {
-                    try {
-                        setResponses(JSONStringify(err))
-                    } catch (error) {
-                        setResponses(error)
-                    }
-                    setForm({
-                        ...form.value,
-                        Timestamp: new Date().toLocaleString().replace(/\//g, '-'),
-                        ['Random-Code']: Math.floor(Math.random() * 100000) + ''
-                    })
-                    state.responseLoading = false
+                toggleShowParams(true)
+                state.responseLoading = false
+            }).catch((err:any) => {
+                try {
+                    setResponses(JSONStringify(err))
+                } catch (error) {
+                    setResponses(error)
+                }
+                setForm({
+                    ...form.value,
+                    Timestamp: new Date().toLocaleString().replace(/\//g, '-'),
+                    ['Random-Code']: Math.floor(Math.random() * 100000) + ''
                 })
-            }
+                toggleShowParams(true)
+                state.responseLoading = false
+            })
         }
     })
 }
@@ -150,6 +153,10 @@ const onReset = (formEl: FormInstance | undefined) => {
         ...initFormData(state.inData)
     })
     setResponses(arr2obj(pageData.value.method, pageData.value.data?.responses[200]?.schema?.$ref || []))
+    toggleShowParams(false)
+    nextTick(() => {
+        toggleShowParams(true)
+    })
 }
 const delParams = (item:any, index:number) => {
     state.inData = state.inData.filter((el: any) => item.name !== el.name)
@@ -236,9 +243,9 @@ watch(pageData, (val) => {
             </el-form-item>
         </el-form>
         <div class="name">响应数据</div>
-        <div v-highlight class="code" v-show="showParams" v-loading="state.responseLoading">
+        <div v-highlight class="code" v-if="showParams" v-loading="state.responseLoading">
             <span class="copy" @click="onCopy">json 复制代码</span>
-            <pre><code class="JSON"> {{ responses }}</code></pre>
+            <pre><code class="JSON">{{ responses }}</code></pre>
         </div>
     </div>
   </div>

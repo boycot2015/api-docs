@@ -158,11 +158,11 @@ onMounted(() => {
 .home {
     text-align: center;
     width: 100%;
-    min-width: 1200px;
+    min-width: var(--layout-max-width);
     canvas {
         position: absolute;
         width: 100%;
-        min-width: 1200px;
+        min-width: var(--layout-max-width);
         top: 0;
         left: 0;
         background-color: var(--vt-c-black-light);
@@ -209,7 +209,7 @@ onMounted(() => {
     margin: 0 auto;
 }
 .process > ul {
-  width: 1200px;
+  width: var(--layout-max-width);
   margin-top: 50px;
   font-size: 0;
 }
