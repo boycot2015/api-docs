@@ -42,8 +42,8 @@ export type {
 // #f8711a #2458b3
 export default <AppConfigProps>({
     primaryColor: '#f8711a',
-    websitePrefix: 'boycot_openapi',
-    websiteName: 'boycot开放平台', // 网站名称
+    websitePrefix: 'openapi',
+    websiteName: '开发者开放平台', // 网站名称
     showBreadcrumb: true, // 是否显示面包屑导航 false/true
     logoPosition: 'top', // logo位置 bottom/top
     effect,
@@ -54,6 +54,20 @@ export default <AppConfigProps>({
         icon: 'fluent:developer-board-16-regular',
         name: '开发文档',
         url: baseUrl
+    },
+    {
+        id: 2,
+        replace: false,
+        icon: 'fluent:developer-board-16-regular',
+        name: 'BLOG文档',
+        url: 'http://blog-api.boycot.top'
+    },
+    {
+        id: 3,
+        replace: false,
+        icon: 'fluent:developer-board-16-regular',
+        name: 'B2C开发文档',
+        url: 'http://192.168.1.225:5101'
     }],
     currentEffect: -1,
     footer: {

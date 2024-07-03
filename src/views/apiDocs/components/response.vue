@@ -78,6 +78,7 @@ const onSubmit = (formEl: FormInstance | undefined) => {
             try {
                 params.data = {
                     ...JSONParse(form.value.bodyParams || '{}'),
+                    url: params.url,
                     loading: true
                 }
             } catch (error) {
@@ -94,32 +95,33 @@ const onSubmit = (formEl: FormInstance | undefined) => {
                 delete params.data
             }
             state.responseLoading = true
-            // if (import.meta.hot) {
-            //     import.meta.hot.send('getDataByApiUrl', params)
-            //     import.meta.hot.on('getDataByApiUrl', (res) => {
-            //         if (res) {
-            //             setResponses(JSONStringify(res))
-            //             setForm({
-            //                 ...form.value,
-            //                 Timestamp: new Date().toLocaleString().replace(/\//g, '-'),
-            //                 ['Random-Code']: Math.floor(Math.random() * 100000) + ''
-            //             })
-            //         } else {
-            //             try {
-            //                 setResponses(JSONStringify(res || {}))
-            //             } catch (error) {
-            //                 setResponses(error)
-            //             }
-            //             setForm({
-            //                 ...form.value,
-            //                 Timestamp: new Date().toLocaleString().replace(/\//g, '-'),
-            //                 ['Random-Code']: Math.floor(Math.random() * 100000) + ''
-            //             })
-            //         }
-            //         state.responseLoading = false
-            //     })
-            //     return
-            // }
+            if (import.meta.hot) {
+                import.meta.hot.send('getDataByApiUrl', params)
+                import.meta.hot.on('getDataByApiUrl', (res) => {
+                    if (res) {
+                        setResponses(JSONStringify(res))
+                        setForm({
+                            ...form.value,
+                            Timestamp: new Date().toLocaleString().replace(/\//g, '-'),
+                            ['Random-Code']: Math.floor(Math.random() * 100000) + ''
+                        })
+                    } else {
+                        try {
+                            setResponses(JSONStringify(res || {}))
+                        } catch (error) {
+                            setResponses(error)
+                        }
+                        setForm({
+                            ...form.value,
+                            Timestamp: new Date().toLocaleString().replace(/\//g, '-'),
+                            ['Random-Code']: Math.floor(Math.random() * 100000) + ''
+                        })
+                    }
+                    toggleShowParams(true)
+                    state.responseLoading = false
+                })
+                return
+            }
             http.request(params).then((res:any) => {
                 setResponses(JSONStringify(res))
                 setForm({

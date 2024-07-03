@@ -115,7 +115,7 @@ export const copyToClipboard = (textToCopy:string) => {
     }
 }
 export const getDynamicIcon = (name:string) => {
-    if (!name) return 'ep:menu'
+    if (!name) return 'ant-design:appstore-outlined'
     let icons = [{ name: 'goods',icon: 'ep:goods'},
     { name: 'address', icon: 'mdi:address-marker-outline' },
     { name: 'order', icon: 'icon-park-outline:transaction-order' },
@@ -125,6 +125,10 @@ export const getDynamicIcon = (name:string) => {
     { name: 'excel', icon: 'uiw:file-excel' },
     { name: 'stock', icon: 'mdi:warehouse' },
     { name: 'warehouse', icon: 'mdi:warehouse' },
+    { name: 'news', icon: 'ri:newspaper-line' },
+    { name: 'wallpaper', icon: 'material-symbols:imagesmode-outline' },
+    { name: 'upload', icon: 'flowbite:folder-duplicate-outline' },
+    { name: 'file', icon: 'flowbite:folder-duplicate-outline' },
     { name: 'user', icon: 'ph:user' },
     { name: 'redpacket', icon: 'mingcute:red-packet-line' },
     { name: 'address', icon: 'mdi:address-marker-outline' },

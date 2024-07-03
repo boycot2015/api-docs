@@ -58,7 +58,7 @@
     justify-content: space-between;
     max-width: var(--layout-max-width);
     margin: 0 auto;
-    height: 58px;
+    height: 56px;
     background-image: radial-gradient(transparent 1px,var(--bg-color) 1px);
     background-size: 4px 4px;
     backdrop-filter: saturate(50%) blur(4px);

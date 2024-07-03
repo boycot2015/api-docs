@@ -130,7 +130,7 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                             url: key,
                             basePath,
                             component: baseApiStr,
-                            name: data.summary?.replace(/[`~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘'，。、]/g, '') || data.description,
+                            name: data.summary?.replace(/[`~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~@#￥%……&*（）——\-+={}|《》：【】、；'、]/g, '') || data.description,
                             host,
                             info,
                             method: paths[key].post ? 'post' : 'get'
@@ -166,7 +166,6 @@ const fetchRouteData = (to:any, from:any, next: any) => {
         }
         let excludeExtends = ['.json']
         if (!excludeExtends.find(el => apiUrl.includes(el))) apiUrl += '/v2/api-docs'
-        
         if (import.meta.hot && !excludeExtends.find(el => apiUrl.includes(el))) {
             import.meta.hot.send('getRoutes', { url: apiUrl })
             import.meta.hot.on('getRoutes', (res) => {

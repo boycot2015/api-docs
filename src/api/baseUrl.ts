@@ -12,7 +12,7 @@ let env = process.env.NODE_ENV === 'development'
 switch (env) {
 case 'development':
     prefix = `http://api.boycot.top/swagger.json`
-    // prefix = `http://api.boycot.top` // dev环境url
+    // prefix = `https://api.boycot.top` // dev环境url
     // prefix = '/openApi'
     // prefix = '/mallAdminDev'
     baseUrl = prefix
@@ -22,31 +22,31 @@ case 'development':
     ws = 'http://127.0.0.1:3008'
     break
 case 'dev':
-    prefix = 'http://api.boycot.top'
+    prefix = `https://api.boycot.top/swagger.json`
     baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'
-    apiUrl = '/boycot-api'
+    apiUrl = 'https://api.boycot.top/api'
     ws = 'http://127.0.0.1:3008'
     break
 case 'test':
-    prefix = 'http://api.boycot.top'
+    prefix = `https://api.boycot.top/swagger.json`
     baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'
-    apiUrl = '/boycot-api'
+    apiUrl = 'https://api.boycot.top/api'
     ws = 'http://127.0.0.1'
     break
 case 'show':
-    prefix = 'http://api.boycot.top'
+    prefix = `https://api.boycot.top/swagger.json`
     baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'
-    apiUrl = '/boycot-api'
+    apiUrl = 'https://api.boycot.top/api'
     ws = 'http://127.0.0.1'
     break
 case 'production':
-    prefix = 'http://api.boycot.top'
+    prefix = `https://api.boycot.top/swagger.json`
     baseUrl = prefix
     loginUrl = prefix + '/api/login/authskip'
-    apiUrl = '/boycot-api'
+    apiUrl = 'https://api.boycot.top/api'
     ws = 'http://127.0.0.1'
     break
 }

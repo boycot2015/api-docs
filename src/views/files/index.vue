@@ -38,7 +38,7 @@
                     label=""
                     width="100px">
                         <template #default="{row}">
-                            <Image :compress="true" :preview-list="[row.origionUrl,...fileList.map((el:any) => el.origionUrl)]" style="min-width:60px;width: auto;height: 60px;" :src="row.url" lazy></Image>
+                            <Image :compress="true" :preview-list="[row.origionUrl,...fileList.map((el:any) => el.origionUrl)]" style="min-width:60px;width: auto;height: 60px;" fit="contain" :src="row.url" lazy></Image>
                             <!-- <img :src="row.url" alt=""> -->
                         </template>
                     </el-table-column>

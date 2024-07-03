@@ -16,7 +16,7 @@
                 <el-input placeholder="IconifyIcon, 示例: ep:menu" v-model="form.icon"></el-input>
             </el-form-item>
             <el-form-item label="项目地址" prop="url">
-                <el-input placeholder="项目地址, 如：http/https://xxx.com" v-model="form.url"></el-input>
+                <el-input placeholder="项目地址, 如：https://xxx.com，仅支持https协议" v-model="form.url"></el-input>
             </el-form-item>
             <el-form-item label="替换为当前项目" prop="replace">
                 <el-radio-group v-model="form.replace">

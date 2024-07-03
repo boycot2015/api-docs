@@ -8,6 +8,14 @@
             "source": "/boycot-api/(.*)",  
             "destination": "/api/proxy"
         },
+        {
+            "source": "/v2/api-docs/(.*)",  
+            "destination": "/api/proxy"
+        },
+        {
+            "source": "/swagger.json",
+            "destination": "/api/proxy"
+        },
         { "source": "/:path*", "destination": "/index.html" }
     ]
 }
