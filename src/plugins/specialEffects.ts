@@ -65,11 +65,11 @@ const clickText = (textArr:any) => {
         var a_idx = 0;
         window.onclick = function (event) {
             var arr = textArr || [
-                'Nodejs', 'html', 'css',
-                'javascript', 'Vue', 'React',
-                'uni-app', 'Tarojs','micro-app',
-                'pinia', 'Koa.js','Express', 'SSR',
-                'unity 3D', 'Tree.js', 'Nuxt', 'Next'
+                'Nodejs', 'html', 'css', 'Vercel',
+                'javascript', 'Vue', 'React', 'uni-app', 'Ghat GPT', 'Ghat GPT-3.5',
+                'uni-app', 'Tarojs','micro-app', 'minio', 'MongoDB', 'MySQL',
+                'pinia', 'Koa.js','Express', 'SSR', 'Vite', 'webpack', 'rollup',
+                'unity 3D', 'Tree.js', 'Nuxt', 'Next', 'Nest', 'Github', 'Gitlab', 'Gitee'
             ];
 
             var heart:any = document.createElement("b"); //创建b元素

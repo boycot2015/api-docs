@@ -4,7 +4,7 @@ import Header from '@/layout/header.vue'
 import Footer from '@/layout/footer.vue'
 // import config from '@/config'
 import { useAppConfigStore } from '@/stores/app'
-import logo from '@/assets/image/logo.png'
+import logo from '@/assets/logo.svg'
 const { appConfig } = useAppConfigStore()
 const config = ref({ ...appConfig }) as any
 watch(appConfig, (val) => {

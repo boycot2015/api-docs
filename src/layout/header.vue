@@ -121,7 +121,7 @@ import { useRouter } from 'vue-router'
 import { useCollapseStore, useRouteStore, useAppConfigStore } from '@/stores/app'
 import useState from '@/hooks/useState'
 import type { RouteProps } from '@/router'
-import logo from '@/assets/image/logo.png'
+import logo from '@/assets/logo.svg'
 import { getMenuTitleStr } from '@/utils' 
 const [ visible, toggleVisible ] = useState(false)
 let routeStore = useRouteStore()

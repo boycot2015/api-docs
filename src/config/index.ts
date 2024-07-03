@@ -39,9 +39,9 @@ export type {
     effectProps,
     AppConfigProps
 }
-// #f8711a #2458b3
+// #f8711a #2458b3 #646cff
 export default <AppConfigProps>({
-    primaryColor: '#f8711a',
+    primaryColor: '#646cff',
     websitePrefix: 'openapi',
     websiteName: '开发者开放平台', // 网站名称
     showBreadcrumb: true, // 是否显示面包屑导航 false/true
@@ -71,9 +71,9 @@ export default <AppConfigProps>({
     }],
     currentEffect: -1,
     footer: {
-        copyright: '2001-2023 云中鹤版权所有',
+        copyright: '2016-2024 boycot版权所有',
         beian: {
-            name: '粤ICP备16107141号',
+            name: '粤ICP备18002072号',
             href: 'https://beian.miit.gov.cn/',
             target: '_blank'
         },
@@ -89,26 +89,28 @@ export default <AppConfigProps>({
             name: '网抑云音乐',
             href: 'https://music.boycot.top/',
             target: '_blank'
-        },{
-            name: '云台系统',
-            href: 'https://www.user.yunzhonghe.com/',
-            target: '_blank'
         },
         // {
+        //     name: '云台系统',
+        //     href: 'https://user.yunzhonghe.com/',
+        //     target: '_blank'
+        // }
+        // {
         //     name: '积分中台',
-        //     href: 'https://www.admin-points.haoxiny.com/',
+        //     href: 'https://admin-points.haoxiny.com/',
         //     target: '_blank'
         // },
-        {
-            name: 'GitLab',
-            href: 'http://192.168.1.218:8888/YZH-WEB',
-            target: '_blank'
-        },
-        {
-            name: '云中鹤官网',
-            href: 'https://www.yunzhonghe.com/',
-            target: '_blank'
-        }]
+        // {
+        //     name: 'GitLab',
+        //     href: 'http://192.168.1.218:8888/YZH-WEB',
+        //     target: '_blank'
+        // },
+        // {
+        //     name: '云中鹤官网',
+        //     href: 'https://www.yunzhonghe.com/',
+        //     target: '_blank'
+        // }
+    ]
     },
     gitConfig: { // git仓库配置
         owner: 'boycot',

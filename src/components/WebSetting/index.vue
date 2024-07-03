@@ -27,6 +27,23 @@ const rules = reactive<FormRules>({
     apiUrl: [{ required: true, message: 'swagger地址不能为空' }]
 })
 const emits = defineEmits(['update:modelValue'])
+
+const predefineColors = ref([
+  '#ff4500',
+  '#ff8c00',
+  '#ffd700',
+  '#90ee90',
+  '#00ced1',
+  '#1e90ff',
+  '#c71585',
+  'rgba(255, 69, 0, 0.68)',
+  'rgb(255, 120, 0)',
+  'hsv(51, 100, 98)',
+  'hsva(120, 40, 94, 0.5)',
+  'hsl(181, 100%, 37%)',
+  'hsla(209, 100%, 56%, 0.73)',
+  '#c7158577',
+])
 const accordion = ref('1')
 const drawerFormRef = ref<FormInstance|undefined>()
 const { setAppConfig } = useAppConfigStore()
@@ -252,7 +269,7 @@ html,body {
                         <el-input placeholder="网站名称" maxlength="15" v-model="form.websiteName"></el-input>
                     </el-form-item>
                     <el-form-item label="主题色" prop="primaryColor" class="color-picker">
-                        <el-color-picker style="width: 200px;" v-model="form.primaryColor" @change="() => onColorPickerChange(true)" show-alpha />
+                        <el-color-picker style="max-width: 200px;" v-model="form.primaryColor" @change="() => onColorPickerChange(true)" :predefine="predefineColors" show-alpha />
                         <span>{{ form.primaryColor }}</span>
                     </el-form-item>
                     <el-form-item label="特效" prop="currentEffect">
@@ -284,8 +301,8 @@ html,body {
                     <el-form-item label="copyright" :rules="[{required: true, message: 'copyright不能为空'}]" prop="footer.copyright">
                         <el-input placeholder="copyright" v-model="form.footer.copyright"></el-input>
                     </el-form-item>
-                    <el-form-item label="备案信息" :rules="[{required: true, message: '备案链接不能为空'}]" prop="footer.beian.href">
-                        <el-input placeholder="备案链接" v-model="form.footer.beian.href"></el-input>
+                    <el-form-item label="备案信息" :rules="[{required: true, message: '备案信息不能为空'}]" prop="footer.beian.name">
+                        <el-input placeholder="备案信息" v-model="form.footer.beian.name"></el-input>
                     </el-form-item>
                     <el-form-item label="显示导航" prop="showBreadcrumb">
                         <el-switch v-model="form.showBreadcrumb"></el-switch>
