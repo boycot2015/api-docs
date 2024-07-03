@@ -77,8 +77,8 @@ const onSubmit = (formEl: FormInstance | undefined) => {
             params.url += pageData.value.url
             try {
                 params.data = {
-                    ...JSONParse(form.value.bodyParams || '{}'),
                     url: params.url,
+                    ...JSONParse(form.value.bodyParams || '{}'),
                     loading: true
                 }
             } catch (error) {
