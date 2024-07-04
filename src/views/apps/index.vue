@@ -106,12 +106,12 @@ onMounted(() => {
             background-color: var(--vt-c-white-soft);
             overflow: hidden;
             transition: all .3s;
+            cursor: pointer;
             &:hover {
                 transform: translateY(-5px);
                 box-shadow: 0 5px 20px var(--vt-c-ccc);
             }
             .icon {
-                cursor: pointer;
                 color: #333;
                 padding: 15px;
                 // width: 60px;
