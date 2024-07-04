@@ -6,21 +6,24 @@
                     <el-table-column
                     label="项目名称"
                     prop="name"
-                    ></el-table-column>
+                    >
+                        <template #default="{row}">
+                            {{ row.name }}
+                            <el-tag style="margin-left: 10px;" size="mini" v-if="row.replace">默认</el-tag>
+                        </template>
+                    </el-table-column>
                     <el-table-column
                     label="项目路径"
                     prop="url"
                     ></el-table-column>
                     <el-table-column
                     label="操作"
-                    fixed="right"
                     width="100px"
                     >
-                    <template #default="{row}">
-                        <!-- {{ row }} -->
-                        <el-link style="margin-right: 10px;" @click="onAdd(row)">编辑</el-link>
-                        <el-link @click="onDelete(row)">删除</el-link>
-                    </template>
+                        <template #default="{row}">
+                            <el-link style="margin-right: 10px;" @click="onAdd(row)">编辑</el-link>
+                            <el-link @click="onDelete(row)">删除</el-link>
+                        </template>
                 </el-table-column>
                 </el-table>
             </el-col>
@@ -33,10 +36,9 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { useAppConfigStore } from '@/stores/app'
 import Loading from '@/hooks/loading'
 import useState from '@/hooks/useState'
-import { useRouter } from 'vue-router'
 import AddOrEdit from './addOrEdit.vue'
 const emits = defineEmits(['update:modelValue'])
-const {appConfig, setAppConfig } = useAppConfigStore()
+const { appConfig, setAppConfig } = useAppConfigStore()
 interface AppProps {
     icon: string
     url: string
@@ -44,11 +46,9 @@ interface AppProps {
     replace?:boolean
 }
 const appList = computed<AppProps[]>(() => appConfig.apiList)
-const router = useRouter()
 const loading = ref(true)
 const [ visible, toggleVisible ] = useState(false)
 const rowData = ref({})
-const pageData:any = computed(() => router.currentRoute.value.meta.pageData)
 const onAdd = (row?:any) => {
     rowData.value = row || {}
     toggleVisible(true)
@@ -67,57 +67,12 @@ const onDelete = (row: { id: any }) => {
     }).catch(() => {
     })
 }
-watch(pageData, (val) => {})
 onMounted(() => {
     loading.value = false
 })
 </script>
 <style lang="scss">
 .api-docs-app {
-    // width: calc(100vw - 200px);
     max-width: 100%;
-    .list {
-        // margin-top: 30px;
-        &-item {
-            text-align: center;
-            margin-bottom: 20px;
-            .icon {
-                cursor: pointer;
-                background-color: var(--vt-c-white-soft);
-                color: #333;
-                padding: 15px;
-                width: 60px;
-                height: 60px;
-                margin: 0 auto;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-weight: bold;
-                border-radius: var(--border-radius);
-                border: 1px solid var(--vt-c-ccc);
-                box-shadow: 0 0px 10px var(--vt-c-ccc);
-                margin-bottom: 10px;
-                transition: all .3s;
-                &:hover {
-                    transform: translateY(-5px);
-                    box-shadow: 0 5px 20px var(--vt-c-ccc);
-                }
-            }
-            &.is-active {
-                .icon {
-                    background-color: var(--el-color-primary);
-                    color: var(--vt-c-white);
-                }
-                .name {
-                    color: var(--el-color-primary);
-                }
-            }
-        }
-    }
-    .export-btn {
-        position: absolute;
-        right: 10px;
-        top: 10px;
-    }
 }
 </style>

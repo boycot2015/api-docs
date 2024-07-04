@@ -28,8 +28,8 @@
             :class="{ 'is-active' : app.replace }"
             v-for="app in appList" :key="app.name">
                 <div class="icon" @click="onAdd(app)">
-                        <el-icon :size="30">
-                            <IconifyIcon :name="app.icon || 'ep:menu'" color="var(--el-primary-color)" :icon-style="{fontSize: 30}" />
+                        <el-icon :size="50">
+                            <IconifyIcon :name="app.icon || 'ep:menu'" color="var(--el-primary-color)" :icon-style="{fontSize: 50}" />
                         </el-icon>
                 </div>
                 <div class="name">{{ app.name }}</div>
@@ -95,39 +95,46 @@ onMounted(() => {
 .api-docs-app {
     width: calc(100vw - 200px);
     .list {
-        // margin-top: 30px;
         &-item {
+            margin: 0 15px 10px;
+            padding: 10px 0;
             text-align: center;
             margin-bottom: 20px;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--vt-c-ccc);
+            box-shadow: 0 0px 10px var(--vt-c-ccc);
+            background-color: var(--vt-c-white-soft);
+            overflow: hidden;
+            transition: all .3s;
+            &:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 5px 20px var(--vt-c-ccc);
+            }
             .icon {
                 cursor: pointer;
-                background-color: var(--vt-c-white-soft);
                 color: #333;
                 padding: 15px;
-                width: 60px;
-                height: 60px;
+                // width: 60px;
+                // height: 60px;
                 margin: 0 auto;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 font-weight: bold;
-                border-radius: var(--border-radius);
-                border: 1px solid var(--vt-c-ccc);
-                box-shadow: 0 0px 10px var(--vt-c-ccc);
                 margin-bottom: 10px;
-                transition: all .3s;
-                &:hover {
-                    transform: translateY(-5px);
-                    box-shadow: 0 5px 20px var(--vt-c-ccc);
-                }
             }
             &.is-active {
-                .icon {
+                position: relative;
+                &::after {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    content: '默认';
+                    padding: 3px;
+                    font-size: 12px;
+                    border-radius: 0 0 0 var(--border-radius);
                     background-color: var(--el-color-primary);
                     color: var(--vt-c-white);
-                }
-                .name {
-                    color: var(--el-color-primary);
                 }
             }
         }
