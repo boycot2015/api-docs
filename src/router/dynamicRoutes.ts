@@ -124,20 +124,21 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                 for (const key in paths) {
                     let data = paths[key].post || paths[key].get || {}
                     if (data.tags.includes(el.name)) {
-                        // console.log({ ...getParameters(data) }, 'obj');
-                        route.meta.pageData.push({
-                            data: { ...getParameters(data) },
-                            url: key,
-                            basePath,
-                            component: baseApiStr,
-                            name: data.summary?.replace(/[`~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~@#￥%……&*（）——\-+={}|《》：【】、；'、]/g, '') || data.description,
-                            host,
-                            info,
-                            method: paths[key].post ? 'post' : 'get'
-                        })
+                        if (data.summary || data.description) {
+                            route.meta.pageData.push({
+                                data: { ...getParameters(data) },
+                                url: key,
+                                basePath,
+                                component: baseApiStr,
+                                name: data.summary?.replace(/[`~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~@#￥%……&*（）——\-+={}|《》：【】、；'、]/g, '') || data.description,
+                                host,
+                                info,
+                                method: paths[key].post ? 'post' : 'get'
+                            })
+                        }
                     }
                 }
-                route.name = route.meta.pageData[0]?.url.split('/').filter((el:string) => el !== baseApiStr).join('') || ''
+                route.name = route.meta.pageData[0]?.url.split('/').filter((el:string) => el && el !== baseApiStr).join('') || ''
                 route.path += route.name || ''
                 route.meta.showInHeader = false
                 route.meta.hideInMenu = route.path === `/${baseApiStr}/`
@@ -146,7 +147,8 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                     route.meta.showInHeader = route.meta.pageData.length > 1 && route.meta.pageData.length < 15
                     route.children = route.meta.pageData.map((val:any, idx: number) => {
                         // let path:string = `/${baseApiStr}/` + (route.name + (val.url ? '/' + val.url.split('/').join('') : ''))
-                        let path:string = `/${baseApiStr}/` + (val.url ? val.url.split('/').join('') : route.name)
+                        // let path:string = `/${baseApiStr}/` + (val.url ? val.url.split('/').join('') : route.name)
+                        let path:string = `/${baseApiStr}` + (val.url ? val.url : route.name)
                         return {
                             path,
                             name: baseApiStr + val.url?.split('/').join('') || '',
@@ -170,7 +172,7 @@ const fetchRouteData = (to:any, from:any, next: any) => {
             import.meta.hot.send('getRoutes', { url: apiUrl })
             import.meta.hot.on('getRoutes', (res) => {
                 if (res) {
-                    let routes = handleRoutes(res, dyRoutes)
+                    let routes = handleRoutes(res, dyRoutes)                    
                     dynamicRoutes(routes)
                     resolve(routes)
                 } else {

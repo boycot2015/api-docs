@@ -13,16 +13,6 @@ export default [
         },
         component: () => import('@/views/home.vue')
       },
-      {
-        path: '/error',
-        name: 'error',
-        meta: {
-            title: '404',
-            hideInSearch: true,
-            hideInMenu: true,
-        },
-        component: () => import('@/views/error.vue')
-      },
     // {
     //     path: '/guide',
     //     name: 'guide',
@@ -130,5 +120,19 @@ export default [
                 component: () => import('@/views/log.vue'),
             }
         ]
+    },
+    // {
+    //     path: '/apiDocs/',
+    //     redirect: '/error',
+    // },
+    {
+        path: '/error',
+        name: 'error',
+        meta: {
+            title: '404',
+            hideInSearch: true,
+            hideInMenu: true,
+        },
+        component: () => import('@/views/error.vue')
     },
 ]

@@ -88,8 +88,8 @@
             display: inline-block;
         }
         img {
-            margin: 0 auto;
             width: 100px;
+            height: 40px;
         }
     }
     .el-header-menu {

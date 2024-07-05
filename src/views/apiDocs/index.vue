@@ -36,6 +36,7 @@ onMounted(() => {
     z-index: 2;
     min-width: 300px;
     margin: 0 auto;
+    width: 100%;
     max-width: var(--layout-max-width);
     .title {
         font-size: 32px;

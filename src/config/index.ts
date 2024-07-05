@@ -60,7 +60,7 @@ export default <AppConfigProps>({
         replace: false,
         icon: 'fluent:developer-board-16-regular',
         name: 'BLOG文档',
-        url: 'http://blog-api.boycot.top'
+        url: 'http://blog-api.boycot.top/swagger.json'
     },
     {
         id: 3,

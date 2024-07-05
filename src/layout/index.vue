@@ -143,7 +143,6 @@ onMounted(() => {
         background-color: var(--vt-c-white);
         // max-width: calc(100vw - 220px);
         // max-width: var(--layout-max-width);
-        // min-width: 800px;
         display: flex;
         // overflow: hidden;
         overflow: auto;
