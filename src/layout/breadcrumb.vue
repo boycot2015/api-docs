@@ -18,7 +18,7 @@ import { useRouter } from 'vue-router'
 // import routes from '@/router/routes'
 const router = useRouter()
 const activeRoutes = computed(() => {
-   return router.currentRoute.value.matched.filter((el:any) => !el.meta.hideChildren)
+   return router.currentRoute.value.matched.filter((el:any) => !el.meta.hideChildren && !el.meta.hideInMenu).slice(-2)
 })
 // const separatorIcon = '>'
 // const separatorIcon:any = <el-icon ><Icon icon="ep:arrow-right" /></el-icon>

@@ -22,7 +22,7 @@ let state = reactive({
     responseLoading: false,
     data: pageData.value.data,
     url: (appConfigStore.appConfig?.baseUrl || pageData.value.basePath?.replace(/\//i, '') || '') + pageData.value.url,
-    method: pageData.value.method,
+    method: pageData.value.method || 'get',
     pramsObj: {
         name: '',
         value: '',
@@ -77,7 +77,7 @@ const onSubmit = (formEl: FormInstance | undefined) => {
             params.url += pageData.value.url
             try {
                 params.data = {
-                    url: params.url,
+                    url: params.url.replace(/{/g, ':').replace(/\}/g, ''),
                     ...JSONParse(form.value.bodyParams || '{}'),
                     loading: true
                 }
@@ -95,33 +95,33 @@ const onSubmit = (formEl: FormInstance | undefined) => {
                 delete params.data
             }
             state.responseLoading = true
-            if (import.meta.hot) {
-                import.meta.hot.send('getDataByApiUrl', params)
-                import.meta.hot.on('getDataByApiUrl', (res) => {
-                    if (res) {
-                        setResponses(JSONStringify(res))
-                        setForm({
-                            ...form.value,
-                            Timestamp: new Date().toLocaleString().replace(/\//g, '-'),
-                            ['Random-Code']: Math.floor(Math.random() * 100000) + ''
-                        })
-                    } else {
-                        try {
-                            setResponses(JSONStringify(res || {}))
-                        } catch (error) {
-                            setResponses(error)
-                        }
-                        setForm({
-                            ...form.value,
-                            Timestamp: new Date().toLocaleString().replace(/\//g, '-'),
-                            ['Random-Code']: Math.floor(Math.random() * 100000) + ''
-                        })
-                    }
-                    toggleShowParams(true)
-                    state.responseLoading = false
-                })
-                return
-            }
+            // if (import.meta.hot) {
+            //     import.meta.hot.send('getDataByApiUrl', params)
+            //     import.meta.hot.on('getDataByApiUrl', (res) => {
+            //         if (res) {
+            //             setResponses(JSONStringify(res))
+            //             setForm({
+            //                 ...form.value,
+            //                 Timestamp: new Date().toLocaleString().replace(/\//g, '-'),
+            //                 ['Random-Code']: Math.floor(Math.random() * 100000) + ''
+            //             })
+            //         } else {
+            //             try {
+            //                 setResponses(JSONStringify(res || {}))
+            //             } catch (error) {
+            //                 setResponses(error)
+            //             }
+            //             setForm({
+            //                 ...form.value,
+            //                 Timestamp: new Date().toLocaleString().replace(/\//g, '-'),
+            //                 ['Random-Code']: Math.floor(Math.random() * 100000) + ''
+            //             })
+            //         }
+            //         toggleShowParams(true)
+            //         state.responseLoading = false
+            //     })
+            //     return
+            // }
             http.request(params).then((res:any) => {
                 setResponses(JSONStringify(res))
                 setForm({

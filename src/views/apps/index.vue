@@ -4,8 +4,8 @@
             <el-col :span="24" class="mb16">
                 <div class="flexbox-h just-b">
                     <el-button class="icon-button" type="primary" style="margin-bottom: 10px;" @click="onAdd()">
-                        <el-icon :size="30">
-                          <IconifyIcon :name="'ep:plus'" color="var(--el-primary-color)" :icon-style="{fontSize: 16}" />
+                        <el-icon :size="18">
+                          <IconifyIcon :name="'ep:plus'" color="var(--el-primary-color)" :icon-style="{fontSize: 18}" />
                         </el-icon>
                         新增项目
                     </el-button>
@@ -91,7 +91,7 @@ onMounted(() => {
     loading.value = false
 })
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .api-docs-app {
     width: calc(100vw - 200px);
     .list {

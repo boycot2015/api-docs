@@ -11,7 +11,7 @@ const [ state, setState ] = useState({
     loading: false,
     data: pageData.value.data,
     url: pageData.value.url,
-    method: pageData.value.method,
+    method: pageData.value.method || 'get',
     name: pageData.value.name
 })
 const urlObj:any = new URL(appConfig.value?.apiUrl)
@@ -43,7 +43,7 @@ watch(pageData, (val) => {
         </div>
         <div class="api-desc-item">
             <div class="name sub-title-item">1.2 请求类型</div>
-            <div class="value">{{state.data?.consumes?.join(',')}}</div>
+            <div class="value">{{state.data?.consumes?.join(',')||'application/json, text/plain, */*'}}</div>
         </div>
         <div class="api-desc-item">
             <div class="name sub-title-item">1.3 响应类型</div>

@@ -68,12 +68,12 @@
                         </template>
                     </el-table-column>
                 </el-table>
-                <div class="page clerfix mt16">
+                <div class="page clerfix mt16" style="width:100%;">
                     <el-pagination
                     v-model:current-page="currentPage"
                     v-model:page-size="pageSize"
                     :page-sizes="[10, 20, 30, 100]"
-                    small
+                    size="default"
                     class="fr"
                     :background="true"
                     layout="total, sizes, prev, pager, next, jumper"

@@ -15,7 +15,7 @@
                     <el-icon v-if="item.meta && item.meta.icon" ><IconifyIcon :name="item.meta.icon" /></el-icon>
                     <span class="line-clamp1" :title="item.meta.title" v-if="item.meta.title">{{ getMenuTitleStr(item.meta.title) }}</span>
                 </template>
-                <el-menu-item  v-for="child in item.children" :key="child.path" :index="child.path">
+                <el-menu-item  v-for="child in item.children" :key="child.path" :index="child.path" v-show="!child.meta.hideInMenu">
                     <el-icon v-if="child.meta && child.meta.icon" ><IconifyIcon :name="child.meta.icon" /></el-icon>
                     <template #title v-if="child.meta && child.meta.title"><span :title="child.meta.title">{{ getMenuTitleStr(child.meta.title, 8) }}</span></template>
                 </el-menu-item>

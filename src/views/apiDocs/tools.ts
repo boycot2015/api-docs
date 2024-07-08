@@ -74,7 +74,7 @@ const getParams = (data:ColumnProps[], child?:boolean, name?:string) => {
         if (children && children.length) {
             children = getParams(children, true, el.type === 'array' ? el.name+'[]' : el.type ? el.name : 'body')
         }
-        return { ...el, in: el.in || (el.type === 'array' ? 'body': el.type === 'object' ? 'object': name), children, child }
+        return { ...el, type: el.type || 'string', in: el.in || (el.type === 'array' ? 'body': el.type === 'object' ? 'object': name), children, child }
     })
 }
 const arr2obj = (method:string, arr:ColumnProps[] | undefined, prop = 'children') => {

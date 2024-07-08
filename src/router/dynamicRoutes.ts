@@ -18,6 +18,7 @@ const dynamicRoutes = (data:any, parent = baseApiStr) => {
                 meta: {
                     parent,
                     ...item.meta,
+                    pageData: item.meta && item.meta.pageData ? item.meta.pageData.length ? item.meta.pageData[0] : item.meta.pageData : {},
                     icon: getDynamicIcon(item.path),
                     // showAnchor: true,
                     auth: true
@@ -33,6 +34,7 @@ const dynamicRoutes = (data:any, parent = baseApiStr) => {
                     parent,
                     ...item.meta,
                     icon: getDynamicIcon(item.path),
+                    pageData: item.meta && item.meta.pageData ? item.meta.pageData.length ? item.meta.pageData[0] : item.meta.pageData : {},
                     // showAnchor: true,
                     auth: true
                 }
@@ -62,7 +64,7 @@ const fetchRouteData = (to:any, from:any, next: any) => {
             apiUrl = storage.getItem('websiteConfig').apiUrl || ''
         }
         const handleRoutes = (res: { data: any; }, dyRoutes: any[]) => {
-            let { tags, paths, definitions, host, info, basePath } = (res.data  || res) as any
+            let { tags, paths, definitions, host, info, basePath = '', components, openapi } = (res.data  || res) as any
             // console.log((res.data  || res), '(res.data  || res)');
             const getParameters = (obj:any) => {
                 if (!obj || obj === null) return {}
@@ -70,7 +72,6 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                     if (k === '$ref') {
                         for (const key in definitions) {
                             if (obj[k] && typeof obj[k] === 'string' && obj[k].split('/')[2] && key === obj[k].split('/')[2]) {
-                                console.log(key, 'key');
                                 if (loopRefs.includes(key)) { // 剔除树结构，防止递归死循环
                                     obj[k] = ''
                                 } else {
@@ -94,6 +95,30 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                             }
                         }
                     }
+                    if (k === 'requestBody') {
+                        let requestBody = (components && components.schemas) || {}
+                        for (const key in requestBody) {
+                            if (requestBody[key] && obj[k] && obj[k].content && obj[k].content['application/json'] && key === obj[k].content['application/json'].schema.$ref.split('/')[3]) {
+                                let children:any = []
+                                for (const j in requestBody[key].properties) {
+                                    let temp = requestBody[key].properties[j]
+                                    let child:any = temp?.items ? temp.items?.$ref : temp.$ref ? temp.$ref : temp || requestBody[key]?.properties[j] || ''
+                                    let o:any = {
+                                        name: j,
+                                        example: temp?.example || child?.example || '',
+                                        children: child,
+                                        in: 'body',
+                                        type: temp?.type || child?.type || 'array',
+                                        required: temp?.required || child?.required || false,
+                                        format: temp['format'],
+                                        description: temp['description'],
+                                    }
+                                    children.push(o)
+                                }
+                                children.length && (obj['parameters'] = children)
+                            }
+                        }
+                    }
                     if (typeof obj[k] === 'object' &&  obj[k] !== null && obj[k]) {
                         obj[k] = getParameters(obj[k])
                     }
@@ -101,9 +126,6 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                 return obj
             }
             if (tags && !tags.length) {
-                // if (tags && !tags.length) {
-                // tags = [{ name: '开发文档' }]
-                // }
                 for (const key in paths) {
                     tags.push(paths[key].post?.tags[0] || paths[key].get?.tags[0])
                 }
@@ -139,6 +161,7 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                     }
                 }
                 route.name = route.meta.pageData[0]?.url.split('/').filter((el:string) => el && el !== baseApiStr).join('') || ''
+                if (openapi) route.name = route.name || baseApiStr
                 route.path += route.name || ''
                 route.meta.showInHeader = false
                 route.meta.hideInMenu = route.path === `/${baseApiStr}/`
@@ -146,8 +169,6 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                 if (route.meta.pageData.length >= 1) {
                     route.meta.showInHeader = route.meta.pageData.length > 1 && route.meta.pageData.length < 15
                     route.children = route.meta.pageData.map((val:any, idx: number) => {
-                        // let path:string = `/${baseApiStr}/` + (route.name + (val.url ? '/' + val.url.split('/').join('') : ''))
-                        // let path:string = `/${baseApiStr}/` + (val.url ? val.url.split('/').join('') : route.name)
                         let path:string = `/${baseApiStr}` + (val.url ? val.url : route.name)
                         return {
                             path,
@@ -164,6 +185,7 @@ const fetchRouteData = (to:any, from:any, next: any) => {
                 }
                 dyRoutes.push(route)
             })
+            // console.log(dyRoutes, 'dyRoutes')
             return dyRoutes
         }
         let excludeExtends = ['.json']

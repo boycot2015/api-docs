@@ -22,7 +22,7 @@ const loading = ref(false)
 const pageData:any = computed(() => router.currentRoute.value.meta.pageData)
 const [ state, setState ] = useState({
     loading: false,
-    method: pageData.value.method,
+    method: pageData.value.method || 'get',
     data: pageData.value.data,
     inData: [...getCustomParams(pageData.value), ...getParams(pageData.value.data?.parameters || [])],
     columns: props.columns,
@@ -93,27 +93,52 @@ watch(pageData, (val) => {
         </el-table>
     </div>
     <div class="in-params api-docs-section">
-        <h3 class="sub-title-item">{{ state.method === 'post'?'Body':'Query' }}</h3>
-        <el-table
-        border
-        row-key="name"
-        ref="tableRef"
-        header-cell-class-name="bg-header"
-        :span-method="(...args:[SpanMethodProps]) => objectSpanMethod(...args, state.inData)"
-        v-loading="state.loading"
-        default-expand-all
-        :data="state.inData.filter((l:any) => state.method === 'post' ? l.in === 'body': (l.in === 'query' || l.in === 'body'))"
-        :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-        >
-            <el-table-column
-            v-for="column in columns"
-            :key="column.prop"
-            :label="column.label"
-            :prop="column.prop"
-            :formatter="column.formatter"
-            :min-width="column.minWidth ? column.minWidth : column.width"
-            ></el-table-column>
-        </el-table>
+        <template v-if="state.inData.find((l:any) => l.in === 'query')">
+            <h3 class="sub-title-item">Query</h3>
+            <el-table
+            border
+            row-key="name"
+            ref="tableRef"
+            header-cell-class-name="bg-header"
+            :span-method="(...args:[SpanMethodProps]) => objectSpanMethod(...args, state.inData)"
+            v-loading="state.loading"
+            default-expand-all
+            :data="state.inData.filter((l:any) => l.in === 'query')"
+            :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+            >
+                <el-table-column
+                v-for="column in columns"
+                :key="column.prop"
+                :label="column.label"
+                :prop="column.prop"
+                :formatter="column.formatter"
+                :min-width="column.minWidth ? column.minWidth : column.width"
+                ></el-table-column>
+            </el-table>
+        </template>
+        <template v-if="state.method === 'post'&&state.inData.find((l:any) => l.in === 'body')">
+            <h3 class="sub-title-item">{{ state.method === 'post'?'Body':'Query' }}</h3>
+            <el-table
+            border
+            row-key="name"
+            ref="tableRef"
+            header-cell-class-name="bg-header"
+            :span-method="(...args:[SpanMethodProps]) => objectSpanMethod(...args, state.inData)"
+            v-loading="state.loading"
+            default-expand-all
+            :data="state.inData.filter((l:any) => state.method === 'post' ? l.in === 'body': (l.in === 'query' || l.in === 'body'))"
+            :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+            >
+                <el-table-column
+                v-for="column in columns"
+                :key="column.prop"
+                :label="column.label"
+                :prop="column.prop"
+                :formatter="column.formatter"
+                :min-width="column.minWidth ? column.minWidth : column.width"
+                ></el-table-column>
+            </el-table>
+        </template>
     </div>
     <div class="out-params api-docs-section">
         <h3 class="app-page-anchor sub-title" id="app-page-anchor2">3. 返回数据</h3>
