@@ -29,12 +29,12 @@
                     <!-- <el-icon v-else>{{ item.name.slice(0,2).toUpperCase() }}</el-icon> -->
                     <span :title="item.meta.title">{{ getMenuTitleStr(item.meta.title) }}</span>
                 </template>
-                <el-menu-item v-for="child in item.children" :key="child.path" :index="child.path">
+                <el-menu-item v-for="child in item.children" :key="child.path" :index="child.path" v-show="child.meta && !child.meta.hideInMenu">
                     <el-icon v-if="child.meta && child.meta.icon"><IconifyIcon :name="child.meta.icon" /></el-icon>
                     <template #title v-if="child.meta"><span :title="child.meta.title">{{child.meta?.title}}</span></template>
                 </el-menu-item>
             </el-sub-menu>
-            <el-menu-item :index="item.path" v-else>
+            <el-menu-item :index="item.path" v-else-if="item.meta && !item.meta.hideInMenu">
                 <template #title v-if="item.meta">
                     <el-icon v-if="item.meta && item.meta.icon"><IconifyIcon :name="item.meta.icon" /></el-icon>
                     <span :title="item.meta.title">{{ getMenuTitleStr(item.meta.title) }}</span>
