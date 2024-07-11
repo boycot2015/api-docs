@@ -1,14 +1,14 @@
 <template>
-<div class="header" :style="{maxWidth: showMenu ? 'var(--layout-max-width)': '1100px'}">
+<div class="header" :style="{maxWidth: showMenu ? 'var(--layout-max-width)': '1300px'}">
     <slot name="logo">
         <!-- :class="{'is-collapse': collapse.isCollapse }" -->
-        <div class="logo" v-if="appConfig.logoPosition === 'top' && showMenu">
+        <div class="logo" v-if="appConfig.logoPosition === 'top'" :style="{'flex-basis': collapse.isCollapse?'60px':'220px'}">
             <!-- v-if="!collapse.isCollapse" -->
-            <RouterLink class="title" to="/">{{appConfig.websiteName}}</RouterLink>
-            <el-icon :size="24" v-if="showMenu"><IconifyIcon name="ep:operation" :iconStyle="{ }" @click="collapse.toggleCollapse()" /></el-icon>
+            <img :src="logo" alt="">
+            <RouterLink class="title line-clamp1" v-if="!collapse.isCollapse" :title="appConfig.websiteName" to="/">{{appConfig.websiteName}}</RouterLink>
+            <el-icon :size="24" v-if="!showMenu"><IconifyIcon name="ep:operation" :iconStyle="{ }" @click="collapse.toggleCollapse()" /></el-icon>
         </div>
-        <div class="logo" v-if="!showMenu">
-            <!-- v-if="!collapse.isCollapse" -->
+        <div class="logo" v-else>
             <img :src="logo" alt="">
         </div>
     </slot>
@@ -22,7 +22,7 @@
         router
         :style="appConfig.logoPosition === 'bottom' && activeIndex!=='/' ? 'width: 880px': ''"
     >
-        <template v-for="item in routes.slice(0,20)" :key="item.path">
+        <template v-for="item in routes" :key="item.path">
             <el-sub-menu :index="item.path" v-if="item.children && item.children.length && !item.meta.hideChildren">
                 <template #title>
                     <el-icon v-if="item.meta && item.meta.icon"><IconifyIcon :name="item.meta.icon" /></el-icon>
@@ -34,7 +34,7 @@
                     <template #title v-if="child.meta"><span :title="child.meta.title">{{child.meta?.title}}</span></template>
                 </el-menu-item>
             </el-sub-menu>
-            <el-menu-item :index="item.path" v-else-if="item.meta && !item.meta.hideInMenu">
+            <el-menu-item :index="item.path" v-else-if="item.meta">
                 <template #title v-if="item.meta">
                     <el-icon v-if="item.meta && item.meta.icon"><IconifyIcon :name="item.meta.icon" /></el-icon>
                     <span :title="item.meta.title">{{ getMenuTitleStr(item.meta.title) }}</span>
@@ -64,15 +64,15 @@
     backdrop-filter: saturate(50%) blur(4px);
     background-color: var(--vt-c-white);
     .logo {
-        flex-basis: 200px;
+        flex-basis: 220px;
         text-align: center;
         cursor: pointer;
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: center;
         // flex-wrap: nowrap;
         .title {
-            flex-basis: 140px;
+            flex-basis: 220px;
             line-height: 22px;
         }
         i {
@@ -88,7 +88,7 @@
             display: inline-block;
         }
         img {
-            width: 100px;
+            // width: 100px;
             height: 40px;
         }
     }
@@ -135,17 +135,21 @@ const activeIndex = computed(() => {
     let matched = router.currentRoute.value.matched
     return path === '/home' ? '/' : hideChildren ? matched[0].path : path
 })
-const routes = computed<RouteProps[]>(() => routeStore.routes.filter((el:any) => el.meta?.showInHeader || (routeStore.routes.length < 10 && el.meta?.affix)))
-
-const showMenu = ref(true)
+// && ((routeStore.routes.length < 15 && el.meta?.affix))
+const routes = computed<RouteProps[]>(() => routeStore.routes.filter((el:any) => el.meta?.showInHeader || (el.meta && !el.meta.hideInMenu && el.children.length > 2 && (el.meta?.affix || el.children[0].path === activeIndex))))
+const showMenu = ref(!!appConfig.value.showMenuInHeader)
 const toggleShow = (e?:any) => {
     let innerWidth = e && e.target ? Math.floor(e.target.innerWidth) : window.innerWidth
     if (innerWidth <= 1200) {
         showMenu.value = false
     } else {
-        showMenu.value = true
+        showMenu.value = appConfig.value.showMenuInHeader
     }
 }
+watch(appConfig, (val) => {
+    showMenu.value = val.showMenuInHeader
+    
+})
 onMounted(() => {
     toggleShow()
     window.addEventListener('resize', toggleShow)

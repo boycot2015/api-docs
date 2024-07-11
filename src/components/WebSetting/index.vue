@@ -54,6 +54,7 @@ const form = ref({
     websiteName: appConfig.value.websiteName,
     primaryColor: appConfig.value.primaryColor || getComputedStyle(root).getPropertyValue('--el-color-primary'),
     showBreadcrumb: appConfig.value.showBreadcrumb,
+    showMenuInHeader: appConfig.value.showMenuInHeader,
     logoPosition: appConfig.value.logoPosition,
     baseUrl: appConfig.value.baseUrl || '',
     apiUrl: appConfig.value.apiUrl || baseUrl,
@@ -133,6 +134,7 @@ const onSubmit = () => {
 const resetForm = (val?:any) => {
     form.value.primaryColor = val.primaryColor
     form.value.showBreadcrumb = val.showBreadcrumb
+    form.value.showMenuInHeader = val.showMenuInHeader
     form.value.currentEffect = val.currentEffect
     form.value.logoPosition = val.logoPosition
     form.value.baseUrl = val.baseUrl
@@ -265,12 +267,21 @@ html,body {
         <el-form class="web-setting-form" ref="drawerFormRef" :model="form" label-width="110px" :rules="rules">
             <el-tabs v-model="accordion" accordion>
                 <el-tab-pane name="1" label="基础设置">
-                    <el-form-item label="网站名称" :rules="[{required: true, message: '网站名称不能为空'}]" prop="websiteName">
-                        <el-input placeholder="网站名称" maxlength="15" v-model="form.websiteName"></el-input>
-                    </el-form-item>
                     <el-form-item label="主题色" prop="primaryColor" class="color-picker">
                         <el-color-picker style="max-width: 200px;" v-model="form.primaryColor" @change="() => onColorPickerChange(true)" :predefine="predefineColors" show-alpha />
                         <span>{{ form.primaryColor }}</span>
+                    </el-form-item>
+                    <el-form-item label="面包屑导航" prop="showBreadcrumb">
+                        <el-switch v-model="form.showBreadcrumb"></el-switch>
+                    </el-form-item>
+                    <el-form-item label="头部菜单" prop="showMenuInHeader">
+                        <el-switch v-model="form.showMenuInHeader"></el-switch>
+                    </el-form-item>
+                    <el-form-item label="logo位置" prop="logoPosition">
+                        <el-radio-group v-model="form.logoPosition">
+                            <el-radio :value="'top'" :label="'top'">头部</el-radio>
+                            <el-radio :value="'bottom'" :label="'bottom'">侧边栏</el-radio>
+                        </el-radio-group>
                     </el-form-item>
                     <el-form-item label="特效" prop="currentEffect">
                         <el-select v-model="form.currentEffect" class="effect" style="width:100%;margin-right: 10px;" placeholder="特效" @change="(val:any) => onEffectChange(val, true)">
@@ -278,11 +289,8 @@ html,body {
                             <el-option v-for="(item, index) in appConfig.effect as AppProps[]" :label="item.name" :value="index" :key="item.name"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="logo位置" prop="logoPosition">
-                        <el-radio-group v-model="form.logoPosition">
-                            <el-radio :value="'top'" :label="'top'">头部</el-radio>
-                            <el-radio :value="'bottom'" :label="'bottom'">侧边栏</el-radio>
-                        </el-radio-group>
+                    <el-form-item label="网站名称" :rules="[{required: true, message: '网站名称不能为空'}]" prop="websiteName">
+                        <el-input placeholder="网站名称" maxlength="15" v-model="form.websiteName"></el-input>
                     </el-form-item>
                     <el-form-item label="友情链接" prop="footer.links">
                         <el-form-item
@@ -303,9 +311,6 @@ html,body {
                     </el-form-item>
                     <el-form-item label="备案信息" :rules="[{required: true, message: '备案信息不能为空'}]" prop="footer.beian.name">
                         <el-input placeholder="备案信息" v-model="form.footer.beian.name"></el-input>
-                    </el-form-item>
-                    <el-form-item label="显示导航" prop="showBreadcrumb">
-                        <el-switch v-model="form.showBreadcrumb"></el-switch>
                     </el-form-item>
                 </el-tab-pane>
                 <el-tab-pane name="2" label="接口设置">

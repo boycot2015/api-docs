@@ -43,8 +43,9 @@ export type {
 export default <AppConfigProps>({
     primaryColor: '#646cff',
     websitePrefix: 'openapi',
-    websiteName: '开发者开放平台', // 网站名称
+    websiteName: '开发者平台', // 网站名称
     showBreadcrumb: true, // 是否显示面包屑导航 false/true
+    showMenuInHeader: false, // 是否在头部显示菜单
     logoPosition: 'top', // logo位置 bottom/top
     effect,
     apiUrl: baseUrl,

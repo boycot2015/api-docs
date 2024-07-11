@@ -9,11 +9,13 @@ const appConfigStore = useAppConfigStore()
 const router = useRouter()
 const appConfig = computed(() => appConfigStore.appConfig) as any
 const showBreadcrumb = ref(appConfig.value.showBreadcrumb)
+const showMenuInHeader = ref(appConfig.value.showMenuInHeader)
 const scrollRef:any = ref(null)
 const appPageAnchors = useAnchorStore()
 const collapse = useCollapseStore()
 watch(appConfig, (val) => {
     showBreadcrumb.value = val.showBreadcrumb && !router.currentRoute.value.meta.hideBreadcrumb
+    showMenuInHeader.value = val.showMenuInHeader
     computedStyle()
 })
 const styles = ref({})
@@ -69,7 +71,7 @@ onMounted(() => {
         <el-container>
             <el-header v-if="!$route.meta.hideHeader"><Header /></el-header>
             <el-container>
-                <el-aside :style="{height: !$route.meta.hideHeader ? '': '100vh'}" :width="collapse.isCollapse ? '65px': '200px'" v-if="!$route.meta.hideAside"><Aside /></el-aside>
+                <el-aside :style="{height: !$route.meta.hideHeader ? '': '100vh'}" :width="collapse.isCollapse ? '65px': '200px'" v-if="!$route.meta.hideAside&&!showMenuInHeader"><Aside /></el-aside>
                 <el-main>
                     <Breadcrumb v-if="showBreadcrumb"></Breadcrumb>
                     <div class="body" ref="scrollRef" :style="styles">
