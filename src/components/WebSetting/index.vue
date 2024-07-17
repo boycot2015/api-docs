@@ -274,11 +274,15 @@ html,body {
                     <el-form-item label="面包屑导航" prop="showBreadcrumb">
                         <el-switch v-model="form.showBreadcrumb"></el-switch>
                     </el-form-item>
-                    <el-form-item label="头部菜单" prop="showMenuInHeader">
-                        <el-switch v-model="form.showMenuInHeader"></el-switch>
+                    <el-form-item label="菜单位置" prop="showMenuInHeader">
+                        <el-radio-group v-model="form.showMenuInHeader">
+                            <el-radio :value="true" :label="true">头部</el-radio>
+                            <el-radio :value="false" :label="false">侧边栏</el-radio>
+                        </el-radio-group>
+                        <!-- <el-switch v-model="form.showMenuInHeader" active-text="头部" inactive-text="侧边栏"></el-switch> -->
                     </el-form-item>
                     <el-form-item label="logo位置" prop="logoPosition">
-                        <el-radio-group v-model="form.logoPosition">
+                        <el-radio-group v-model="form.logoPosition" :disabled="form.showMenuInHeader">
                             <el-radio :value="'top'" :label="'top'">头部</el-radio>
                             <el-radio :value="'bottom'" :label="'bottom'">侧边栏</el-radio>
                         </el-radio-group>

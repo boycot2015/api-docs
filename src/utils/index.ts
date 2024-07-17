@@ -134,6 +134,7 @@ export const getDynamicIcon = (name:string) => {
     { name: 'upload', icon: 'flowbite:folder-duplicate-outline' },
     { name: 'file', icon: 'flowbite:folder-duplicate-outline' },
     { name: 'user', icon: 'ph:user' },
+    { name: 'hots', icon: 'mdi:hot' },
     { name: 'redpacket', icon: 'mingcute:red-packet-line' },
     { name: 'address', icon: 'mdi:address-marker-outline' },
     { name: 'Address', icon: 'mdi:address-marker-outline' },

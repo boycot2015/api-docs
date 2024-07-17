@@ -6,7 +6,7 @@ export default [
         name: 'index',
         meta: {
           title: '首页',
-          affix: true,
+        //   affix: true,
           hideInSearch: true,
           hideInMenu: true,
           icon: 'ep:house'
@@ -77,7 +77,7 @@ export default [
             hideChildren: true,
             showInHeader: true,
             hideInMenu: true,
-            affix: true,
+            affix: false,
             icon: 'ri:image-line'
         },
         component: Layout,

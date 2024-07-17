@@ -13,7 +13,6 @@
         </div>
     </slot>
     <el-menu
-        v-if="showMenu"
         :default-active="activeIndex"
         class="el-header-menu"
         mode="horizontal"
@@ -135,9 +134,8 @@ const activeIndex = computed(() => {
     let matched = router.currentRoute.value.matched
     return path === '/home' ? '/' : hideChildren ? matched[0].path : path
 })
-// && ((routeStore.routes.length < 15 && el.meta?.affix))
-const routes = computed<RouteProps[]>(() => routeStore.routes.filter((el:any) => el.meta?.showInHeader || (el.meta && !el.meta.hideInMenu && el.children.length > 2 && (el.meta?.affix || el.children[0].path === activeIndex))))
 const showMenu = ref(!!appConfig.value.showMenuInHeader)
+const routes = computed<RouteProps[]>(() => routeStore.routes.filter((el:any) => el.meta?.affix || (showMenu.value && !el.meta.hideInMenu) || (el.meta && !el.meta.hideInMenu && el.children.length > 2 && (el.children[0].path === activeIndex))))
 const toggleShow = (e?:any) => {
     let innerWidth = e && e.target ? Math.floor(e.target.innerWidth) : window.innerWidth
     if (innerWidth <= 1200) {
