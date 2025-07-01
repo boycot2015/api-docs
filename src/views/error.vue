@@ -2,9 +2,13 @@
     <div class="error-page">
         <div class="icon"><el-icon><Warning /></el-icon></div>
         <div class="text">404 | Page Not Found </div>
-        <div class="button" @click="$router.push('/')">返回首页</div>
+        <div class="button" @click="() => router.push('/')">返回首页</div>
     </div>
 </template>
+<script setup>
+import { useRouter } from 'vue-router'
+const router = useRouter()
+</script>
 <style lang="scss" scoped>
 .error-page {
     display: flex;

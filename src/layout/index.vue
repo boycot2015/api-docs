@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RouterLink, RouterView, useRouter } from 'vue-router'
+import { RouterLink, RouterView, useRouter, useRoute } from 'vue-router'
 import Header from './header.vue'
 import Aside from './aside.vue'
 import Breadcrumb from './breadcrumb.vue'
@@ -7,6 +7,7 @@ import Anchor from './anchor.vue'
 import { useAnchorStore, useCollapseStore, useAppConfigStore } from '@/stores/app'
 const appConfigStore = useAppConfigStore()
 const router = useRouter()
+const route = useRoute()
 const appConfig = computed(() => appConfigStore.appConfig) as any
 const showBreadcrumb = ref(appConfig.value.showBreadcrumb)
 const showMenuInHeader = ref(appConfig.value.showMenuInHeader)
@@ -69,9 +70,9 @@ onMounted(() => {
 <template>
     <div class="layout">
         <el-container>
-            <el-header v-if="!$route.meta.hideHeader"><Header /></el-header>
+            <el-header v-if="!route.meta.hideHeader"><Header /></el-header>
             <el-container>
-                <el-aside :style="{height: !$route.meta.hideHeader ? '': '100vh'}" :width="collapse.isCollapse ? '65px': '200px'" v-if="!$route.meta.hideAside&&!showMenuInHeader"><Aside /></el-aside>
+                <el-aside :style="{height: !route.meta.hideHeader ? '': '100vh'}" :width="collapse.isCollapse ? '65px': '200px'" v-if="!route.meta.hideAside&&!showMenuInHeader"><Aside /></el-aside>
                 <el-main>
                     <Breadcrumb v-if="showBreadcrumb"></Breadcrumb>
                     <div class="body" ref="scrollRef" :style="styles">
@@ -82,7 +83,7 @@ onMounted(() => {
                                 </keep-alive>
                             </Transition>
                         </RouterView>
-                        <Anchor v-if="$route.meta.showAnchor" />
+                        <Anchor v-if="route.meta.showAnchor" />
                     </div>
                 </el-main>
             </el-container>

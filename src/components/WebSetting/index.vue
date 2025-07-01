@@ -325,7 +325,7 @@ html,body {
                         <el-select filterable v-model="form.apiUrl" @change="apiObj.apiUrl = form.apiUrl" style="width: 92%;margin-bottom: 5px;">
                             <el-option v-for="api in form.apiList" :label="api.name" :value="api.url" :key="api.name"></el-option>
                         </el-select>
-                        <el-icon title="新增项目" style="margin-left: 5px;margin-bottom: 5px;cursor: pointer;" @click="$router.push('/apps/index');onClose();"><IconifyIcon name="ep:plus" :iconStyle="{ }" /></el-icon>
+                        <el-icon title="新增项目" style="margin-left: 5px;margin-bottom: 5px;cursor: pointer;" @click="() => { router.push('/apps/index');onClose();}"><IconifyIcon name="ep:plus" :iconStyle="{ }" /></el-icon>
                     </el-form-item>
                     <el-form-item label="项目地址" prop="apiUrl">
                         <el-input style="width:100%" placeholder="链接名称" v-model="apiObj.apiUrl"></el-input>
