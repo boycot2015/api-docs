@@ -5,7 +5,7 @@
         <div class="button" @click="() => router.push('/')">返回首页</div>
     </div>
 </template>
-<script setup>
+<script lang="ts" setup>
 import { useRouter } from 'vue-router'
 const router = useRouter()
 </script>
